@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找茬挑战 - 你的眼睛有多准？</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            font-size: 1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        /* 文字描述区 */
+        .text-card {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+            font-size: 1.15em;
+            line-height: 2;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .text-card .highlight {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        /* 倒计时 */
+        .countdown-screen {
+            padding: 60px 0;
+        }
+
+        .countdown-number {
+            font-size: 120px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 1s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* 选项按钮 */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .option-btn {
+            padding: 18px 25px;
+            font-size: 1.05em;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .option-btn.wrong {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .option-btn.missed {
+            border-color: var(--warning);
+            border-style: dashed;
+        }
+
+        /* 结果反馈 */
+        .result-box {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .result-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        /* 洞察卡片 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 对比展示 */
+        .compare-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .compare-item {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .compare-item .label {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .compare-item .content {
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .compare-item .changed {
+            background: rgba(255, 107, 107, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        /* 进度指示 */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg);
+        }
+
+        .dot.active {
+            background: var(--primary);
+        }
+
+        .dot.completed {
+            background: var(--success);
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .text-card {
+                padding: 20px;
+                font-size: 1em;
+            }
+
+            .countdown-number {
+                font-size: 80px;
+            }
+
+            .compare-box {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <h1>找茬挑战</h1>
+            <p class="subtitle">仔细阅读，你能在变化中发现不同吗？<br>考验你观察力的时候到了！</p>
+
+            <div class="text-card" style="text-align: center;">
+                <p style="color: var(--text-muted);">游戏规则：</p>
+                <p>1. 仔细阅读第一段文字</p>
+                <p>2. 短暂等待后阅读第二段文字</p>
+                <p>3. 找出两段文字的区别</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="startGame()">开始挑战</button>
+        </div>
+
+        <!-- 屏幕2：第一段文字 -->
+        <div class="screen" id="screen-text1">
+            <div class="progress-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <h2>请仔细阅读并记住</h2>
+
+            <div class="text-card" id="textCard1"></div>
+
+            <button class="btn btn-primary" onclick="showCountdown()">记住并进入下一步</button>
+        </div>
+
+        <!-- 屏幕3：倒计时 -->
+        <div class="screen" id="screen-countdown">
+            <div class="countdown-screen">
+                <p class="subtitle">请稍候...</p>
+                <div class="countdown-number" id="countdownNumber">5</div>
+            </div>
+        </div>
+
+        <!-- 屏幕4：第二段文字 -->
+        <div class="screen" id="screen-text2">
+            <div class="progress-dots">
+                <div class="dot completed"></div>
+                <div class="dot active"></div>
+                <div class="dot"></div>
+            </div>
+
+            <h2>第二段文字来了</h2>
+
+            <div class="text-card" id="textCard2"></div>
+
+            <p class="subtitle" style="margin-top: 20px;">第二段文字哪里变了？</p>
+
+            <div class="options-grid" id="optionsGrid"></div>
+        </div>
+
+        <!-- 屏幕5：结果 -->
+        <div class="screen" id="screen-result">
+            <div class="progress-dots">
+                <div class="dot completed"></div>
+                <div class="dot completed"></div>
+                <div class="dot active"></div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-icon" id="resultIcon">😅</div>
+                <div class="result-text" id="resultText"></div>
+            </div>
+
+            <div class="compare-box" id="compareBox">
+                <div class="compare-item">
+                    <div class="label">第一段文字</div>
+                    <div class="content" id="compareText1"></div>
+                </div>
+                <div class="compare-item">
+                    <div class="label">第二段文字</div>
+                    <div class="content" id="compareText2"></div>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h3>🧠 发现了什么？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的原理</button>
+        </div>
+
+        <!-- 屏幕6：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>大脑的"自动补全"</h2>
+
+            <div class="theory-section">
+                <h3>🔬 这是什么现象？</h3>
+                <p>这就是<strong>变化盲视</strong>（Change Blindness）。人的注意力资源非常有限，当视线发生中断（如眨眼、转头、页面切换）或注意力高度集中在某一点时，大脑会默认"周围环境没变"，从而自动忽略视野中其他明显的改变。</p>
+                <p>你以为自己看全了，其实大脑只让你看到了它想让你看到的。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>🏠 家庭教育启示</h3>
+                <p><strong>别怪孩子"左耳进右耳出"，他们的注意力是"单通道"的</strong></p>
+                <ul class="tips-list">
+                    <li>家长交代"把书包收拾好，别忘带水杯"，孩子只拿了水杯，书包依然乱七八糟——这可能不是故意的，而是他的注意力全在"拿水杯"上</li>
+                    <li>孩子的大脑正处于"变化盲视"中，自动屏蔽了其他指令</li>
+                    <li>建议：跟孩子交代任务时，确保有<strong>眼神接触</strong>（打破视觉中断）</li>
+                    <li>一次只给<strong>一个明确指令</strong>，确认他"接收"到了，再给下一个</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏数据
+        const GAMES = [
+            {
+                text1: "桌上有一个红色苹果，旁边是一把银色钥匙，桌角有一张蓝色便签。",
+                text2: "桌上有一个绿色苹果，旁边是一把银色钥匙，桌角有一张蓝色便签。",
+                answer: "苹果颜色",
+                options: ["苹果颜色", "钥匙颜色", "便签颜色", "没变化"],
+                change: "红色 → 绿色",
+                changeWord1: "红色",
+                changeWord2: "绿色"
+            },
+            {
+                text1: "书架上摆着三本书，最上面是蓝色的，中间是黄色的，最下面是白色的。",
+                text2: "书架上摆着三本书，最上面是红色的，中间是黄色的，最下面是白色的。",
+                answer: "最上面书的颜色",
+                options: ["最上面书的颜色", "中间书的颜色", "书的数量", "没变化"],
+                change: "蓝色 → 红色",
+                changeWord1: "蓝色",
+                changeWord2: "红色"
+            },
+            {
+                text1: "窗台上放着一个陶瓷花盆，里面种着一株绿萝，旁边落着一片枯叶。",
+                text2: "窗台上放着一个塑料花盆，里面种着一株绿萝，旁边落着一片枯叶。",
+                answer: "花盆材质",
+                options: ["花盆材质", "植物种类", "枯叶数量", "没变化"],
+                change: "陶瓷 → 塑料",
+                changeWord1: "陶瓷",
+                changeWord2: "塑料"
+            },
+            {
+                text1: "门口站着一个穿黑色外套的人，手里拿着一杯咖啡，脚边有一个棕色纸箱。",
+                text2: "门口站着一个穿灰色外套的人，手里拿着一杯咖啡，脚边有一个棕色纸箱。",
+                answer: "外套颜色",
+                options: ["外套颜色", "咖啡杯颜色", "纸箱颜色", "没变化"],
+                change: "黑色 → 灰色",
+                changeWord1: "黑色",
+                changeWord2: "灰色"
+            },
+            {
+                text1: "花园里有一棵苹果树，树下放着一张木制长椅，旁边有一个红色水桶。",
+                text2: "花园里有一棵梨树，树下放着一张木制长椅，旁边有一个红色水桶。",
+                answer: "树的种类",
+                options: ["树的种类", "长椅材质", "水桶颜色", "没变化"],
+                change: "苹果树 → 梨树",
+                changeWord1: "苹果树",
+                changeWord2: "梨树"
+            },
+            {
+                text1: "墙上挂着一幅风景画，画框是金色的，画旁边有一个圆形时钟。",
+                text2: "墙上挂着一幅风景画，画框是银色的，画旁边有一个圆形时钟。",
+                answer: "画框颜色",
+                options: ["画框颜色", "画的内容", "时钟形状", "没变化"],
+                change: "金色 → 银色",
+                changeWord1: "金色",
+                changeWord2: "银色"
+            },
+            {
+                text1: "冰箱里有三盒牛奶，左边是草莓味的，中间是原味的，右边是巧克力味的。",
+                text2: "冰箱里有三盒牛奶，左边是蓝莓味的，中间是原味的，右边是巧克力味的。",
+                answer: "左边牛奶口味",
+                options: ["左边牛奶口味", "中间牛奶口味", "牛奶数量", "没变化"],
+                change: "草莓味 → 蓝莓味",
+                changeWord1: "草莓味",
+                changeWord2: "蓝莓味"
+            },
+            {
+                text1: "会议室里有六张椅子，最前面那张是带扶手的，后面五张是普通的。",
+                text2: "会议室里有五张椅子，最前面那张是带扶手的，后面四张是普通的。",
+                answer: "椅子数量",
+                options: ["椅子数量", "扶手设计", "椅子颜色", "没变化"],
+                change: "六张 → 五张",
+                changeWord1: "六张",
+                changeWord2: "五张"
+            }
+        ];
+
+        let currentGame = null;
+        let countdownTimer = null;
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始游戏
+        function startGame() {
+            // 随机选择一个游戏
+            currentGame = GAMES[Math.floor(Math.random() * GAMES.length)];
+
+            // 显示第一段文字（不高亮）
+            document.getElementById('textCard1').textContent = currentGame.text1;
+            showScreen('screen-text1');
+        }
+
+        // 显示倒计时
+        function showCountdown() {
+            showScreen('screen-countdown');
+
+            let count = 5;
+            const countdownEl = document.getElementById('countdownNumber');
+            countdownEl.textContent = count;
+
+            countdownTimer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownEl.textContent = count;
+                } else {
+                    clearInterval(countdownTimer);
+                    showText2();
+                }
+            }, 1000);
+        }
+
+        // 显示第二段文字（也不高亮，保持一致）
+        function showText2() {
+            document.getElementById('textCard2').textContent = currentGame.text2;
+
+            // 生成选项
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+
+            currentGame.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option, btn);
+                optionsGrid.appendChild(btn);
+            });
+
+            showScreen('screen-text2');
+        }
+
+        // 选择选项
+        function selectOption(option, btn) {
+            const isCorrect = option === currentGame.answer;
+
+            // 禁用所有按钮
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.style.pointerEvents = 'none';
+                if (b.textContent === currentGame.answer) {
+                    b.classList.add('correct');
+                } else if (b === btn && !isCorrect) {
+                    b.classList.add('wrong');
+                }
+            });
+
+            // 延迟显示结果
+            setTimeout(() => {
+                showResults(isCorrect);
+            }, 1000);
+        }
+
+        // 显示结果
+        function showResults(isCorrect) {
+            showScreen('screen-result');
+
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const insightText = document.getElementById('insightText');
+
+            if (isCorrect) {
+                resultIcon.textContent = '🎉';
+                resultText.innerHTML = `<strong style="color: var(--success);">太棒了！你发现了变化！</strong><br>你成功注意到了 ${currentGame.change} 这个变化。`;
+                insightText.textContent = '你的观察力很敏锐！不过很多人会错过这个变化，这就是变化盲视的神奇之处——明明变化就在眼前，大脑却选择性忽略了。';
+            } else {
+                resultIcon.textContent = '😅';
+                resultText.innerHTML = `<strong style="color: var(--accent);">你错过了明显的变化</strong><br>正确答案是：${currentGame.answer}（${currentGame.change}）`;
+                insightText.textContent = '明明变化这么大，为什么刚才那一瞬间你完全没发现？你以为自己看全了，其实大脑只让你看到了它想让你看到的。这就是变化盲视！';
+            }
+
+            // 显示对比（结果页才高亮变化处）
+            document.getElementById('compareText1').textContent = currentGame.text1;
+            document.getElementById('compareText2').innerHTML = currentGame.text2.replace(
+                currentGame.changeWord2,
+                `<span class="changed">${currentGame.changeWord2}</span>`
+            );
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentGame = null;
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+        }
+    </script>
+</body>
+</html>

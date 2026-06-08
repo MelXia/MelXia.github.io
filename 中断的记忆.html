@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>限时挑战 - 你能完成多少？</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            font-size: 1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        /* 任务执行区 */
+        .task-execution {
+            background: var(--bg);
+            padding: 35px 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            min-height: 320px;
+            position: relative;
+        }
+
+        .task-question {
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .timer-display {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1em;
+            color: var(--text-muted);
+        }
+
+        .timer-display span {
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .timer-display.warning span {
+            color: var(--accent);
+        }
+
+        /* 选项按钮 */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            padding: 18px 15px;
+            font-size: 1.05em;
+            background: var(--card);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .option-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1em;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .submit-btn:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn.selected {
+            background: var(--success);
+        }
+
+        /* 中断提示 */
+        .interrupt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .interrupt-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .interrupt-text {
+            font-size: 1.5em;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        /* 完成提示 */
+        .complete-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(78, 205, 196, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 0.2s;
+        }
+
+        .complete-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .complete-text {
+            font-size: 1.5em;
+            color: var(--success);
+        }
+
+        /* 回忆阶段 */
+        .recall-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .recall-title {
+            font-size: 1em;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .recall-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .recall-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .recall-question {
+            font-size: 1em;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .recall-input {
+            padding: 12px 15px;
+            font-size: 1em;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .recall-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .recall-status {
+            margin-top: 8px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .recall-status.correct {
+            color: var(--success);
+            display: block;
+        }
+
+        .recall-status.wrong {
+            color: var(--accent);
+            display: block;
+        }
+
+        /* 结果卡片 */
+        .result-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .result-value.highlight {
+            color: var(--accent);
+        }
+
+        .result-value.success {
+            color: var(--success);
+        }
+
+        /* 任务回顾列表 */
+        .task-review {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .review-title {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .review-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
+            flex-shrink: 0;
+        }
+
+        .review-number.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .review-number.interrupted {
+            background: var(--accent);
+            color: white;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .review-question {
+            font-size: 0.9em;
+            color: var(--text);
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        .review-answer {
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .review-answer span {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .review-status {
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        .review-status.done {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .review-status.stop {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        .review-status.remembered {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--warning);
+        }
+
+        /* 洞察卡片 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <h1>限时挑战</h1>
+            <p class="subtitle">看看你能在规定时间内完成多少任务<br>准备好了吗？</p>
+
+            <div style="background: var(--bg); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <p style="color: var(--text-muted); font-size: 0.95em;">游戏规则：</p>
+                <p style="margin-top: 10px;">你将看到 6 个选择题，每个任务有时间限制。<br>请尽快选择正确答案！</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="startGame()">开始挑战</button>
+        </div>
+
+        <!-- 屏幕2：任务执行 -->
+        <div class="screen" id="screen-task">
+            <div style="color: var(--text-muted); font-size: 0.9em;">任务 <span id="taskProgress">1</span> / 6</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div class="task-execution">
+                <div class="timer-display" id="timerDisplay">剩余 <span id="timerCount">10</span> 秒</div>
+                <div class="task-question" id="taskQuestion"></div>
+                <div class="options-grid" id="optionsGrid"></div>
+                <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>提交答案</button>
+            </div>
+        </div>
+
+        <!-- 屏幕3：回忆阶段 -->
+        <div class="screen" id="screen-recall">
+            <h2>最后的挑战</h2>
+            <p class="subtitle">有些任务你可能没能完成<br>如果记得答案，请依次输入</p>
+
+            <div class="recall-section" id="recallSection"></div>
+
+            <button class="btn btn-primary" id="recallSubmitBtn" onclick="submitRecall()">提交答案</button>
+        </div>
+
+        <!-- 屏幕4：结果 -->
+        <div class="screen" id="screen-result">
+            <h2>任务回顾</h2>
+
+            <div class="task-review" id="taskReview"></div>
+
+            <div class="result-card" style="margin-top: 20px;">
+                <div class="result-row">
+                    <span class="result-label">完成的任务（在时间内提交）</span>
+                    <span class="result-value success" id="resultCompleted">4 道</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">被中断的任务（还记得答案）</span>
+                    <span class="result-value highlight" id="resultInterrupted">0 / 2</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h3>🧠 发现了什么？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的原理</button>
+        </div>
+
+        <!-- 屏幕5：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>大脑的"念念不忘"</h2>
+
+            <div class="theory-section">
+                <h3>🔬 这是什么现象？</h3>
+                <p>这就是<strong>蔡格尼克效应</strong>（Zeigarnik Effect），由苏联心理学家布鲁玛·蔡格尼克于 1927 年发现。</p>
+                <p>人们对<strong>未完成或中断的任务</strong>记忆更清晰，因为未完成任务会产生一种"认知张力"，驱使大脑持续关注直到闭环。一旦完成，大脑就会把它"归档"扔掉。</p>
+                <p>这就是为什么你总是记得"还没做完的事"，却忘了"已经完成的事"。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>🏠 家庭教育启示</h3>
+                <p><strong>利用"未完待续"激发内驱力，而不是靠"做完奖励"</strong></p>
+                <ul class="tips-list">
+                    <li>很多家长习惯逼孩子"一口气把作业写完"，其实这破坏了蔡格尼克效应</li>
+                    <li><strong>写作业时：</strong>在孩子最投入、最顺畅的时候，让他停下来休息。这种"未完成感"会让他大脑后台继续运转，休息回来后会迫不及待地想把它做完</li>
+                    <li><strong>培养兴趣时：</strong>讲故事或看纪录片，在最精彩的地方按下暂停，"欲知后事如何，明天继续"。这种张力比任何物质奖励都能激发好奇心和内驱力</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <!-- 中断提示遮罩 -->
+    <div class="interrupt-overlay" id="interruptOverlay" style="display: none;">
+        <div class="interrupt-icon">⏱️</div>
+        <div class="interrupt-text">时间到！</div>
+        <div style="color: var(--text-muted);">进入下一题</div>
+    </div>
+
+    <!-- 完成提示遮罩 -->
+    <div class="complete-overlay" id="completeOverlay" style="display: none;">
+        <div class="complete-icon">✅</div>
+        <div class="complete-text">正确！</div>
+    </div>
+
+    <script>
+        // 题库 - 15道选择题
+        const QUESTION_BANK = [
+            { question: "中国最长的河流是？", options: ["长江", "黄河", "珠江", "淮河"], answer: "长江" },
+            { question: "一年有多少个月？", options: ["10个月", "11个月", "12个月", "13个月"], answer: "12个月" },
+            { question: "太阳从哪个方向升起？", options: ["东方", "西方", "南方", "北方"], answer: "东方" },
+            { question: "水的化学式是？", options: ["H2O", "CO2", "O2", "N2"], answer: "H2O" },
+            { question: "地球上最大的动物是？", options: ["大象", "蓝鲸", "长颈鹿", "鲨鱼"], answer: "蓝鲸" },
+            { question: "一周有多少天？", options: ["5天", "6天", "7天", "8天"], answer: "7天" },
+            { question: "中国首都是哪个城市？", options: ["上海", "北京", "广州", "深圳"], answer: "北京" },
+            { question: "彩虹有几种颜色？", options: ["5种", "6种", "7种", "8种"], answer: "7种" },
+            { question: "人体最大的器官是？", options: ["心脏", "肝脏", "皮肤", "大脑"], answer: "皮肤" },
+            { question: "光速约是多少？", options: ["30万公里/秒", "20万公里/秒", "10万公里/秒", "5万公里/秒"], answer: "30万公里/秒" },
+            { question: "世界上最高的山峰是？", options: ["乔戈里峰", "珠穆朗玛峰", "干城章嘉峰", "洛子峰"], answer: "珠穆朗玛峰" },
+            { question: "中国的国宝动物是？", options: ["金丝猴", "大熊猫", "东北虎", "白鳍豚"], answer: "大熊猫" },
+            { question: "地球绕太阳一圈需要多久？", options: ["一天", "一个月", "一年", "十年"], answer: "一年" },
+            { question: "蜜蜂采集什么来酿蜜？", options: ["树叶", "花蜜", "果实", "树皮"], answer: "花蜜" },
+            { question: "人体有多少块骨头？", options: ["106块", "156块", "206块", "306块"], answer: "206块" }
+        ];
+
+        // 游戏状态
+        let currentTask = 0;
+        let taskResults = [];
+        let taskTimer = null;
+        let selectedQuestions = [];
+        let interruptedIndices = [];
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始游戏
+        function startGame() {
+            currentTask = 0;
+            taskResults = [];
+            selectedQuestions = [];
+            interruptedIndices = [];
+
+            // 从题库随机选6道题
+            const shuffled = [...QUESTION_BANK].sort(() => Math.random() - 0.5);
+            selectedQuestions = shuffled.slice(0, 6);
+
+            // 随机选择2道题会被中断（索引）
+            const indices = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
+            interruptedIndices = indices.slice(0, 2).sort((a, b) => a - b);
+
+            showTask();
+        }
+
+        // 显示当前任务
+        function showTask() {
+            if (currentTask >= selectedQuestions.length) {
+                showRecall();
+                return;
+            }
+
+            const task = selectedQuestions[currentTask];
+            const willInterrupt = interruptedIndices.includes(currentTask);
+            const timeLimit = willInterrupt ? 3 : 12; // 中断的题只有3秒，正常题12秒
+
+            // 更新进度
+            document.getElementById('taskProgress').textContent = currentTask + 1;
+            document.getElementById('progressFill').style.width = (currentTask / selectedQuestions.length * 100) + '%';
+
+            // 显示问题
+            document.getElementById('taskQuestion').textContent = task.question;
+            document.getElementById('timerCount').textContent = timeLimit;
+            document.getElementById('timerDisplay').classList.remove('warning');
+
+            // 渲染选项
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+
+            task.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option);
+                optionsGrid.appendChild(btn);
+            });
+
+            // 重置提交按钮
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.remove('selected');
+            selectedAnswer = null;
+
+            showScreen('screen-task');
+            startTimer(timeLimit);
+        }
+
+        let selectedAnswer = null;
+
+        // 启动计时器
+        function startTimer(seconds) {
+            let timeLeft = seconds;
+            const timerCount = document.getElementById('timerCount');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            clearInterval(taskTimer);
+            taskTimer = setInterval(() => {
+                timeLeft--;
+                timerCount.textContent = timeLeft;
+
+                if (timeLeft <= 3) {
+                    timerDisplay.classList.add('warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(taskTimer);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        // 选择选项（先选中，再提交）
+        function selectOption(option) {
+            selectedAnswer = option;
+
+            // 更新按钮样式
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if (btn.textContent === option) {
+                    btn.style.background = 'var(--primary)';
+                } else {
+                    btn.style.background = 'var(--card)';
+                }
+            });
+
+            // 启用提交按钮
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        // 提交答案
+        function submitAnswer() {
+            if (!selectedAnswer) return;
+
+            clearInterval(taskTimer);
+
+            // 记录结果 - 在时间内提交了（完成）
+            taskResults.push({
+                index: currentTask,
+                completed: true,
+                userAnswer: selectedAnswer
+            });
+
+            // 直接进入下一题
+            currentTask++;
+            showTask();
+        }
+
+        // 时间到 - 被中断
+        function timeUp() {
+            clearInterval(taskTimer);
+
+            // 禁用所有按钮
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            document.getElementById('submitBtn').disabled = true;
+
+            // 记录结果 - 被中断（没来得及提交）
+            taskResults.push({
+                index: currentTask,
+                completed: false,
+                userAnswer: null
+            });
+
+            // 显示中断提示
+            const overlay = document.getElementById('interruptOverlay');
+            overlay.style.display = 'flex';
+
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                currentTask++;
+                showTask();
+            }, 1200);
+        }
+
+        // 显示回忆阶段
+        function showRecall() {
+            showScreen('screen-recall');
+
+            const section = document.getElementById('recallSection');
+            section.innerHTML = '';
+
+            const interruptedTasks = taskResults.filter(r => !r.completed);
+
+            if (interruptedTasks.length === 0) {
+                section.innerHTML = '<p style="text-align: center; color: var(--text-muted);">太厉害了！你完成了所有任务！</p>';
+                document.getElementById('recallSubmitBtn').textContent = '查看结果';
+            } else {
+                section.innerHTML = '<div class="recall-title">你有 ' + interruptedTasks.length + ' 道题没能完成，如果还记得答案，请依次输入：</div>';
+
+                interruptedTasks.forEach((result, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'recall-item';
+                    item.innerHTML = `
+                        <div class="recall-question">第 ${i + 1} 题答案：</div>
+                        <input type="text" class="recall-input" id="recallInput${result.index}" placeholder="输入你记得的答案" autocomplete="off">
+                        <div class="recall-status" id="recallStatus${result.index}"></div>
+                    `;
+                    section.appendChild(item);
+                });
+
+                document.getElementById('recallSubmitBtn').textContent = '提交答案';
+            }
+        }
+
+        // 提交回忆
+        function submitRecall() {
+            let totalCompleted = 0;
+            let totalInterrupted = 0;
+            let interruptedRemembered = 0;
+
+            // 统计完成的任务
+            taskResults.forEach(result => {
+                if (result.completed) {
+                    totalCompleted++;
+                } else {
+                    totalInterrupted++;
+                }
+            });
+
+            // 检查未完成任务的回忆答案
+            const interruptedTasks = taskResults.filter(r => !r.completed);
+            interruptedTasks.forEach(result => {
+                const task = selectedQuestions[result.index];
+                const input = document.getElementById(`recallInput${result.index}`);
+                const status = document.getElementById(`recallStatus${result.index}`);
+                const userAnswer = input ? input.value.trim() : '';
+
+                // 检查答案是否正确（忽略空格）
+                const isCorrect = userAnswer.replace(/\s/g, '') === task.answer.replace(/\s/g, '');
+
+                if (isCorrect) {
+                    interruptedRemembered++;
+                    status.className = 'recall-status correct';
+                    status.textContent = '✓ 正确！你记得这个未完成的任务';
+                } else if (userAnswer) {
+                    status.className = 'recall-status wrong';
+                    status.textContent = `✗ 正确答案是：${task.answer}`;
+                } else {
+                    status.className = 'recall-status wrong';
+                    status.textContent = `未填写，正确答案是：${task.answer}`;
+                }
+            });
+
+            setTimeout(() => {
+                showResults(totalCompleted, interruptedRemembered, totalInterrupted);
+            }, 1500);
+        }
+
+        // 显示结果
+        function showResults(totalCompleted, interruptedRemembered, totalInterrupted) {
+            showScreen('screen-result');
+
+            document.getElementById('resultCompleted').textContent = `${totalCompleted} 道`;
+            document.getElementById('resultInterrupted').textContent = `${interruptedRemembered} / ${totalInterrupted}`;
+
+            // 生成任务回顾列表
+            const reviewEl = document.getElementById('taskReview');
+            reviewEl.innerHTML = '<div class="review-title">你的答题情况</div>';
+
+            selectedQuestions.forEach((task, index) => {
+                const result = taskResults[index];
+                const item = document.createElement('div');
+                item.className = 'review-item';
+
+                let statusHtml = '';
+                let answerHtml = '';
+                let numberClass = '';
+
+                if (result.completed) {
+                    numberClass = 'completed';
+                    statusHtml = '<span class="review-status done">已完成</span>';
+                    answerHtml = `你的答案：<span>${result.userAnswer}</span>`;
+                } else {
+                    numberClass = 'interrupted';
+                    // 检查回忆阶段是否答对
+                    const recallInput = document.getElementById(`recallInput${index}`);
+                    const userRecall = recallInput ? recallInput.value.trim() : '';
+                    const isRecallCorrect = userRecall.replace(/\s/g, '') === task.answer.replace(/\s/g, '');
+
+                    if (isRecallCorrect) {
+                        statusHtml = '<span class="review-status remembered">被中断 · 还记得</span>';
+                    } else {
+                        statusHtml = '<span class="review-status stop">被中断</span>';
+                    }
+                    answerHtml = `正确答案：<span>${task.answer}</span>`;
+                }
+
+                item.innerHTML = `
+                    <div class="review-number ${numberClass}">${index + 1}</div>
+                    <div class="review-content">
+                        <div class="review-question">${task.question}</div>
+                        <div class="review-answer">${answerHtml}</div>
+                    </div>
+                    ${statusHtml}
+                `;
+
+                reviewEl.appendChild(item);
+            });
+
+            const interruptedRate = totalInterrupted > 0 ? interruptedRemembered / totalInterrupted : 0;
+
+            let insightText;
+            if (totalInterrupted === 0) {
+                insightText = '你完成了所有任务，太厉害了！这次没有体验到蔡格尼克效应，再玩一次试试？';
+            } else if (interruptedRemembered === totalInterrupted) {
+                insightText = `太神奇了！你被中断了 ${totalInterrupted} 道题，全部都还记得正确答案！那些没做完的任务，在你脑海里确实"念念不忘"。这就是蔡格尼克效应！`;
+            } else if (interruptedRemembered > 0) {
+                insightText = `不错！你被中断了 ${totalInterrupted} 道题，其中 ${interruptedRemembered} 道还记得正确答案。那种"未完成"的感觉确实更容易让人记住。`;
+            } else {
+                insightText = `有趣！这次你被中断的题目都没能回忆起来。不过心理学研究发现，大多数人对未完成的任务记忆更深刻——那种"悬而未决"的感觉会让大脑持续关注。再玩一次试试？`;
+            }
+
+            document.getElementById('insightText').textContent = insightText;
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentTask = 0;
+            taskResults = [];
+            selectedQuestions = [];
+            interruptedIndices = [];
+            clearInterval(taskTimer);
+        }
+    </script>
+</body>
+</html>

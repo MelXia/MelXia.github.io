@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿希从众实验 - 有钳任性横着走的Mel</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --error: #FF6B6B;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        .game-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--card);
+            margin-bottom: 25px;
+        }
+
+        .game-title {
+            font-size: 1.5em;
+            color: var(--primary-light);
+            margin-bottom: 8px;
+        }
+
+        .game-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .game-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .intro-text {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .intro-text strong { color: var(--primary-light); }
+
+        .line-display {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 220px;
+            margin: 25px 0;
+            padding: 20px;
+            padding-top: 10px;
+            background: rgba(107,92,231,0.1);
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+        }
+
+        .line-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .line {
+            width: 8px;
+            background: var(--text-muted);
+            border-radius: 4px;
+            transition: height 0.5s ease;
+        }
+
+        .line.target {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            width: 10px;
+        }
+
+        .line-label {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .npc-log {
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            line-height: 1.7;
+            min-height: 80px;
+            color: var(--text-muted);
+        }
+
+        .npc-name {
+            font-weight: bold;
+            color: var(--primary-light);
+        }
+
+        .player-turn-msg {
+            color: var(--success);
+            font-weight: bold;
+            margin: 15px 0;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107,92,231,0.3);
+        }
+
+        button:disabled {
+            background: rgba(255,255,255,0.1);
+            cursor: not-allowed;
+            transform: none;
+            color: var(--text-muted);
+        }
+
+        .btn-choice {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--primary);
+            flex: 1;
+        }
+
+        .btn-choice:hover:not(:disabled) {
+            background: var(--primary);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            display: none;
+            margin: 20px auto 0;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 1em;
+            padding: 14px 30px;
+        }
+
+        .result-msg {
+            font-size: 1em;
+            font-weight: bold;
+            margin: 15px 0;
+            min-height: 27px;
+        }
+
+        .success { color: var(--success); }
+        .error { color: var(--error); }
+
+        .round-title {
+            color: var(--accent);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .theory-box {
+            text-align: left;
+            background: rgba(78,205,196,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 3px solid var(--success);
+            margin-top: 20px;
+        }
+
+        .theory-box h3 {
+            color: var(--success);
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        .theory-box p {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .theory-box p:last-child { margin-bottom: 0; }
+
+        .theory-box strong { color: var(--primary-light); }
+
+        .result-list {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .result-list li {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .analysis-text {
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .hidden { display: none; }
+
+        .footer-nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--card);
+        }
+
+        .footer-nav a {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .footer-nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html#翻译工具" class="back-link">← 返回首页</a>
+
+    <div class="game-header">
+        <h1 class="game-title">🧠 阿希从众实验</h1>
+        <p class="game-subtitle">从众效应 · 群体压力下的选择</p>
+    </div>
+
+    <div class="game-card" id="app">
+        <div id="intro-screen">
+            <p class="intro-text">
+                欢迎参与本次视觉测试！你将与另外3名参与者一起在线完成。
+            </p>
+            <p class="intro-text">
+                规则：屏幕上将显示一条<strong>目标线段</strong>和三条<strong>比较线段(A, B, C)</strong>。请选出与目标线段长度完全一致的那一条。
+            </p>
+            <button class="btn-start" onclick="startGame()">开始测试</button>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <h2 class="round-title" id="round-title">第 1 轮</h2>
+            <div class="line-display">
+                <div class="line-item">
+                    <div class="line target" id="target-line"></div>
+                    <div class="line-label">目标</div>
+                </div>
+                <div class="line-item">
+                    <div class="line" id="line-a"></div>
+                    <div class="line-label">A</div>
+                </div>
+                <div class="line-item">
+                    <div class="line" id="line-b"></div>
+                    <div class="line-label">B</div>
+                </div>
+                <div class="line-item">
+                    <div class="line" id="line-c"></div>
+                    <div class="line-label">C</div>
+                </div>
+            </div>
+
+            <div class="npc-log" id="npc-log">等待其他参与者选择...</div>
+            <div class="player-turn-msg" id="player-turn-msg">现在轮到你了，请做出选择：</div>
+
+            <div class="result-msg" id="result-msg"></div>
+
+            <div class="btn-group" id="choices">
+                <button class="btn-choice" disabled onclick="makeChoice('A')">选择 A</button>
+                <button class="btn-choice" disabled onclick="makeChoice('B')">选择 B</button>
+                <button class="btn-choice" disabled onclick="makeChoice('C')">选择 C</button>
+            </div>
+
+            <button class="btn-next" id="next-btn" onclick="nextRound()">下一轮</button>
+        </div>
+
+        <div id="end-screen" class="hidden">
+            <h2 class="round-title">测试结束</h2>
+            <p style="color:var(--text-muted);font-size:0.9em;margin-bottom:15px;">你的选择记录：</p>
+            <ul class="result-list">
+                <li>第1轮：<span id="record-1"></span></li>
+                <li>第2轮：<span id="record-2"></span></li>
+            </ul>
+            <p id="conformity-analysis" class="analysis-text"></p>
+
+            <div class="theory-box" id="theory-box">
+                <h3>关于"阿希从众实验"</h3>
+                <p>本游戏是根据美国心理学家所罗门·阿希在1951年设计的经典"阿希从众实验"改编而成。</p>
+                <p><strong>实验背景：</strong>阿希想要探究人们在面对群体压力时，是否会放弃自己的正确判断而选择随大流。</p>
+                <p><strong>从众效应：</strong>指个体在群体压力下，改变自己的观点或行为，使之与群体保持一致的现象。在阿希的原始实验中，大约有75%的参与者至少有一次屈服于群体压力。</p>
+                <p><strong>心理机制：</strong>人们从众通常出于两个原因：一是<strong>规范性社会影响</strong>（为了被群体接纳）；二是<strong>信息性社会影响</strong>（认为群体的判断是正确的）。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="index.html#翻译工具">← 返回首页</a>
+    </div>
+</div>
+
+<script>
+    let currentRound = 0;
+    let playerChoices = [];
+    let gameData = {};
+    const npcNames = ["参与者1", "参与者2", "参与者3"];
+
+    function randomLength(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function setupRound(roundNum) {
+        const targetLen = randomLength(100, 180);
+        const correctOption = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
+
+        let lengths = { A: 0, B: 0, C: 0 };
+        lengths[correctOption] = targetLen;
+
+        const otherOptions = ['A', 'B', 'C'].filter(o => o !== correctOption);
+        lengths[otherOptions[0]] = targetLen + (Math.random() > 0.5 ? 1 : -1) * randomLength(30, 50);
+        lengths[otherOptions[1]] = targetLen + (Math.random() > 0.5 ? 1 : -1) * randomLength(8, 12);
+
+        for (let key in lengths) {
+            if (lengths[key] < 40) lengths[key] = 40;
+        }
+
+        let npcChoices = [];
+        if (roundNum === 1) {
+            npcChoices = [correctOption, correctOption, correctOption];
+        } else if (roundNum === 2) {
+            npcChoices = [otherOptions[1], otherOptions[1], otherOptions[1]];
+        }
+
+        return { targetLen, lengths, correctOption, npcChoices };
+    }
+
+    function renderLines(data) {
+        document.getElementById('target-line').style.height = data.targetLen + 'px';
+        document.getElementById('line-a').style.height = data.lengths.A + 'px';
+        document.getElementById('line-b').style.height = data.lengths.B + 'px';
+        document.getElementById('line-c').style.height = data.lengths.C + 'px';
+    }
+
+    function renderNPCLog(npcChoices) {
+        const logDiv = document.getElementById('npc-log');
+        const playerTurnMsg = document.getElementById('player-turn-msg');
+        const btns = document.querySelectorAll('.btn-choice');
+
+        logDiv.innerHTML = '其他参与者正在选择...<br>';
+        playerTurnMsg.style.display = 'none';
+        btns.forEach(btn => btn.disabled = true);
+
+        npcChoices.forEach((choice, index) => {
+            setTimeout(() => {
+                logDiv.innerHTML += `<span class="npc-name">${npcNames[index]}</span> 选择了 <strong>${choice}</strong><br>`;
+
+                if (index === npcChoices.length - 1) {
+                    setTimeout(() => {
+                        playerTurnMsg.style.display = 'block';
+                        btns.forEach(btn => btn.disabled = false);
+                    }, 800);
+                }
+            }, (index + 1) * 1000);
+        });
+    }
+
+    function startGame() {
+        document.getElementById('intro-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        currentRound = 1;
+        startRound();
+    }
+
+    function startRound() {
+        document.getElementById('round-title').innerText = `第 ${currentRound} 轮`;
+        document.getElementById('result-msg').innerText = '';
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('player-turn-msg').style.display = 'none';
+
+        gameData = setupRound(currentRound);
+        renderLines(gameData);
+
+        setTimeout(() => {
+            renderNPCLog(gameData.npcChoices);
+        }, 1000);
+    }
+
+    function makeChoice(choice) {
+        const btns = document.querySelectorAll('.btn-choice');
+        btns.forEach(btn => btn.disabled = true);
+        document.getElementById('player-turn-msg').style.display = 'none';
+
+        const isCorrect = (choice === gameData.correctOption);
+        playerChoices.push({
+            round: currentRound,
+            choice: choice,
+            correct: gameData.correctOption,
+            isCorrect: isCorrect
+        });
+
+        const resultMsg = document.getElementById('result-msg');
+        const nextBtn = document.getElementById('next-btn');
+
+        if (isCorrect) {
+            resultMsg.innerHTML = `<span class="success">回答正确！</span> 目标线段长度确实是 ${gameData.correctOption}。`;
+            showNextButton(nextBtn);
+        } else {
+            resultMsg.innerHTML = `<span class="error">回答错误！</span> 你选择了 ${choice}，但正确答案是 ${gameData.correctOption}。`;
+            if (currentRound === 2) {
+                setTimeout(() => {
+                    showNextButton(nextBtn);
+                }, 2000);
+            } else {
+                showNextButton(nextBtn);
+            }
+        }
+    }
+
+    function showNextButton(nextBtn) {
+        if (currentRound < 2) {
+            nextBtn.innerText = '进入下一轮';
+        } else {
+            nextBtn.innerText = '查看测试结果';
+        }
+        nextBtn.style.display = 'block';
+    }
+
+    function nextRound() {
+        currentRound++;
+        if (currentRound > 2) {
+            showEndScreen();
+        } else {
+            startRound();
+        }
+    }
+
+    function showEndScreen() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.remove('hidden');
+
+        const r1 = playerChoices[0];
+        const r2 = playerChoices[1];
+
+        document.getElementById('record-1').innerHTML = `选择 ${r1.choice} (${r1.isCorrect ? '<span class="success">正确</span>' : '<span class="error">错误</span>'})`;
+        document.getElementById('record-2').innerHTML = `选择 ${r2.choice} (${r2.isCorrect ? '<span class="success">正确，你坚持了自己的判断！</span>' : '<span class="error">错误，你受到了群体压力的影响</span>'})`;
+
+        const analysis = document.getElementById('conformity-analysis');
+        if (r2.isCorrect) {
+            analysis.innerHTML = "🎯 在面对群体一致的错误意见时，你坚持了自己的视觉判断，展现了极强的独立性！";
+            analysis.style.color = "var(--success)";
+        } else {
+            analysis.innerHTML = "🤯 面对群体一致的意见，你放弃了自己的初始感知，选择了随大流。不要自责，这就是从众效应的威力！";
+            analysis.style.color = "var(--accent)";
+        }
+
+        setTimeout(() => {
+            document.getElementById('theory-box').style.display = 'block';
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>

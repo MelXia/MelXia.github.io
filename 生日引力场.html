@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日引力场 - 自我参照效应体验游戏</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .intro-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* 生日选择 */
+        .birthday-picker {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .picker-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .picker-group label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        .picker-group select {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        /* 记忆阶段 */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .avatar-card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .avatar-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+
+        .avatar-card .name {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .avatar-card .birthday {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* 干扰任务 */
+        .math-task {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .math-question {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .math-input {
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--text);
+            width: 150px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .math-input.error {
+            border-color: var(--accent);
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .timer {
+            font-size: 1.2em;
+            color: var(--accent);
+            margin-top: 15px;
+        }
+
+        /* 回忆测试 */
+        .recall-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .date-chip {
+            padding: 12px 8px;
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95em;
+        }
+
+        .date-chip:hover {
+            border-color: var(--primary);
+        }
+
+        .date-chip.selected {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .date-chip.correct {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .date-chip.wrong {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .date-chip.missed {
+            background: transparent;
+            border-color: var(--warning);
+            border-style: dashed;
+        }
+
+        /* 热力图 */
+        .heatmap-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 30px auto;
+        }
+
+        .heatmap-wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                from 0deg,
+                #1a1b2e 0deg, #1a1b2e 30deg,
+                #2a2b4e 30deg, #2a2b4e 60deg,
+                #1a1b2e 60deg, #1a1b2e 90deg,
+                #2a2b4e 90deg, #2a2b4e 120deg,
+                #1a1b2e 120deg, #1a1b2e 150deg,
+                #2a2b4e 150deg, #2a2b4e 180deg,
+                #1a1b2e 180deg, #1a1b2e 210deg,
+                #2a2b4e 210deg, #2a2b4e 240deg,
+                #1a1b2e 240deg, #1a1b2e 270deg,
+                #2a2b4e 270deg, #2a2b4e 300deg,
+                #1a1b2e 300deg, #1a1b2e 330deg,
+                #2a2b4e 330deg, #2a2b4e 360deg
+            );
+        }
+
+        .birthday-marker {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .date-dot {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65em;
+            font-weight: bold;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .date-dot.remembered {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 0 15px var(--success);
+            border: 3px solid white;
+        }
+
+        .date-dot.remembered.nearby {
+            box-shadow: 0 0 25px var(--warning);
+            border: 3px solid var(--warning);
+        }
+
+        .date-dot.forgot {
+            background: var(--accent);
+            color: white;
+            opacity: 0.6;
+            border: 2px dashed white;
+        }
+
+        .date-dot.forgot.nearby {
+            opacity: 1;
+            border: 3px dashed var(--warning);
+        }
+
+        /* 热力图图例 */
+        .heatmap-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.remembered-normal {
+            background: var(--success);
+            border: 2px solid white;
+        }
+
+        .legend-dot.remembered-nearby {
+            background: var(--success);
+            border: 2px solid var(--warning);
+            box-shadow: 0 0 8px var(--warning);
+        }
+
+        .legend-dot.forgot {
+            background: var(--accent);
+            border: 2px dashed white;
+            opacity: 0.6;
+        }
+
+        .legend-dot.forgot-nearby {
+            background: var(--accent);
+            border: 2px dashed var(--warning);
+        }
+
+        /* 结果报告 */
+        .result-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .result-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .result-stat:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--primary-light);
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text);
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 进度指示 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg);
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .step-indicator.active {
+            opacity: 1;
+        }
+
+        .step-indicator.completed {
+            opacity: 1;
+            color: var(--success);
+        }
+
+        .step-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        .step-indicator.active .step-dot {
+            background: var(--primary);
+        }
+
+        .step-indicator.completed .step-dot {
+            background: var(--success);
+        }
+
+        .step-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 动画 */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .memory-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recall-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .heatmap-container {
+                width: 280px;
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 进度指示 -->
+        <div class="progress-steps" id="progressSteps">
+            <div class="step-indicator" id="step1">
+                <div class="step-dot">1</div>
+                <span class="step-label">设置生日</span>
+            </div>
+            <div class="step-indicator" id="step2">
+                <div class="step-dot">2</div>
+                <span class="step-label">记忆挑战</span>
+            </div>
+            <div class="step-indicator" id="step3">
+                <div class="step-dot">3</div>
+                <span class="step-label">回忆测试</span>
+            </div>
+            <div class="step-indicator" id="step4">
+                <div class="step-dot">4</div>
+                <span class="step-label">发现秘密</span>
+            </div>
+        </div>
+
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="intro-icon">🧠</div>
+            <h1>生日引力场</h1>
+            <p class="subtitle">一个关于记忆的小游戏<br>探索你的大脑有哪些"小秘密"</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-setup')">开始体验</button>
+        </div>
+
+        <!-- 屏幕2：设置生日 -->
+        <div class="screen" id="screen-setup">
+            <h2>你的生日是？</h2>
+            <p class="subtitle">这将影响游戏体验，请如实填写</p>
+
+            <div class="birthday-picker">
+                <div class="picker-group">
+                    <label>月份</label>
+                    <select id="birthMonth">
+                        <option value="">选择</option>
+                    </select>
+                </div>
+                <div class="picker-group">
+                    <label>日期</label>
+                    <select id="birthDay">
+                        <option value="">选择</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="startBtn" disabled onclick="startGame()">确认并开始</button>
+        </div>
+
+        <!-- 屏幕3：记忆阶段 -->
+        <div class="screen" id="screen-memory">
+            <h2>记忆挑战</h2>
+            <p class="subtitle">仔细记住屏幕上出现的每个日期，你有 <span id="memoryTime">30</span> 秒</p>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="memoryProgress"></div>
+            </div>
+
+            <div class="memory-grid" id="memoryGrid"></div>
+        </div>
+
+        <!-- 屏幕4：干扰任务 -->
+        <div class="screen" id="screen-interference">
+            <h2>快速计算</h2>
+            <p class="subtitle">请完成计算后点击提交</p>
+
+            <div class="math-task">
+                <div class="math-question" id="mathQuestion"></div>
+                <input type="number" class="math-input" id="mathAnswer" placeholder="输入答案">
+                <button class="btn btn-primary" id="mathSubmitBtn" onclick="submitMath()">提交答案</button>
+            </div>
+
+            <div class="timer">剩余时间: <span id="mathTimer">30</span> 秒</div>
+        </div>
+
+        <!-- 屏幕5：回忆测试 -->
+        <div class="screen" id="screen-recall">
+            <h2>回忆时刻</h2>
+            <p class="subtitle">选择你记得的日期（可多选）</p>
+
+            <div class="recall-grid" id="recallGrid"></div>
+
+            <p style="color: var(--text-muted); margin: 20px 0;">已选择: <span id="selectedCount">0</span> 个</p>
+
+            <button class="btn btn-primary" id="submitRecall" onclick="submitRecall()">提交答案</button>
+        </div>
+
+        <!-- 屏幕6：热力图结果 -->
+        <div class="screen" id="screen-heatmap">
+            <h2>你的记忆热力图</h2>
+            <p class="subtitle">看看你的大脑"记住"了什么</p>
+
+            <div class="heatmap-container">
+                <div class="birthday-marker" id="birthdayMarker"></div>
+                <div class="heatmap-wheel" id="heatmapWheel"></div>
+            </div>
+
+            <div class="heatmap-legend">
+                <div class="legend-item">
+                    <div class="legend-dot remembered-normal"></div>
+                    <span>记住了（普通日期）</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot remembered-nearby"></div>
+                    <span>记住了（生日附近）</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot forgot"></div>
+                    <span>忘记了（普通日期）</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot forgot-nearby"></div>
+                    <span>忘记了（生日附近）</span>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-stat">
+                    <span class="stat-label">总共记住了</span>
+                    <span class="stat-value" id="statTotal">0 / 12 个日期</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">生日前后15天内（共4个日期）</span>
+                    <span class="stat-value" id="statNearby">记住了 0 个</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">其他日期（共8个日期）</span>
+                    <span class="stat-value" id="statOther">记住了 0 个</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h3>🎯 发现规律了吗？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的心理学</button>
+        </div>
+
+        <!-- 屏幕7：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>自我参照效应</h2>
+            <p class="subtitle">为什么"我"能让记忆更深刻？</p>
+
+            <div class="theory-section">
+                <h3>🔍 什么是自我参照效应？</h3>
+                <p>当信息与<strong>"自我"</strong>产生关联时，大脑会开启"VIP通道"进行深度加工，记忆效果显著提升。这个现象由心理学家 Rogers 等人于 1977 年发现。</p>
+                <p>在你的生日附近，那些日期与"你"产生了某种联系——"咦，这个日子离我很近！"——这触发了自我参照，让它们被优先存储。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>💡 如何利用这个效应？</h3>
+                <ul class="tips-list">
+                    <li>背历史年代时，试着和自己的生日做加减法联想</li>
+                    <li>记新朋友名字时，找找和自己或熟人的关联</li>
+                    <li>学习新知识时，思考"这和我已有的经验有什么联系"</li>
+                    <li>把重要信息"挂钩"在个人信息上（手机号、学号等）</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏数据
+        let playerBirthday = { month: 0, day: 0 };
+        let displayedDates = [];
+        let selectedDates = [];
+        let memoryTimer;
+        let mathTimer;
+        let currentMathQuestion = {};
+
+        // 虚拟人物名字
+        const names = ['小明', '小红', '小华', '小丽', '小刚', '小芳', '小强', '小燕', '小伟', '小娟', '小军', '小敏'];
+
+        // 初始化月份和日期选择器
+        function initPickers() {
+            const monthSelect = document.getElementById('birthMonth');
+            const daySelect = document.getElementById('birthDay');
+
+            // 月份
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + '月';
+                monthSelect.appendChild(option);
+            }
+
+            // 更新日期
+            monthSelect.onchange = function() {
+                const month = parseInt(this.value);
+                const daysInMonth = new Date(2024, month, 0).getDate();
+                daySelect.innerHTML = '<option value="">选择</option>';
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i + '日';
+                    daySelect.appendChild(option);
+                }
+                checkSetup();
+            };
+
+            daySelect.onchange = checkSetup;
+        }
+
+        function checkSetup() {
+            const month = document.getElementById('birthMonth').value;
+            const day = document.getElementById('birthDay').value;
+            document.getElementById('startBtn').disabled = !(month && day);
+        }
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            // 更新进度指示
+            const steps = ['screen-setup', 'screen-memory', 'screen-recall', 'screen-heatmap'];
+            const stepIndex = steps.indexOf(screenId);
+            for (let i = 1; i <= 4; i++) {
+                const stepEl = document.getElementById('step' + i);
+                stepEl.classList.remove('active', 'completed');
+                if (i < stepIndex + 1) {
+                    stepEl.classList.add('completed');
+                } else if (i === stepIndex + 1) {
+                    stepEl.classList.add('active');
+                }
+            }
+        }
+
+        // 开始游戏
+        function startGame() {
+            playerBirthday.month = parseInt(document.getElementById('birthMonth').value);
+            playerBirthday.day = parseInt(document.getElementById('birthDay').value);
+
+            showScreen('screen-memory');
+            generateMemoryTask();
+        }
+
+        // 生成记忆任务
+        function generateMemoryTask() {
+            displayedDates = [];
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+
+            // 生成12个日期
+            // 4个在生日附近（前后15天内）
+            const nearbyDates = generateNearbyDates(4);
+            // 8个随机日期
+            const randomDates = generateRandomDates(8, nearbyDates);
+
+            displayedDates = [...nearbyDates, ...randomDates];
+            shuffleArray(displayedDates);
+
+            // 显示日期卡片（不显示人名）
+            displayedDates.forEach((date, index) => {
+                const card = document.createElement('div');
+                card.className = 'avatar-card';
+                card.style.animationDelay = (index * 0.1) + 's';
+                card.innerHTML = `
+                    <div class="birthday" style="font-size:1.3em;">${date.month}月${date.day}日</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // 开始倒计时
+            let timeLeft = 30;
+            const progressFill = document.getElementById('memoryProgress');
+            const timeDisplay = document.getElementById('memoryTime');
+
+            memoryTimer = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+                progressFill.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+
+                if (timeLeft <= 0) {
+                    clearInterval(memoryTimer);
+                    startInterference();
+                }
+            }, 1000);
+        }
+
+        // 生成生日附近的日期
+        function generateNearbyDates(count) {
+            const dates = [];
+            const usedOffsets = new Set();
+
+            // 将生日转换为一年中的天数
+            const birthdayDayOfYear = getDayOfYear(playerBirthday.month, playerBirthday.day);
+
+            while (dates.length < count) {
+                // 生成前后15天内的偏移
+                let offset;
+                if (Math.random() > 0.5) {
+                    offset = Math.floor(Math.random() * 15) + 1; // 之后
+                } else {
+                    offset = -(Math.floor(Math.random() * 15) + 1); // 之前
+                }
+
+                if (usedOffsets.has(offset)) continue;
+                usedOffsets.add(offset);
+
+                // 计算新日期
+                let newDayOfYear = birthdayDayOfYear + offset;
+                if (newDayOfYear < 1) newDayOfYear += 365;
+                if (newDayOfYear > 365) newDayOfYear -= 365;
+
+                const date = dayOfYearToDate(newDayOfYear);
+                dates.push({
+                    month: date.month,
+                    day: date.day,
+                    isNearby: true
+                });
+            }
+
+            return dates;
+        }
+
+        // 生成随机日期（排除生日附近）
+        function generateRandomDates(count, excludeDates) {
+            const dates = [];
+            const birthdayDayOfYear = getDayOfYear(playerBirthday.month, playerBirthday.day);
+
+            while (dates.length < count) {
+                const dayOfYear = Math.floor(Math.random() * 365) + 1;
+
+                // 检查是否在生日附近（前后20天）
+                let diff = Math.abs(dayOfYear - birthdayDayOfYear);
+                if (diff > 182) diff = 365 - diff; // 处理跨年
+
+                if (diff < 20) continue; // 太近了，跳过
+
+                const date = dayOfYearToDate(dayOfYear);
+
+                // 检查是否已存在
+                const exists = dates.some(d => d.month === date.month && d.day === date.day) ||
+                               excludeDates.some(d => d.month === date.month && d.day === date.day);
+
+                if (!exists) {
+                    dates.push({
+                        month: date.month,
+                        day: date.day,
+                        isNearby: false
+                    });
+                }
+            }
+
+            return dates;
+        }
+
+        // 辅助函数
+        function getDayOfYear(month, day) {
+            const daysInMonth = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let dayOfYear = 0;
+            for (let m = 1; m < month; m++) {
+                dayOfYear += daysInMonth[m];
+            }
+            dayOfYear += day;
+            return dayOfYear;
+        }
+
+        function dayOfYearToDate(dayOfYear) {
+            const daysInMonth = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let month = 1;
+            let remaining = dayOfYear;
+
+            while (remaining > daysInMonth[month]) {
+                remaining -= daysInMonth[month];
+                month++;
+            }
+
+            return { month, day: remaining };
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // 干扰任务
+        function startInterference() {
+            showScreen('screen-interference');
+
+            // 生成数学题（只用加减法，100以内）
+            let a, b, op, answer;
+            op = Math.random() > 0.5 ? '+' : '-';
+
+            if (op === '+') {
+                a = Math.floor(Math.random() * 50) + 10;
+                b = Math.floor(Math.random() * (90 - a)) + 5; // 确保和不超过100
+                answer = a + b;
+            } else {
+                a = Math.floor(Math.random() * 50) + 40; // 被减数大一些
+                b = Math.floor(Math.random() * Math.min(a - 5, 30)) + 5; // 确保结果为正
+                answer = a - b;
+            }
+
+            currentMathQuestion = { a, b, op, answer };
+            document.getElementById('mathQuestion').textContent = `${a} ${op} ${b} = ?`;
+            document.getElementById('mathAnswer').value = '';
+
+            // 倒计时
+            let timeLeft = 30;
+            const timerDisplay = document.getElementById('mathTimer');
+
+            mathTimer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(mathTimer);
+                    // 时间到，自动进入回忆阶段
+                    startRecall();
+                }
+            }, 1000);
+        }
+
+        function submitMath() {
+            const answerInput = document.getElementById('mathAnswer');
+            const answer = parseInt(answerInput.value);
+
+            // 必须输入答案才能提交
+            if (isNaN(answer) || answerInput.value.trim() === '') {
+                answerInput.classList.add('error');
+                setTimeout(() => answerInput.classList.remove('error'), 500);
+                answerInput.focus();
+                return;
+            }
+
+            clearInterval(mathTimer);
+            startRecall();
+        }
+
+        // 回忆测试
+        function startRecall() {
+            showScreen('screen-recall');
+            selectedDates = [];
+
+            const grid = document.getElementById('recallGrid');
+            grid.innerHTML = '';
+
+            // 创建日期选项（包含显示过的和其他干扰日期）
+            const allDates = [...displayedDates];
+            const distractorDates = generateRandomDates(8, displayedDates);
+
+            const options = [...allDates, ...distractorDates];
+            shuffleArray(options);
+
+            options.forEach(date => {
+                const chip = document.createElement('div');
+                chip.className = 'date-chip';
+                chip.textContent = `${date.month}月${date.day}日`;
+                chip.dataset.month = date.month;
+                chip.dataset.day = date.day;
+
+                // 标记是否是真实显示过的
+                const wasDisplayed = displayedDates.some(d =>
+                    d.month === date.month && d.day === date.day
+                );
+                chip.dataset.displayed = wasDisplayed;
+                chip.dataset.nearby = date.isNearby || false;
+
+                chip.onclick = () => toggleDate(chip, date);
+                grid.appendChild(chip);
+            });
+
+            updateSelectedCount();
+        }
+
+        function toggleDate(chip, date) {
+            chip.classList.toggle('selected');
+
+            const index = selectedDates.findIndex(d =>
+                d.month === date.month && d.day === date.day
+            );
+
+            if (index > -1) {
+                selectedDates.splice(index, 1);
+            } else {
+                selectedDates.push(date);
+            }
+
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedDates.length;
+        }
+
+        function submitRecall() {
+            // 计算结果
+            let correctNearby = 0;
+            let correctOther = 0;
+            let totalNearby = 0;
+            let totalOther = 0;
+
+            displayedDates.forEach(date => {
+                if (date.isNearby) {
+                    totalNearby++;
+                    if (selectedDates.some(d => d.month === date.month && d.day === date.day)) {
+                        correctNearby++;
+                    }
+                } else {
+                    totalOther++;
+                    if (selectedDates.some(d => d.month === date.month && d.day === date.day)) {
+                        correctOther++;
+                    }
+                }
+            });
+
+            // 标记正确/错误
+            document.querySelectorAll('.date-chip').forEach(chip => {
+                const month = parseInt(chip.dataset.month);
+                const day = parseInt(chip.dataset.day);
+                const wasDisplayed = chip.dataset.displayed === 'true';
+                const wasSelected = chip.classList.contains('selected');
+
+                if (wasDisplayed && wasSelected) {
+                    chip.classList.add('correct');
+                } else if (!wasDisplayed && wasSelected) {
+                    chip.classList.add('wrong');
+                } else if (wasDisplayed && !wasSelected) {
+                    chip.classList.add('missed');
+                }
+            });
+
+            // 延迟显示结果
+            setTimeout(() => {
+                showResults(correctNearby, correctOther, totalNearby, totalOther);
+            }, 1500);
+        }
+
+        function showResults(correctNearby, correctOther, totalNearby, totalOther) {
+            showScreen('screen-heatmap');
+
+            // 更新统计
+            document.getElementById('statTotal').textContent =
+                `${correctNearby + correctOther} / ${totalNearby + totalOther} 个日期`;
+            document.getElementById('statNearby').textContent =
+                `记住了 ${correctNearby} 个`;
+            document.getElementById('statOther').textContent =
+                `记住了 ${correctOther} 个`;
+
+            // 生日标记
+            document.getElementById('birthdayMarker').textContent =
+                `${playerBirthday.month}月${playerBirthday.day}日`;
+
+            // 生成热力图
+            generateHeatmap();
+
+            // 生成洞察文字
+            const nearbyRate = totalNearby > 0 ? correctNearby / totalNearby : 0;
+            const otherRate = totalOther > 0 ? correctOther / totalOther : 0;
+
+            let insightText;
+            if (nearbyRate > otherRate + 0.15) {
+                insightText = `看！生日前后15天内的4个日期，你记住了 ${correctNearby} 个；而其他8个日期，你只记住了 ${correctOther} 个。你的大脑就像个"自私"的小雷达，悄悄把和你有关的日子都"吸"住了！`;
+            } else if (nearbyRate > otherRate) {
+                insightText = `不错！生日前后15天内的4个日期，你记住了 ${correctNearby} 个；其他8个日期，你记住了 ${correctOther} 个。自我参照效应正在悄悄发挥作用！`;
+            } else if (nearbyRate === otherRate && correctNearby === correctOther) {
+                insightText = `有趣！生日前后15天内和其他日期，你分别记住了 ${correctNearby} 个和 ${correctOther} 个。这次干扰任务让你的记忆"一视同仁"了。`;
+            } else {
+                insightText = `这次结果有点意外：其他8个日期你记住了 ${correctOther} 个，生日前后15天内的4个日期只记住了 ${correctNearby} 个。可能是偶然因素，再玩一次试试？`;
+            }
+
+            document.getElementById('insightText').textContent = insightText;
+        }
+
+        function generateHeatmap() {
+            const wheel = document.getElementById('heatmapWheel');
+            wheel.innerHTML = '';
+
+            const centerX = 160;
+            const centerY = 160;
+            const radius = 120;
+
+            displayedDates.forEach(date => {
+                const dayOfYear = getDayOfYear(date.month, date.day);
+                const angle = ((dayOfYear - 1) / 365) * 360 - 90; // 从12点开始
+                const rad = angle * Math.PI / 180;
+
+                const x = centerX + radius * Math.cos(rad);
+                const y = centerY + radius * Math.sin(rad);
+
+                const wasRemembered = selectedDates.some(d =>
+                    d.month === date.month && d.day === date.day
+                );
+
+                const dot = document.createElement('div');
+                dot.className = 'date-dot';
+
+                if (wasRemembered) {
+                    dot.classList.add('remembered');
+                } else {
+                    dot.classList.add('forgot');
+                }
+
+                // 标记是否为生日附近的日期
+                if (date.isNearby) {
+                    dot.classList.add('nearby');
+                }
+
+                dot.style.left = x + 'px';
+                dot.style.top = y + 'px';
+                // 显示完整日期，更清晰
+                dot.textContent = `${date.month}/${date.day}`;
+
+                wheel.appendChild(dot);
+            });
+        }
+
+        function resetGame() {
+            displayedDates = [];
+            selectedDates = [];
+            document.getElementById('birthMonth').value = '';
+            document.getElementById('birthDay').innerHTML = '<option value="">选择</option>';
+            document.getElementById('startBtn').disabled = true;
+
+            // 重置进度指示
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('step' + i).classList.remove('active', 'completed');
+            }
+            document.getElementById('step1').classList.add('active');
+        }
+
+        // 初始化
+        initPickers();
+    </script>
+</body>
+</html>

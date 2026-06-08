@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>师恩难忘 - 照片挂画生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .section h2 {
+            color: #444;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section h2 .step {
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        .drop-zone {
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .drop-zone p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .drop-zone input {
+            display: none;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-item .remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,0,0,0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .template-preview {
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .control-group label {
+            font-weight: 500;
+            color: #444;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+        .control-group select, .control-group input[type="color"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .control-group input[type="color"] {
+            height: 45px;
+            cursor: pointer;
+        }
+        .range-value {
+            text-align: right;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .progress {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .result {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .result canvas {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .info p {
+            color: #1565C0;
+            font-size: 0.95em;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>师恩难忘 - 照片挂画生成器</h1>
+        <p class="subtitle">将您的照片组合成精美的纪念挂画</p>
+
+        <div class="info">
+            <p><strong>输出尺寸：</strong>A3 (3508 × 4961 像素，300dpi 高清打印)</p>
+            <p><strong>使用说明：</strong>上传照片 → 上传文字模板 → 调整参数 → 生成下载</p>
+        </div>
+
+        <!-- 步骤1：上传照片 -->
+        <div class="section">
+            <h2><span class="step">1</span> 上传照片素材</h2>
+            <div class="drop-zone" id="photoZone">
+                <p>拖拽照片到这里，或点击选择</p>
+                <p style="color: #999; font-size: 0.9em;">支持 JPG、PNG 格式，可多选</p>
+                <input type="file" id="photoInput" multiple accept="image/*">
+            </div>
+            <div class="preview-grid" id="photoPreview"></div>
+            <p id="photoCount" style="margin-top: 10px; color: #666;"></p>
+        </div>
+
+        <!-- 步骤2：上传文字模板 -->
+        <div class="section">
+            <h2><span class="step">2</span> 上传文字模板</h2>
+            <div class="drop-zone" id="templateZone">
+                <p>拖拽模板图片到这里，或点击选择</p>
+                <p style="color: #999; font-size: 0.9em;">白底黑字的"师恩难忘"图片</p>
+                <input type="file" id="templateInput" accept="image/*">
+            </div>
+            <img id="templatePreview" class="template-preview" alt="模板预览">
+        </div>
+
+        <!-- 步骤3：参数设置 -->
+        <div class="section">
+            <h2><span class="step">3</span> 参数设置</h2>
+            <div class="controls">
+                <div class="control-group">
+                    <label>照片间距</label>
+                    <input type="range" id="spacing" min="0" max="30" value="8">
+                    <div class="range-value"><span id="spacingValue">8</span>px</div>
+                </div>
+                <div class="control-group">
+                    <label>照片大小范围</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="range" id="minPhotoSize" min="80" max="300" value="150" style="width: 45%;">
+                        <span style="color: #666;">~</span>
+                        <input type="range" id="maxPhotoSize" min="100" max="500" value="350" style="width: 45%;">
+                    </div>
+                    <div class="range-value"><span id="minSizeValue">150</span>px ~ <span id="maxSizeValue">350</span>px（随机）</div>
+                </div>
+                <div class="control-group">
+                    <label>布局模式</label>
+                    <select id="layoutMode">
+                        <option value="random">随机大小瀑布流</option>
+                        <option value="grid">整齐网格排列</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>背景颜色</label>
+                    <input type="color" id="bgColor" value="#ffffff">
+                </div>
+                <div class="control-group">
+                    <label>照片圆角</label>
+                    <input type="range" id="borderRadius" min="0" max="50" value="5">
+                    <div class="range-value"><span id="borderRadiusValue">5</span>%</div>
+                </div>
+                <div class="control-group">
+                    <label>照片旋转</label>
+                    <input type="range" id="rotation" min="0" max="30" value="0">
+                    <div class="range-value"><span id="rotationValue">0</span>°（随机角度）</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生成按钮 -->
+        <button class="generate-btn" id="generateBtn" disabled>请先上传照片和模板</button>
+
+        <!-- 进度显示 -->
+        <div class="progress" id="progress">
+            <p id="progressText">正在生成...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- 结果显示 -->
+        <div class="result" id="result">
+            <canvas id="outputCanvas"></canvas>
+            <br>
+            <a class="download-btn" id="downloadBtn" download="师恩难忘挂画.png">下载高清图片</a>
+        </div>
+    </div>
+
+    <script>
+        // A3 尺寸 300dpi
+        const A3_WIDTH = 3508;
+        const A3_HEIGHT = 4961;
+
+        let photos = [];
+        let templateImage = null;
+
+        // 验证照片是否有效（有像素数据）
+        function isPhotoValid(img) {
+            if (!img || !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
+                return false;
+            }
+            // 尝试访问像素数据来验证图片是否真正加载
+            try {
+                const testCanvas = document.createElement('canvas');
+                testCanvas.width = 1;
+                testCanvas.height = 1;
+                const testCtx = testCanvas.getContext('2d');
+                testCtx.drawImage(img, 0, 0, 1, 1);
+                const pixel = testCtx.getImageData(0, 0, 1, 1).data;
+                // 检查是否获取到像素（如果是全透明可能是加载失败）
+                return pixel[3] > 0 || pixel[0] > 0 || pixel[1] > 0 || pixel[2] > 0;
+            } catch (e) {
+                console.warn('照片验证失败:', e);
+                return false;
+            }
+        }
+
+        // 获取有效的照片数组
+        function getValidPhotos() {
+            return photos.filter(img => isPhotoValid(img));
+        }
+
+        // DOM 元素
+        const photoZone = document.getElementById('photoZone');
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        const photoCount = document.getElementById('photoCount');
+        const templateZone = document.getElementById('templateZone');
+        const templateInput = document.getElementById('templateInput');
+        const templatePreview = document.getElementById('templatePreview');
+        const generateBtn = document.getElementById('generateBtn');
+        const progress = document.getElementById('progress');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const result = document.getElementById('result');
+        const outputCanvas = document.getElementById('outputCanvas');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // 滑块值显示
+        document.getElementById('spacing').oninput = function() {
+            document.getElementById('spacingValue').textContent = this.value;
+        };
+        document.getElementById('minPhotoSize').oninput = function() {
+            document.getElementById('minSizeValue').textContent = this.value;
+            // 确保最小值不超过最大值
+            const maxVal = parseInt(document.getElementById('maxPhotoSize').value);
+            if (parseInt(this.value) > maxVal) {
+                document.getElementById('maxPhotoSize').value = this.value;
+                document.getElementById('maxSizeValue').textContent = this.value;
+            }
+        };
+        document.getElementById('maxPhotoSize').oninput = function() {
+            document.getElementById('maxSizeValue').textContent = this.value;
+            // 确保最大值不小于最小值
+            const minVal = parseInt(document.getElementById('minPhotoSize').value);
+            if (parseInt(this.value) < minVal) {
+                document.getElementById('minPhotoSize').value = this.value;
+                document.getElementById('minSizeValue').textContent = this.value;
+            }
+        };
+        document.getElementById('rotation').oninput = function() {
+            document.getElementById('rotationValue').textContent = this.value;
+        };
+        document.getElementById('borderRadius').oninput = function() {
+            document.getElementById('borderRadiusValue').textContent = this.value;
+        };
+
+        // 照片拖拽上传
+        photoZone.addEventListener('click', () => photoInput.click());
+        photoZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            photoZone.classList.add('dragover');
+        });
+        photoZone.addEventListener('dragleave', () => {
+            photoZone.classList.remove('dragover');
+        });
+        photoZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            photoZone.classList.remove('dragover');
+            handlePhotoFiles(e.dataTransfer.files);
+        });
+        photoInput.addEventListener('change', (e) => {
+            handlePhotoFiles(e.target.files);
+        });
+
+        function handlePhotoFiles(files) {
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            photos.push(img);
+                            updatePhotoPreview();
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
+        function updatePhotoPreview() {
+            photoPreview.innerHTML = '';
+            let validCount = 0;
+            photos.forEach((img, index) => {
+                const isValid = isPhotoValid(img);
+                if (isValid) validCount++;
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.style.opacity = isValid ? '1' : '0.3';
+                item.style.border = isValid ? 'none' : '2px solid red';
+                item.innerHTML = `
+                    <img src="${img.src}" alt="照片${index + 1}" style="opacity: ${isValid ? '1' : '0.3'}">
+                    <button class="remove" onclick="removePhoto(${index})">×</button>
+                    ${!isValid ? '<span style="position:absolute;bottom:0;left:0;right:0;background:red;color:white;font-size:10px;padding:2px;">加载失败</span>' : ''}
+                `;
+                photoPreview.appendChild(item);
+            });
+            photoCount.innerHTML = `已上传 ${photos.length} 张照片<span style="color: ${validCount === photos.length ? '#28a745' : '#dc3545'}">（${validCount} 张有效）</span>`;
+            checkGenerateReady();
+        }
+
+        window.removePhoto = function(index) {
+            photos.splice(index, 1);
+            updatePhotoPreview();
+        };
+
+        // 模板拖拽上传
+        templateZone.addEventListener('click', () => templateInput.click());
+        templateZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            templateZone.classList.add('dragover');
+        });
+        templateZone.addEventListener('dragleave', () => {
+            templateZone.classList.remove('dragover');
+        });
+        templateZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            templateZone.classList.remove('dragover');
+            handleTemplateFile(e.dataTransfer.files[0]);
+        });
+        templateInput.addEventListener('change', (e) => {
+            handleTemplateFile(e.target.files[0]);
+        });
+
+        function handleTemplateFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        templateImage = img;
+                        templatePreview.src = e.target.result;
+                        templatePreview.style.display = 'block';
+                        checkGenerateReady();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function checkGenerateReady() {
+            const validPhotos = getValidPhotos();
+            if (validPhotos.length > 0 && templateImage) {
+                generateBtn.disabled = false;
+                generateBtn.textContent = `生成挂画（使用 ${validPhotos.length} 张有效照片）`;
+            } else {
+                generateBtn.disabled = true;
+                if (validPhotos.length === 0) {
+                    generateBtn.textContent = '请先上传有效的照片';
+                } else if (!templateImage) {
+                    generateBtn.textContent = '请先上传文字模板';
+                } else {
+                    generateBtn.textContent = '请先上传照片和模板';
+                }
+            }
+        }
+
+        // 生成挂画
+        generateBtn.addEventListener('click', generate);
+
+        // 随机尺寸瀑布流布局 - 完全铺满画布
+        async function generateRandomLayout(ctx, validPhotos, spacing, minSize, maxSize, borderRadius, maxRotation) {
+            const avgSize = (minSize + maxSize) / 2;
+
+            // 第一轮：密集放置，确保覆盖
+            progressText.textContent = '正在放置照片（第1轮）...';
+
+            let placed = 0;
+            for (let y = -maxSize; y < A3_HEIGHT + maxSize; y += avgSize * 0.6) {
+                for (let x = -maxSize; x < A3_WIDTH + maxSize; x += avgSize * 0.6) {
+                    // 随机偏移，避免整齐排列
+                    const offsetX = (Math.random() - 0.5) * avgSize * 0.4;
+                    const offsetY = (Math.random() - 0.5) * avgSize * 0.4;
+
+                    // 随机尺寸
+                    const size = minSize + Math.random() * (maxSize - minSize);
+
+                    const finalX = x + offsetX;
+                    const finalY = y + offsetY;
+
+                    // 从有效照片中随机选择
+                    const photo = validPhotos[Math.floor(Math.random() * validPhotos.length)];
+                    const rotation = (Math.random() - 0.5) * 2 * maxRotation;
+
+                    // 再次验证照片有效性并绘制
+                    if (isPhotoValid(photo)) {
+                        drawPhoto(ctx, photo, finalX, finalY, size, borderRadius, rotation);
+                    } else {
+                        // 照片无效，用其他照片替代
+                        const replacement = validPhotos[Math.floor(Math.random() * validPhotos.length)];
+                        if (isPhotoValid(replacement)) {
+                            drawPhoto(ctx, replacement, finalX, finalY, size, borderRadius, rotation);
+                        }
+                    }
+
+                    placed++;
+                    if (placed % 100 === 0) {
+                        progressFill.style.width = (placed / 1500 * 40) + '%';
+                        await new Promise(r => setTimeout(r, 0));
+                    }
+                }
+            }
+
+            // 第二轮：填充剩余大空隙
+            progressText.textContent = '正在填充空隙（第2轮）...';
+
+            for (let i = 0; i < 500; i++) {
+                const x = Math.random() * A3_WIDTH - minSize / 2;
+                const y = Math.random() * A3_HEIGHT - minSize / 2;
+                const size = minSize + Math.random() * (maxSize - minSize) * 0.5;
+
+                const photo = validPhotos[Math.floor(Math.random() * validPhotos.length)];
+                const rotation = (Math.random() - 0.5) * 2 * maxRotation;
+
+                if (isPhotoValid(photo)) {
+                    drawPhoto(ctx, photo, x, y, size, borderRadius, rotation);
+                }
+
+                if (i % 50 === 0) {
+                    progressFill.style.width = (40 + i / 500 * 10) + '%';
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+
+            progressFill.style.width = '50%';
+        }
+
+
+        // 整齐网格布局 - 真正整齐排列
+        async function generateGridLayout(ctx, validPhotos, spacing, photoSize, borderRadius, maxRotation) {
+            // 计算网格
+            const effectiveSize = photoSize + spacing;
+            const cols = Math.ceil(A3_WIDTH / effectiveSize);
+            const rows = Math.ceil(A3_HEIGHT / effectiveSize);
+            const totalPhotos = cols * rows;
+
+            // 计算起始位置，让网格居中
+            const totalWidth = cols * effectiveSize - spacing;
+            const totalHeight = rows * effectiveSize - spacing;
+            const startX = (A3_WIDTH - totalWidth) / 2;
+            const startY = (A3_HEIGHT - totalHeight) / 2;
+
+            let drawn = 0;
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    // 整齐排列，无随机偏移
+                    const x = startX + col * effectiveSize;
+                    const y = startY + row * effectiveSize;
+
+                    // 顺序选择照片（可预测的排列）
+                    const photoIndex = (row * cols + col) % validPhotos.length;
+                    const photo = validPhotos[photoIndex];
+
+                    // 网格模式下不旋转（除非用户设置了旋转）
+                    const rotation = maxRotation > 0 ? (Math.random() - 0.5) * 2 * maxRotation : 0;
+
+                    // 验证并绘制
+                    if (isPhotoValid(photo)) {
+                        drawPhoto(ctx, photo, x, y, photoSize, borderRadius, rotation);
+                    } else {
+                        const replacement = validPhotos[(photoIndex + 1) % validPhotos.length];
+                        if (isPhotoValid(replacement)) {
+                            drawPhoto(ctx, replacement, x, y, photoSize, borderRadius, rotation);
+                        }
+                    }
+
+                    drawn++;
+                    if (drawn % 100 === 0) {
+                        progressFill.style.width = (drawn / totalPhotos * 50) + '%';
+                        await new Promise(r => setTimeout(r, 0));
+                    }
+                }
+            }
+        }
+
+        // 绘制单张照片
+        function drawPhoto(ctx, photo, x, y, size, borderRadius, rotation) {
+            ctx.save();
+
+            // 应用旋转
+            if (rotation !== 0) {
+                ctx.translate(x + size / 2, y + size / 2);
+                ctx.rotate(rotation * Math.PI / 180);
+                ctx.translate(-(x + size / 2), -(y + size / 2));
+            }
+
+            // 绘制圆角矩形裁剪
+            const radius = size * borderRadius;
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + size - radius, y);
+            ctx.quadraticCurveTo(x + size, y, x + size, y + radius);
+            ctx.lineTo(x + size, y + size - radius);
+            ctx.quadraticCurveTo(x + size, y + size, x + size - radius, y + size);
+            ctx.lineTo(x + radius, y + size);
+            ctx.quadraticCurveTo(x, y + size, x, y + size - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            ctx.clip();
+
+            // 绘制照片（居中裁剪）
+            const scale = Math.max(size / photo.width, size / photo.height);
+            const sw = size / scale;
+            const sh = size / scale;
+            const sx = (photo.width - sw) / 2;
+            const sy = (photo.height - sh) / 2;
+            ctx.drawImage(photo, sx, sy, sw, sh, x, y, size, size);
+
+            ctx.restore();
+        }
+
+        async function generate() {
+            const spacing = parseInt(document.getElementById('spacing').value);
+            const minPhotoSize = parseInt(document.getElementById('minPhotoSize').value);
+            const maxPhotoSize = parseInt(document.getElementById('maxPhotoSize').value);
+            const bgColor = document.getElementById('bgColor').value;
+            const layoutMode = document.getElementById('layoutMode').value;
+            const borderRadius = parseInt(document.getElementById('borderRadius').value) / 100;
+            const maxRotation = parseInt(document.getElementById('rotation').value);
+
+            // 只使用有效的照片
+            const validPhotos = getValidPhotos();
+            if (validPhotos.length === 0) {
+                alert('没有有效的照片！请检查照片是否正确上传。');
+                progress.style.display = 'none';
+                return;
+            }
+
+            console.log(`使用 ${validPhotos.length} 张有效照片生成挂画`);
+
+            // 显示进度
+            progress.style.display = 'block';
+            result.style.display = 'none';
+            generateBtn.disabled = true;
+
+            // 创建离屏 canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = A3_WIDTH;
+            canvas.height = A3_HEIGHT;
+            const ctx = canvas.getContext('2d');
+
+            // 填充背景色
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, A3_WIDTH, A3_HEIGHT);
+
+            progressText.textContent = '正在排列照片...';
+            progressFill.style.width = '0%';
+
+            if (layoutMode === 'random') {
+                // 瀑布流随机尺寸布局
+                await generateRandomLayout(ctx, validPhotos, spacing, minPhotoSize, maxPhotoSize, borderRadius, maxRotation);
+            } else {
+                // 传统整齐网格布局
+                await generateGridLayout(ctx, validPhotos, spacing, minPhotoSize, borderRadius, maxRotation);
+            }
+
+            // 处理文字模板
+            progressText.textContent = '正在处理文字蒙版...';
+            progressFill.style.width = '50%';
+            await new Promise(r => setTimeout(r, 0));
+
+            // 创建模板 canvas
+            const templateCanvas = document.createElement('canvas');
+            templateCanvas.width = A3_WIDTH;
+            templateCanvas.height = A3_HEIGHT;
+            const templateCtx = templateCanvas.getContext('2d');
+
+            // 绘制模板（缩放到画布大小，保持比例居中）
+            const templateScale = Math.min(A3_WIDTH / templateImage.width, A3_HEIGHT / templateImage.height) * 0.9;
+            const templateW = templateImage.width * templateScale;
+            const templateH = templateImage.height * templateScale;
+            const templateX = (A3_WIDTH - templateW) / 2;
+            const templateY = (A3_HEIGHT - templateH) / 2;
+
+            templateCtx.drawImage(templateImage, templateX, templateY, templateW, templateH);
+
+            // 获取模板像素数据
+            const templateData = templateCtx.getImageData(0, 0, A3_WIDTH, A3_HEIGHT);
+
+            // 创建遮罩 canvas
+            const maskCanvas = document.createElement('canvas');
+            maskCanvas.width = A3_WIDTH;
+            maskCanvas.height = A3_HEIGHT;
+            const maskCtx = maskCanvas.getContext('2d');
+
+            // 根据模板创建遮罩（白底黑字）
+            // 白底黑字：黑色文字区域显示照片，白色背景区域填充背景色
+            for (let i = 0; i < templateData.data.length; i += 4) {
+                const r = templateData.data[i];
+                const g = templateData.data[i + 1];
+                const b = templateData.data[i + 2];
+
+                // 计算亮度
+                const brightness = (r + g + b) / 3;
+
+                // 黑色区域（文字）-> 不透明（保留照片）
+                // 白色区域（背景）-> 透明（将被背景色覆盖）
+                const alpha = 255 - brightness; // 黑色=255不透明，白色=0透明
+
+                templateData.data[i + 3] = alpha;
+            }
+
+            maskCtx.putImageData(templateData, 0, 0);
+
+            progressFill.style.width = '80%';
+            progressText.textContent = '正在合成最终效果...';
+            await new Promise(r => setTimeout(r, 0));
+
+            // 创建照片层（只保留文字区域的照片）
+            const photoLayer = document.createElement('canvas');
+            photoLayer.width = A3_WIDTH;
+            photoLayer.height = A3_HEIGHT;
+            const photoCtx = photoLayer.getContext('2d');
+
+            // 先绘制照片
+            photoCtx.drawImage(canvas, 0, 0);
+
+            // 使用遮罩：只保留黑色文字区域的照片
+            photoCtx.globalCompositeOperation = 'destination-in';
+            photoCtx.drawImage(maskCanvas, 0, 0);
+
+            // 清空主画布并填充背景色
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, A3_WIDTH, A3_HEIGHT);
+
+            // 将照片层（只有文字区域）绘制到主画布
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.drawImage(photoLayer, 0, 0);
+
+            progressFill.style.width = '100%';
+            progressText.textContent = '生成完成！';
+
+            // 显示结果
+            await new Promise(r => setTimeout(r, 500));
+
+            // 缩放显示在页面上
+            const displayCanvas = outputCanvas;
+            const displayScale = Math.min(800 / A3_WIDTH, 600 / A3_HEIGHT);
+            displayCanvas.width = A3_WIDTH * displayScale;
+            displayCanvas.height = A3_HEIGHT * displayScale;
+            const displayCtx = displayCanvas.getContext('2d');
+            displayCtx.drawImage(canvas, 0, 0, displayCanvas.width, displayCanvas.height);
+
+            // 设置下载链接
+            downloadBtn.href = canvas.toDataURL('image/png');
+
+            // 隐藏进度，显示结果
+            progress.style.display = 'none';
+            result.style.display = 'block';
+            generateBtn.disabled = false;
+            generateBtn.textContent = '重新生成';
+        }
+    </script>
+</body>
+</html>

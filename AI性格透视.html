@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI性格透视 - 发现真实的你</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            font-size: 1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        /* AI图标 */
+        .ai-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.3);
+        }
+
+        /* 问题卡片 */
+        .question-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .option-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 15px 30px;
+            font-size: 1em;
+            background: var(--card);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        /* 进度指示 */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg);
+        }
+
+        .dot.active {
+            background: var(--primary);
+        }
+
+        .dot.completed {
+            background: var(--success);
+        }
+
+        /* 分析动画 */
+        .analyzing {
+            padding: 40px 0;
+        }
+
+        .analyzing-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .analyzing-text {
+            font-size: 1.1em;
+            color: var(--text-muted);
+        }
+
+        .analyzing-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--bg);
+            border-radius: 2px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .analyzing-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        /* 结果卡片 */
+        .result-card {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .result-title {
+            text-align: center;
+            font-size: 1.1em;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .result-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: var(--text);
+        }
+
+        .result-text p {
+            margin-bottom: 15px;
+        }
+
+        /* 评分按钮 */
+        .rating-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .rating-btn {
+            padding: 18px 25px;
+            font-size: 1.05em;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rating-btn:hover {
+            background: var(--primary);
+        }
+
+        /* 揭秘卡片 */
+        .reveal-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(107, 92, 231, 0.2));
+            border: 2px dashed var(--accent);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .reveal-box h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .reveal-box p {
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        /* 洞察卡片 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .option-btn {
+                padding: 12px 20px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="ai-icon">🤖</div>
+            <h1>AI 性格透视</h1>
+            <p class="subtitle">AI 将通过你的选择习惯分析你的性格<br>准备好了吗？</p>
+
+            <button class="btn btn-primary" onclick="startGame()">开始分析</button>
+        </div>
+
+        <!-- 屏幕2：问题 -->
+        <div class="screen" id="screen-question">
+            <div class="progress-dots" id="progressDots"></div>
+
+            <div class="ai-icon" style="width: 50px; height: 50px; font-size: 24px;">🤖</div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="option-group" id="optionGroup"></div>
+            </div>
+        </div>
+
+        <!-- 屏幕3：分析中 -->
+        <div class="screen" id="screen-analyzing">
+            <div class="analyzing">
+                <div class="analyzing-icon">🔮</div>
+                <div class="analyzing-text">正在分析大数据...</div>
+                <div class="analyzing-bar">
+                    <div class="analyzing-fill"></div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9em;">结合你的选择习惯与行为模式</p>
+            </div>
+        </div>
+
+        <!-- 屏幕4：结果 -->
+        <div class="screen" id="screen-result">
+            <div class="ai-icon" style="width: 50px; height: 50px; font-size: 24px;">🤖</div>
+
+            <h2>分析完成</h2>
+
+            <div class="result-card">
+                <div class="result-title">✨ 你的性格画像 ✨</div>
+                <div class="result-text">
+                    <p>你外表坚强独立，但内心深处渴望被理解和认可。你有时表现得外向开朗，有时又喜欢独处思考，这种矛盾让你显得神秘而有魅力。</p>
+                    <p>你有许多未被发掘的潜能，只是有时缺乏展现的勇气。你是一个理性与感性并存的人，在做重大决定时会深思熟虑，但偶尔也会凭直觉行事。</p>
+                    <p>你对朋友真诚，但真正走进你内心的人并不多。你渴望安全感，却又向往自由，这种张力正是你不断成长的动力。</p>
+                </div>
+            </div>
+
+            <p class="subtitle">你觉得这段描述准吗？</p>
+
+            <div class="rating-group">
+                <button class="rating-btn" onclick="showReveal('very')">非常准！</button>
+                <button class="rating-btn" onclick="showReveal('somewhat')">一般准</button>
+                <button class="rating-btn" onclick="showReveal('not')">不太准</button>
+            </div>
+        </div>
+
+        <!-- 屏幕5：揭秘 -->
+        <div class="screen" id="screen-reveal">
+            <h2>真相揭晓</h2>
+
+            <div class="reveal-box">
+                <h3>🎭 你被骗到了吗？</h3>
+                <p id="revealText"></p>
+            </div>
+
+            <div class="insight-box">
+                <h3>🧠 为什么会觉得准？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的原理</button>
+        </div>
+
+        <!-- 屏幕6：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>大脑的"自我验证"</h2>
+
+            <div class="theory-section">
+                <h3>🔬 这是什么现象？</h3>
+                <p>这就是著名的<strong>巴纳姆效应</strong>（Barnum Effect），以马戏团创始人 P.T. Barnum 命名。</p>
+                <p>人们很容易相信一个笼统的、一般性的人格描述特别适合自己。因为大脑有"主观验证"的倾向——我们会自动忽略不准的部分，拼命搜集证据来证明"它说得真准"。</p>
+                <p>这也是为什么星座、塔罗牌、性格测试总是让人惊呼"太准了"的原因。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>🏠 家庭教育启示</h3>
+                <p><strong>撕掉"负面标签"，善用"正面巴纳姆"暗示</strong></p>
+                <ul class="tips-list">
+                    <li>家长常说"你就是个磨蹭的人"、"你太内向了"，孩子会像相信星座一样，把这些负面标签内化</li>
+                    <li>建议：反过来利用巴纳姆效应，多给孩子笼统但积极的暗示</li>
+                    <li>比如："我发现你其实是一个很有主见、只要想做好就能做好的孩子"</li>
+                    <li>孩子也会拼命搜集证据证明"妈妈说得对"，从而向好的方向发展（这也叫皮格马利翁效应）</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 问题列表
+        const QUESTIONS = [
+            {
+                text: "你更喜欢白天还是黑夜？",
+                options: ["白天", "黑夜"]
+            },
+            {
+                text: "如果可以选择，你更愿意住在哪个城市？",
+                options: ["繁华都市", "宁静小镇"]
+            },
+            {
+                text: "你更喜欢猫还是狗？",
+                options: ["猫", "狗"]
+            },
+            {
+                text: "周末你更倾向于怎么度过？",
+                options: ["宅家休息", "外出活动"]
+            },
+            {
+                text: "做决定时，你更依赖什么？",
+                options: ["理性分析", "直觉感受"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始游戏
+        function startGame() {
+            currentQuestion = 0;
+            answers = [];
+            showQuestion();
+        }
+
+        // 显示问题
+        function showQuestion() {
+            // 更新进度点
+            const dotsEl = document.getElementById('progressDots');
+            dotsEl.innerHTML = '';
+            for (let i = 0; i < QUESTIONS.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i < currentQuestion) dot.classList.add('completed');
+                else if (i === currentQuestion) dot.classList.add('active');
+                dotsEl.appendChild(dot);
+            }
+
+            const question = QUESTIONS[currentQuestion];
+            document.getElementById('questionText').textContent = question.text;
+
+            const optionGroup = document.getElementById('optionGroup');
+            optionGroup.innerHTML = '';
+
+            question.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option);
+                optionGroup.appendChild(btn);
+            });
+
+            showScreen('screen-question');
+        }
+
+        // 选择选项
+        function selectOption(option) {
+            answers.push(option);
+
+            // 标记选中
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if (btn.textContent === option) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            // 延迟进入下一题
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < QUESTIONS.length) {
+                    showQuestion();
+                } else {
+                    showAnalyzing();
+                }
+            }, 300);
+        }
+
+        // 显示分析动画
+        function showAnalyzing() {
+            showScreen('screen-analyzing');
+
+            // 2秒后显示结果
+            setTimeout(() => {
+                showScreen('screen-result');
+            }, 2500);
+        }
+
+        // 显示揭秘
+        function showReveal(rating) {
+            showScreen('screen-reveal');
+
+            const revealText = document.getElementById('revealText');
+            const insightText = document.getElementById('insightText');
+
+            if (rating === 'very') {
+                revealText.innerHTML = `是不是觉得这段话简直就是为你量身定做的？<br><br><strong>真相是：刚才这段话，是所有玩家看到的同一版本。</strong><br><br>不管你前面选了什么，最后显示的性格描述都是一模一样的。不信？你可以刷新页面再测一次，结果完全相同。`;
+                insightText.textContent = '你选择了"非常准"，这正是巴纳姆效应的典型表现。这段话其实适用于任何人，但你的大脑自动搜集证据来证明"它说得真准"，同时忽略了那些模糊或不准的部分。';
+            } else if (rating === 'somewhat') {
+                revealText.innerHTML = `你觉得"一般准"？其实这段话<strong>是所有玩家看到的同一版本</strong>。<br><br>不管你前面选了什么，最后显示的性格描述都是一模一样的。不信？你可以刷新页面再测一次，结果完全相同。`;
+                insightText.textContent = '你觉得"一般准"，说明你有一定的辨别能力，但仍然觉得部分内容符合自己。这正是巴纳姆效应的微妙之处——即使是模糊的描述，我们也能找到与自己相关的部分。';
+            } else {
+                revealText.innerHTML = `恭喜！你成功识破了巴纳姆效应！<br><br>是的，这段话<strong>是所有玩家看到的同一版本</strong>，不管前面选什么都一样。你对笼统的人格描述保持了理性的怀疑。`;
+                insightText.textContent = '你选择了"不太准"，说明你对模糊的人格描述有较强的辨别能力。但大多数人都会觉得这类描述"很准"，这就是为什么星座、性格测试如此流行的原因。';
+            }
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentQuestion = 0;
+            answers = [];
+        }
+    </script>
+</body>
+</html>

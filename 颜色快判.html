@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色快判 - 你的大脑有多快？</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            font-size: 1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            margin: 30px 0;
+        }
+
+        .stimulus {
+            font-size: 120px;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-color {
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 130px;
+        }
+
+        .btn-color:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-color:active {
+            transform: scale(0.98);
+        }
+
+        .btn-red {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .btn-green {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        .btn-blue {
+            background: #5B9BD5;
+            color: white;
+        }
+
+        .btn-yellow {
+            background: #FFE66D;
+            color: #333;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        /* 结果页面 */
+        .result-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-muted);
+            text-align: left;
+        }
+
+        .result-value {
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+
+        .result-value.fast {
+            color: var(--success);
+        }
+
+        .result-value.slow {
+            color: var(--accent);
+        }
+
+        .time-diff {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* 洞察卡片 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .example-box {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .example-box span {
+            font-size: 48px;
+            font-weight: 900;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .stimulus.pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .stimulus {
+                font-size: 80px;
+            }
+
+            .btn-color {
+                padding: 15px 30px;
+                font-size: 1em;
+                min-width: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <h1>颜色快判</h1>
+            <p class="subtitle">你的大脑反应有多快？<br>来挑战这个看似简单的颜色判断游戏吧！</p>
+
+            <div class="example-box">
+                <span style="color: #4ECDC4;">红</span>
+            </div>
+
+            <p class="subtitle" style="font-size: 0.95em;">
+                看到上面的字了吗？<br>
+                请忽略文字含义，只选择<strong>字体的颜色</strong>
+            </p>
+
+            <button class="btn btn-primary" onclick="startGame()">开始挑战</button>
+        </div>
+
+        <!-- 屏幕2：游戏 -->
+        <div class="screen" id="screen-game">
+            <div class="progress-text">第 <span id="currentRound">1</span> / 10 题</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div class="game-area">
+                <p class="question-text">选择字体的颜色，不是文字的含义！</p>
+                <div class="stimulus" id="stimulus">红</div>
+            </div>
+
+            <div class="btn-group" id="btnGroup">
+                <!-- 按钮动态生成 -->
+            </div>
+        </div>
+
+        <!-- 屏幕3：结果 -->
+        <div class="screen" id="screen-result">
+            <h2>你的反应速度</h2>
+
+            <div class="result-card">
+                <div class="result-row">
+                    <div class="result-label">
+                        <div>一致题目</div>
+                        <div class="time-diff">字义与颜色相同</div>
+                    </div>
+                    <div class="result-value" id="resultConsistent">0.0 秒</div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">
+                        <div>冲突题目</div>
+                        <div class="time-diff">字义与颜色不同</div>
+                    </div>
+                    <div class="result-value" id="resultConflict">0.0 秒</div>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h3>🧠 发现了什么？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的原理</button>
+        </div>
+
+        <!-- 屏幕4：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>大脑的"自动挡"</h2>
+
+            <div class="theory-section">
+                <h3>🔬 这是什么现象？</h3>
+                <p>这就是著名的<strong>斯特鲁普效应</strong>（Stroop Effect），由美国心理学家约翰·斯特鲁普于 1935 年发现。</p>
+                <p>对于识字的人来说，"阅读"是一种极其熟练的<strong>自动化本能</strong>，而"辨别颜色"则需要大脑刻意控制。</p>
+                <p>当两者发生冲突时，自动化的阅读本能会强行干扰你的判断，大脑需要多花几百毫秒来"踩刹车"。</p>
+
+                <div class="example-box">
+                    <span style="color: #FF6B6B;">绿</span>
+                    <span style="color: #4ECDC4;">蓝</span>
+                    <span style="color: #FFE66D;">红</span>
+                </div>
+            </div>
+
+            <div class="theory-section">
+                <h3>🏠 家庭教育启示</h3>
+                <p><strong>"磨蹭"可能不是态度问题，而是大脑在"打架"</strong></p>
+                <ul class="tips-list">
+                    <li>孩子写作业盯着发呆，可能是大脑在"自动读取干扰信息"和"刻意解答题目"之间反复横跳</li>
+                    <li>题目排版太密集、周围有噪音，都会让孩子的大脑经历"斯特鲁普冲突"</li>
+                    <li>建议：给孩子提供<strong>极简、无干扰</strong>的学习环境</li>
+                    <li>当孩子卡壳时，不要吼"快一点"，而是帮他们排除视觉或听觉上的干扰</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 颜色配置
+        const COLORS = [
+            { name: '红', color: '#FF6B6B', class: 'btn-red' },
+            { name: '绿', color: '#4ECDC4', class: 'btn-green' },
+            { name: '蓝', color: '#5B9BD5', class: 'btn-blue' },
+            { name: '黄', color: '#FFE66D', class: 'btn-yellow' }
+        ];
+
+        // 游戏数据
+        let currentRound = 0;
+        let trialTimes = [];
+        let startTime = 0;
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始游戏
+        function startGame() {
+            currentRound = 0;
+            trialTimes = [];
+            showScreen('screen-game');
+            nextRound();
+        }
+
+        // 生成题目
+        function generateTrial(isConsistent) {
+            const wordIndex = Math.floor(Math.random() * COLORS.length);
+            let colorIndex;
+
+            if (isConsistent) {
+                // 一致：字义和颜色相同
+                colorIndex = wordIndex;
+            } else {
+                // 冲突：字义和颜色不同
+                do {
+                    colorIndex = Math.floor(Math.random() * COLORS.length);
+                } while (colorIndex === wordIndex);
+            }
+
+            return {
+                word: COLORS[wordIndex].name,
+                color: COLORS[colorIndex].color,
+                colorName: COLORS[colorIndex].name,
+                isConsistent: isConsistent
+            };
+        }
+
+        // 下一轮
+        function nextRound() {
+            currentRound++;
+
+            if (currentRound > 10) {
+                showResults();
+                return;
+            }
+
+            // 前5题一致，后5题冲突
+            const isConsistent = currentRound <= 5;
+            const trial = generateTrial(isConsistent);
+
+            // 更新进度
+            document.getElementById('currentRound').textContent = currentRound;
+            document.getElementById('progressFill').style.width = ((currentRound - 1) / 10 * 100) + '%';
+
+            // 显示刺激
+            const stimulus = document.getElementById('stimulus');
+            stimulus.textContent = trial.word;
+            stimulus.style.color = trial.color;
+            stimulus.classList.remove('pulse');
+            void stimulus.offsetWidth; // 触发重绘
+            stimulus.classList.add('pulse');
+
+            // 生成按钮（随机排列）
+            const btnGroup = document.getElementById('btnGroup');
+            btnGroup.innerHTML = '';
+
+            const shuffledColors = [...COLORS].sort(() => Math.random() - 0.5);
+            shuffledColors.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = `btn-color ${c.class}`;
+                btn.textContent = c.name;
+                btn.onclick = () => selectColor(c.name, trial);
+                btnGroup.appendChild(btn);
+            });
+
+            // 记录开始时间
+            startTime = performance.now();
+        }
+
+        // 选择颜色
+        function selectColor(selected, trial) {
+            const endTime = performance.now();
+            const reactionTime = endTime - startTime;
+
+            trialTimes.push({
+                round: currentRound,
+                isConsistent: trial.isConsistent,
+                time: reactionTime,
+                correct: selected === trial.colorName
+            });
+
+            // 立即进入下一轮
+            nextRound();
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-result');
+
+            // 计算平均时间
+            const consistentTimes = trialTimes.filter(t => t.isConsistent).map(t => t.time);
+            const conflictTimes = trialTimes.filter(t => !t.isConsistent).map(t => t.time);
+
+            const avgConsistent = consistentTimes.length > 0
+                ? consistentTimes.reduce((a, b) => a + b, 0) / consistentTimes.length / 1000
+                : 0;
+            const avgConflict = conflictTimes.length > 0
+                ? conflictTimes.reduce((a, b) => a + b, 0) / conflictTimes.length / 1000
+                : 0;
+
+            // 显示结果
+            const resultConsistent = document.getElementById('resultConsistent');
+            const resultConflict = document.getElementById('resultConflict');
+
+            resultConsistent.textContent = avgConsistent.toFixed(2) + ' 秒';
+            resultConflict.textContent = avgConflict.toFixed(2) + ' 秒';
+
+            // 标记快慢
+            if (avgConflict > avgConsistent) {
+                resultConsistent.classList.add('fast');
+                resultConflict.classList.add('slow');
+            } else {
+                resultConsistent.classList.add('slow');
+                resultConflict.classList.add('fast');
+            }
+
+            // 生成洞察文字
+            const diff = Math.abs(avgConflict - avgConsistent);
+            let insightText;
+
+            if (avgConflict > avgConsistent + 0.1) {
+                insightText = `是不是觉得嘴巴总是比脑子快？明明眼睛看到了颜色，脑子里却忍不住念出了文字。别自责，这不是你反应慢，而是你的大脑太"聪明"了！冲突题目比一致题目多花了 ${(diff * 1000).toFixed(0)} 毫秒，这正是斯特鲁普效应的威力。`;
+            } else if (avgConflict > avgConsistent) {
+                insightText = `你的表现不错！冲突题目只比一致题目慢了 ${(diff * 1000).toFixed(0)} 毫秒，说明你的控制力很强，能很好地抑制住"自动阅读"的冲动。`;
+            } else {
+                insightText = `有趣！这次你的两类题目用时差不多。可能是你天生"反直觉"能力特别强，或者你已经掌握了"只看颜色不看字"的诀窍！`;
+            }
+
+            document.getElementById('insightText').textContent = insightText;
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentRound = 0;
+            trialTimes = [];
+            document.getElementById('progressFill').style.width = '0%';
+        }
+    </script>
+</body>
+</html>

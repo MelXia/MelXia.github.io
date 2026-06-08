@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有钳任性横着走的Mel</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding-bottom: 80px;
+        }
+
+        /* ========== 顶部导航 ========== */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ========== Hero区域 ========== */
+        .hero {
+            padding: 50px 20px 30px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(107,92,231,0.1) 0%, var(--bg) 100%);
+        }
+
+        .hero-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1em;
+            max-width: 320px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .hero-tagline {
+            margin-top: 15px;
+            color: var(--primary-light);
+            font-size: 0.9em;
+        }
+
+        /* ========== 模块标题 ========== */
+        .section {
+            padding: 25px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-icon {
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            color: var(--primary-light);
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* ========== 关于Mel ========== */
+        .about-section {
+            padding: 25px 20px;
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(107,92,231,0.05) 100%);
+        }
+
+        .about-text {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+
+        .about-text p { margin-bottom: 10px; }
+        .about-text p:last-child { margin-bottom: 0; }
+
+        /* ========== 翻译案例 ========== */
+        .article-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+
+        .article-title {
+            font-size: 1em;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .article-excerpt {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .article-result {
+            font-size: 0.8em;
+            color: var(--success);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--primary);
+        }
+
+        .article-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .article-link:hover { text-decoration: underline; }
+
+        /* ========== 翻译工具 ========== */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .game-card {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .game-card:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .game-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+        .game-name { font-size: 0.85em; color: var(--text); display: block; }
+        .game-effect { font-size: 0.75em; color: var(--accent); margin-top: 5px; display: block; }
+        .game-translation {
+            font-size: 0.7em;
+            color: var(--text-muted);
+            margin-top: 8px;
+            display: block;
+            line-height: 1.4;
+        }
+
+        /* ========== 翻译现场 ========== */
+        .公益-category {
+            margin-bottom: 25px;
+        }
+
+        .公益-title {
+            font-size: 1em;
+            color: var(--primary-light);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .公益-翻译 {
+            font-size: 0.8em;
+            color: var(--success);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .公益-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .公益-item {
+            background: var(--card);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .公益-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .公益-info {
+            padding: 10px;
+        }
+
+        .公益-date {
+            font-size: 0.75em;
+            color: var(--accent);
+        }
+
+        .公益-location {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ========== 联系方式 ========== */
+        .contact-section {
+            padding: 20px;
+            background: var(--card);
+            margin: 25px 0;
+            border-radius: 12px;
+        }
+
+        .contact-title {
+            font-size: 1em;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .contact-item {
+            text-align: center;
+        }
+
+        .contact-label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        .contact-value {
+            font-size: 0.95em;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        /* ========== 底部 ========== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            border-top: 1px solid var(--card);
+        }
+
+        .footer-line {
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* ========== 返回顶部 ========== */
+        .back-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.8;
+            z-index: 99;
+        }
+
+        .back-top:hover { opacity: 1; }
+
+        /* ========== 作品入口 ========== */
+        .作品-link {
+            display: block;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+            text-decoration: none;
+        }
+
+        .作品-link:hover {
+            background: var(--primary);
+        }
+
+        .作品-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .作品-text {
+            font-size: 0.9em;
+            color: var(--text);
+        }
+
+        .作品-sub {
+            font-size: 0.8em;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-brand">有钳任性横着走的Mel</div>
+        <div class="nav-links">
+            <a href="#翻译案例">翻译案例</a>
+            <a href="#翻译工具">翻译工具</a>
+            <a href="#翻译现场">翻译现场</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 class="hero-title">我是Mel，有钳任性横着走</h1>
+        <p class="hero-desc">
+            青少年说："我爸妈根本不懂我"<br>
+            父母说："这孩子怎么越来越难沟通"<br>
+            我是站在中间的那个人<br>
+            把彼此听不懂的话，翻译成能听懂的心
+        </p>
+        <p class="hero-tagline">——用案例、用游戏、用一场又一场的相遇</p>
+    </section>
+
+    <!-- 关于Mel（前置） -->
+    <section class="section about-section">
+        <div class="section-header">
+            <span class="section-icon">🦀</span>
+            <h2 class="section-title">关于Mel</h2>
+        </div>
+        <div class="about-text">
+            <p>我是巨蟹座，所以我说自己"有钳任性"。2014年开始做公益，后来发现，帮别人的过程，其实也在治愈自己。</p>
+            <p>我见过太多家长和孩子"互相听不懂"。孩子说"你不懂我"，家长说"你怎么这样"。两个人明明在说话，却像隔着一片海。我站在这片海的中间，试着把两边的话翻译成彼此能听懂的语言。</p>
+            <p>每当看到家长说"我终于懂他了"，孩子说"原来我妈是这样想的"，我就觉得——这件事，值得继续做。我不是什么专家，我只是站在中间的那个人。</p>
+        </div>
+    </section>
+
+    <!-- 翻译案例 -->
+    <section class="section" id="翻译案例">
+        <div class="section-header">
+            <span class="section-icon">📖</span>
+            <h2 class="section-title">翻译案例</h2>
+        </div>
+        <p class="section-desc">每一次翻译，都是一个故事。家长带着困惑来，孩子带着委屈来。我用倾听和理解，帮他们看见彼此的真实。</p>
+
+        <div class="article-card">
+            <div class="article-title">张女士：焦虑兜底能力</div>
+            <div class="article-excerpt">她每天盯着女儿的"不足"，焦虑到睡不着。直到她说出"我之前得过癌症"，一切都有了答案。</div>
+            <div class="article-result">翻译结果：从焦虑成绩到焦虑生命，她终于看见自己的真实恐惧</div>
+            <a href="story-1.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">关女士：多维焦虑与边界混乱</div>
+            <div class="article-excerpt">作为母亲，她觉得自己应该"什么都管"。孩子的学习、丈夫的事业、老人的健康，每一件事都压在她身上。</div>
+            <div class="article-result">翻译结果：从"我什么都管"到"我把边界还给他们"</div>
+            <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">厌学孩子：默默陪伴的力量</div>
+            <div class="article-excerpt">孩子说"我不想上学"，家长的第一反应是"你怎么能这样"。但有一种陪伴，不出声、不追问、不评判。</div>
+            <div class="article-result">翻译结果：从"你怎么能这样"到"原来他需要的只是默默陪伴"</div>
+            <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <a href="articles.html" class="article-link" target="_blank" style="display:block;text-align:center;margin-top:15px;padding:12px;background:var(--card);border-radius:8px;">查看更多翻译案例 →</a>
+    </section>
+
+    <!-- 翻译工具 -->
+    <section class="section" id="翻译工具">
+        <div class="section-header">
+            <span class="section-icon">🧪</span>
+            <h2 class="section-title">翻译工具</h2>
+        </div>
+        <p class="section-desc">翻译之前，先让双方"看见"。这些心理学小游戏，帮助家长和孩子看见自己的盲点、看见彼此的差异。当看见了，翻译就有了起点。</p>
+        <div class="games-grid">
+            <a href="找茬挑战.html" class="game-card">
+                <span class="game-icon">🔍</span>
+                <span class="game-name">找茬挑战</span>
+                <span class="game-effect">变化盲视</span>
+                <span class="game-translation">家长总说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</span>
+            </a>
+            <a href="中断的记忆.html" class="game-card">
+                <span class="game-icon">⏱️</span>
+                <span class="game-name">中断的记忆</span>
+                <span class="game-effect">蔡格尼克效应</span>
+                <span class="game-translation">为什么孩子总记得"那件事还没做完"？帮家长理解未完成任务的执念</span>
+            </a>
+            <a href="AI性格透视.html" class="game-card">
+                <span class="game-icon">🤖</span>
+                <span class="game-name">AI性格透视</span>
+                <span class="game-effect">巴纳姆效应</span>
+                <span class="game-translation">为什么我们总觉得星座很准？帮家长看见"标签化"的危险</span>
+            </a>
+            <a href="颜色快判.html" class="game-card">
+                <span class="game-icon">🎨</span>
+                <span class="game-name">颜色快判</span>
+                <span class="game-effect">斯特鲁普效应</span>
+                <span class="game-translation">当信息和情绪冲突时，大脑会先反应哪个？帮家长理解孩子的情绪反应</span>
+            </a>
+            <a href="生日引力场.html" class="game-card">
+                <span class="game-icon">🎂</span>
+                <span class="game-name">生日引力场</span>
+                <span class="game-effect">自我参照效应</span>
+                <span class="game-translation">孩子说"我生日你都不记得"，家长说"我记得啊"，谁的记忆更深刻？</span>
+            </a>
+            <a href="阿希从众实验.html" class="game-card">
+                <span class="game-icon">🧠</span>
+                <span class="game-name">阿希从众实验</span>
+                <span class="game-effect">从众效应</span>
+                <span class="game-translation">当所有人都说"是"，你敢说"不"吗？帮家长理解群体压力的影响</span>
+            </a>
+            <a href="师恩难忘挂画生成器.html" class="game-card">
+                <span class="game-icon">🖼️</span>
+                <span class="game-name">挂画生成器</span>
+                <span class="game-effect">实用工具</span>
+                <span class="game-translation">让感恩可视化</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- 翻译现场 -->
+    <section class="section" id="翻译现场">
+        <div class="section-header">
+            <span class="section-icon">🌸</span>
+            <h2 class="section-title">翻译现场</h2>
+        </div>
+        <p class="section-desc">翻译不是只在咨询室。从社区到学校，从热线到花艺沙龙，每一次相遇，都是一次翻译的机会。我把孩子的需求翻译给家长，把家长的苦心翻译给孩子，把社会的善意翻译给需要的人。</p>
+
+        <!-- 社区关爱 -->
+        <div class="公益-category">
+            <div class="公益-title">🏠 社区关爱活动 <a href="activity-community.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：翻译不同年龄层彼此理解的需求</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/社区关爱活动2014年10月广州市海珠区江南中街道.jpg" alt="社区关爱">
+                    <div class="公益-info">
+                        <div class="公益-date">2014年10月</div>
+                        <div class="公益-location">海珠区江南中街道</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/社区关爱活动2016年9月广州市荔湾区华林街道.JPG" alt="社区关爱">
+                    <div class="公益-info">
+                        <div class="公益-date">2016年9月</div>
+                        <div class="公益-location">荔湾区华林街道</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/社区关爱活动2017年10月广州市海珠区江南中街道.JPG" alt="社区关爱">
+                    <div class="公益-info">
+                        <div class="公益-date">2017年10月</div>
+                        <div class="公益-location">海珠区江南中街道</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/社区关爱活动2018年10月蒋光鼐小学二年级.JPG" alt="社区关爱">
+                    <div class="公益-info">
+                        <div class="公益-date">2018年10月</div>
+                        <div class="公益-location">蒋光鼐小学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 儿童安全步行 -->
+        <div class="公益-category">
+            <div class="公益-title">🚸 儿童安全步行活动 <a href="activity-safety.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：把安全知识翻译成孩子能懂的语言</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/儿童安全步行活动2014年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全步行">
+                    <div class="公益-info">
+                        <div class="公益-date">2014年12月</div>
+                        <div class="公益-location">江南幼儿园</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/儿童安全步行活动2017年12月广州市海珠区儿福幼儿园.jpeg" alt="儿童安全步行">
+                    <div class="公益-info">
+                        <div class="公益-date">2017年12月</div>
+                        <div class="公益-location">儿福幼儿园</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/儿童安全步行活动2018年1月广州市荔湾区蒋光鼐小学一年级.JPG" alt="儿童安全步行">
+                    <div class="公益-info">
+                        <div class="公益-date">2018年1月</div>
+                        <div class="公益-location">蒋光鼐小学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图书馆活动 -->
+        <div class="公益-category">
+            <div class="公益-title">📚 图书馆活动 <a href="activity-library.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：做孩子阅读世界和家长期待之间的翻译官</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.JPG" alt="图书捐赠">
+                    <div class="公益-info">
+                        <div class="公益-date">2017年11月</div>
+                        <div class="公益-location">郁南镇小学</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队.JPG" alt="微澜图书馆">
+                    <div class="公益-info">
+                        <div class="公益-date">2022年9-12月</div>
+                        <div class="公益-location">微澜图书馆21馆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生涯规划 -->
+        <div class="公益-category">
+            <div class="公益-title">🎯 生涯规划活动 <a href="activity-career.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：把孩子的梦想翻译给家长，把家长的担忧翻译成孩子能接受的建议</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划">
+                    <div class="公益-info">
+                        <div class="公益-date">2022年4月</div>
+                        <div class="公益-location">华南师范大学附属中学</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/生涯规划活动2024年4月暨南大学学生模拟面试活动.jpg" alt="模拟面试">
+                    <div class="公益-info">
+                        <div class="公益-date">2024年4月</div>
+                        <div class="公益-location">暨南大学</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/生涯规划活动2024年月广州中学高一级.JPG" alt="生涯规划">
+                    <div class="公益-info">
+                        <div class="公益-date">2024年</div>
+                        <div class="公益-location">广州中学</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="参观大学">
+                    <div class="公益-info">
+                        <div class="公益-date">2024年7月</div>
+                        <div class="公益-location">广州市第一中学</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 老母亲疯会 -->
+        <div class="公益-category">
+            <div class="公益-title">☕ 老母亲疯会 <a href="activity-moms.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：把妈妈们的心声翻译成社会能听懂的语言</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营">
+                    <div class="公益-info">
+                        <div class="公益-date">2025年3月</div>
+                        <div class="公益-location">心静瑜伽馆</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会">
+                    <div class="公益-info">
+                        <div class="公益-date">2026年5月</div>
+                        <div class="公益-location">广州市海珠区</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 花艺减压沙龙 -->
+        <div class="公益-category">
+            <div class="公益-title">💐 花艺减压沙龙 <a href="activity-flower.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：把说不出口的情绪翻译成美丽的作品</p>
+            <div class="公益-grid">
+                <div class="公益-item">
+                    <img src="照片素材/花艺减压沙龙2024年6月广州市海珠区金碧花园.jpg" alt="花艺减压">
+                    <div class="公益-info">
+                        <div class="公益-date">2024年6月</div>
+                        <div class="公益-location">金碧花园</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/花艺减压沙龙2024年9月广州市天河区珠江新城.jpg" alt="花艺减压">
+                    <div class="公益-info">
+                        <div class="公益-date">2024年9月</div>
+                        <div class="公益-location">珠江新城</div>
+                    </div>
+                </div>
+                <div class="公益-item">
+                    <img src="照片素材/花艺减压沙龙2025年3月广州市天河区珠江新城.JPG" alt="花艺减压">
+                    <div class="公益-info">
+                        <div class="公益-date">2025年3月</div>
+                        <div class="公益-location">珠江新城</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 华南师大心晴热线 -->
+        <div class="公益-category">
+            <div class="公益-title">📞 华南师大"心晴热线" <a href="activity-hotline.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
+            <p class="公益-翻译">翻译角色：把求助者的困惑翻译成他们能理解的答案</p>
+        </div>
+
+        <!-- 作品入口 -->
+        <a href="flower-gallery.html" class="作品-link" target="_blank">
+            <div class="作品-icon">🌸</div>
+            <div class="作品-text">翻译情绪的作品</div>
+            <div class="作品-sub">错过花艺沙龙的朋友，看看我把情绪翻译成了什么</div>
+        </a>
+
+        <a href="photo-gallery.html" class="作品-link" target="_blank">
+            <div class="作品-icon">📷</div>
+            <div class="作品-text">翻译美好的镜头</div>
+            <div class="作品-sub">那些我用镜头捕捉的翻译时刻</div>
+        </a>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="section">
+        <div class="contact-section">
+            <div class="contact-title">找到我</div>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-label">小红书</div>
+                    <div class="contact-value">@有钳任性横着走的Mel</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">邮箱</div>
+                    <div class="contact-value">19469728@qq.com</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <p>有钳任性横着走的Mel</p>
+        <p class="footer-line">应用心理学硕士 · 工商管理硕士</p>
+        <p class="footer-line">2014年起，站在青少年和家长中间<br>做那个把彼此听不懂的话翻译成能听懂的人</p>
+    </footer>
+
+    <!-- 返回顶部 -->
+    <div class="back-top" onclick="scrollToTop()">↑</div>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 显示/隐藏返回顶部按钮
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.back-top');
+            if (window.scrollY > 300) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
