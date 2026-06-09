@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于Mel - 有钳任性横着走的Mel</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a.active { color: var(--accent); font-weight: 600; }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 页面内容 */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1em;
+            color: var(--text-muted);
+        }
+
+        /* 个人介绍 */
+        .about-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-text {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            line-height: 1.9;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+        }
+
+        /* 时间线 */
+        .timeline {
+            margin: 40px 0;
+            padding-left: 20px;
+            border-left: 2px solid var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-size: 0.85em;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .timeline-title {
+            font-size: 1em;
+            color: var(--text);
+            margin: 5px 0;
+        }
+
+        .timeline-desc {
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        /* 资质 */
+        .credentials {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .credential-card {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .credential-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .credential-title {
+            font-size: 0.9em;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .credential-desc {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        /* 联系方式 */
+        .contact-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 1.1em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .contact-subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .contact-free {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), var(--primary-light));
+            color: white;
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-xiaohongshu {
+            background: linear-gradient(135deg, #FF2442, #FE2C55);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-xiaohongshu:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-email {
+            background: var(--bg);
+            color: var(--text);
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-email:hover {
+            background: var(--primary);
+        }
+
+        .contact-note {
+            margin-top: 15px;
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            border-top: 1px solid var(--card);
+        }
+
+        /* 返回顶部 */
+        .back-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 99;
+        }
+
+        /* 移动端 */
+        @media (max-width: 600px) {
+            .credentials { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .contact-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html" class="active">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero-section">
+            <div class="hero-icon">🦀</div>
+            <h1 class="hero-title">关于Mel</h1>
+            <p class="hero-subtitle">有钳任性横着走</p>
+        </section>
+
+        <!-- 个人介绍 -->
+        <section class="about-section">
+            <h2 class="section-title">🙋‍♀️ 我是谁</h2>
+            <div class="about-text">
+                <p>我是巨蟹座，所以我说自己"有钳任性"。2014年开始做公益，后来发现，帮别人的过程，其实也在治愈自己。</p>
+                <p>我见过太多家长和孩子"互相听不懂"。孩子说"你不懂我"，家长说"你怎么这样"。两个人明明在说话，却像隔着一片海。</p>
+                <p>我站在这片海的中间，试着把两边的话翻译成彼此能听懂的语言。</p>
+            </div>
+        </section>
+
+        <!-- 我为什么做这件事 -->
+        <section class="about-section">
+            <h2 class="section-title">💭 我为什么做这件事</h2>
+            <div class="about-text">
+                <p>每当看到家长说"我终于懂他了"，孩子说"原来我妈是这样想的"，我就觉得——这件事，值得继续做。</p>
+                <p>我不是什么专家，我只是站在中间的那个人。</p>
+                <p>我发现，很多时候问题不是"不爱"，而是"不懂"。孩子爱父母，父母也爱孩子，但他们说不同的语言。我帮他们翻译。</p>
+            </div>
+        </section>
+
+        <!-- 资质 -->
+        <section class="about-section">
+            <h2 class="section-title">🎓 背景与资质</h2>
+            <div class="credentials">
+                <div class="credential-card">
+                    <div class="credential-icon">🧠</div>
+                    <div class="credential-title">应用心理学硕士</div>
+                    <div class="credential-desc">华南师范大学</div>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon">💼</div>
+                    <div class="credential-title">工商管理硕士</div>
+                    <div class="credential-desc">MBA</div>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon">📞</div>
+                    <div class="credential-title">心晴热线志愿者</div>
+                    <div class="credential-desc">华南师范大学</div>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon">🌸</div>
+                    <div class="credential-title">花艺减压带领者</div>
+                    <div class="credential-desc">情绪翻译实践</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时间线 -->
+        <section class="about-section">
+            <h2 class="section-title">📅 我的翻译之路</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2014</div>
+                    <div class="timeline-title">开始公益之路</div>
+                    <div class="timeline-desc">社区关爱活动、儿童安全教育</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2017</div>
+                    <div class="timeline-title">图书馆项目</div>
+                    <div class="timeline-desc">图书捐赠、微澜图书馆志愿者</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2022</div>
+                    <div class="timeline-title">生涯规划分享</div>
+                    <div class="timeline-desc">华南师大附中、暨南大学、广州中学</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">花艺减压沙龙</div>
+                    <div class="timeline-desc">把情绪翻译成花艺作品</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-title">老母亲疯会</div>
+                    <div class="timeline-desc">为妈妈们创造减压空间</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section class="contact-section">
+            <h3 class="contact-title">约30分钟通话</h3>
+            <p class="contact-subtitle">一次简短、有用的对话，帮你理清问题</p>
+            <span class="contact-free">✓ 免费 · 无压力</span>
+            <div class="contact-buttons">
+                <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
+                    <span>📱</span>
+                    <span>小红书私信</span>
+                </a>
+                <a href="mailto:19469728@qq.com?subject=预约30分钟通话" class="btn-email">
+                    <span>✉️</span>
+                    <span>邮件联系</span>
+                </a>
+            </div>
+            <p class="contact-note">通常1天内回复</p>
+        </section>
+    </div>
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <p>有钳任性横着走的Mel</p>
+        <p style="margin-top:8px;">站在青少年和家长中间，做那个翻译的人</p>
+    </footer>
+
+    <!-- 返回顶部 -->
+    <div class="back-top" onclick="scrollToTop()">↑</div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.back-top');
+            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+
+        initTheme();
+    </script>
+</body>
+</html>

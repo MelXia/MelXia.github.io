@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>有钳任性横着走的Mel</title>
+    <title>有钳任性横着走的Mel - 青少年和家长之间的翻译官</title>
     <style>
         :root {
             --primary: #6B5CE7;
@@ -17,6 +17,19 @@
             --text-muted: #9899AC;
         }
 
+        /* 浅色模式 */
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -24,7 +37,7 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.7;
-            padding-bottom: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* ========== 顶部导航 ========== */
@@ -40,6 +53,12 @@
             border-bottom: 1px solid var(--primary);
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .nav-brand {
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -48,9 +67,21 @@
             font-size: 0.95em;
         }
 
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -61,247 +92,379 @@
 
         .nav-links a:hover { color: var(--accent); }
 
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
         /* ========== Hero区域 ========== */
         .hero {
-            padding: 50px 20px 30px;
+            padding: 80px 20px 60px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(107,92,231,0.1) 0%, var(--bg) 100%);
+            background: linear-gradient(180deg, rgba(107,92,231,0.15) 0%, var(--bg) 100%);
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-role {
+            font-size: 1.1em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
         }
 
         .hero-title {
-            font-size: 1.8em;
+            font-size: 2.2em;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            line-height: 1.3;
         }
 
         .hero-desc {
             color: var(--text-muted);
-            font-size: 1em;
-            max-width: 320px;
-            margin: 0 auto;
+            font-size: 1.05em;
+            max-width: 400px;
+            margin: 0 auto 30px;
             line-height: 1.8;
         }
 
-        .hero-tagline {
-            margin-top: 15px;
-            color: var(--primary-light);
-            font-size: 0.9em;
-        }
-
-        /* ========== 模块标题 ========== */
-        .section {
-            padding: 25px 20px;
-        }
-
-        .section-header {
+        .hero-stats {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        .section-icon {
-            font-size: 24px;
+        .stat-item {
+            text-align: center;
         }
 
-        .section-title {
-            font-size: 1.2em;
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
             color: var(--primary-light);
         }
 
-        .section-desc {
-            color: var(--text-muted);
+        .stat-label {
             font-size: 0.85em;
-            margin-bottom: 20px;
-            line-height: 1.7;
-        }
-
-        /* ========== 关于Mel ========== */
-        .about-section {
-            padding: 25px 20px;
-            background: linear-gradient(180deg, var(--bg) 0%, rgba(107,92,231,0.05) 100%);
-        }
-
-        .about-text {
             color: var(--text-muted);
-            font-size: 0.9em;
-            line-height: 1.8;
+            margin-top: 5px;
         }
 
-        .about-text p { margin-bottom: 10px; }
-        .about-text p:last-child { margin-bottom: 0; }
-
-        /* ========== 翻译案例 ========== */
-        .article-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .article-title {
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 30px;
             font-size: 1em;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .article-excerpt {
-            font-size: 0.85em;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        .article-result {
-            font-size: 0.8em;
-            color: var(--success);
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--primary);
-        }
-
-        .article-link {
-            display: inline-block;
-            margin-top: 12px;
-            font-size: 0.85em;
-            color: var(--accent);
+            font-weight: 600;
             text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .article-link:hover { text-decoration: underline; }
-
-        /* ========== 翻译工具 ========== */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
         }
 
-        .game-card {
+        .btn-secondary {
             background: var(--card);
-            border: 1px solid var(--primary);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
+            color: var(--text);
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s;
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .game-card:hover {
+        .btn-secondary:hover {
             background: var(--primary);
             transform: translateY(-3px);
         }
 
-        .game-icon { font-size: 28px; margin-bottom: 8px; display: block; }
-        .game-name { font-size: 0.85em; color: var(--text); display: block; }
-        .game-effect { font-size: 0.75em; color: var(--accent); margin-top: 5px; display: block; }
-        .game-translation {
-            font-size: 0.7em;
+        /* ========== 痛点共鸣区域 ========== */
+        .pain-section {
+            padding: 60px 20px;
+            background: var(--card);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            font-size: 0.95em;
             color: var(--text-muted);
-            margin-top: 8px;
-            display: block;
-            line-height: 1.4;
         }
 
-        /* ========== 翻译现场 ========== */
-        .公益-category {
-            margin-bottom: 25px;
+        .pain-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .公益-title {
-            font-size: 1em;
+        .pain-card {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--primary);
+        }
+
+        .pain-card-header {
+            font-size: 1.1em;
             color: var(--primary-light);
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .公益-翻译 {
-            font-size: 0.8em;
-            color: var(--success);
-            margin-bottom: 10px;
-            font-style: italic;
-        }
-
-        .公益-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
-        .公益-item {
-            background: var(--card);
-            border-radius: 10px;
-            overflow: hidden;
+        .pain-list {
+            list-style: none;
         }
 
-        .公益-item img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
+        .pain-item {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.6;
         }
 
-        .公益-info {
-            padding: 10px;
-        }
-
-        .公益-date {
-            font-size: 0.75em;
+        .pain-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
             color: var(--accent);
         }
 
-        .公益-location {
-            font-size: 0.8em;
-            color: var(--text-muted);
-            margin-top: 4px;
+        /* ========== 能力聚焦区域 ========== */
+        .strength-section {
+            padding: 60px 20px;
+            text-align: center;
         }
 
-        /* ========== 联系方式 ========== */
-        .contact-section {
-            padding: 20px;
+        .strength-title {
+            font-size: 1.4em;
+            color: var(--text);
+            margin-bottom: 30px;
+        }
+
+        .strength-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .strength-card {
             background: var(--card);
-            margin: 25px 0;
-            border-radius: 12px;
+            border-radius: 16px;
+            padding: 30px 20px;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
         }
 
-        .contact-title {
-            font-size: 1em;
-            color: var(--primary-light);
+        .strength-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .strength-icon {
+            font-size: 36px;
             margin-bottom: 15px;
+        }
+
+        .strength-name {
+            font-size: 1.05em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .strength-desc {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ========== 预约流程 ========== */
+        .booking-section {
+            padding: 60px 20px;
+            background: var(--card);
+        }
+
+        .booking-header {
             text-align: center;
+            margin-bottom: 40px;
         }
 
-        .contact-grid {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 40px;
-            align-items: center;
+        .booking-title {
+            font-size: 1.5em;
+            color: var(--text);
+            margin-bottom: 10px;
         }
 
-        .contact-item {
-            text-align: center;
-        }
-
-        .contact-label {
-            font-size: 0.8em;
+        .booking-subtitle {
+            font-size: 0.95em;
             color: var(--text-muted);
         }
 
-        .contact-value {
+        .booking-free {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), var(--primary-light));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .booking-steps {
+            max-width: 500px;
+            margin: 0 auto 35px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
             font-size: 0.95em;
             color: var(--accent);
-            margin-top: 5px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .booking-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-xiaohongshu {
+            background: linear-gradient(135deg, #FF2442, #FE2C55);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-xiaohongshu:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255,36,66,0.3);
+        }
+
+        .btn-email {
+            background: var(--bg);
+            color: var(--text);
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-email:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .booking-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: var(--text-muted);
         }
 
         /* ========== 底部 ========== */
         .footer {
             text-align: center;
-            padding: 20px;
+            padding: 25px 20px;
             color: var(--text-muted);
             font-size: 0.85em;
             border-top: 1px solid var(--card);
@@ -322,7 +485,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 20px;
@@ -333,36 +496,18 @@
 
         .back-top:hover { opacity: 1; }
 
-        /* ========== 作品入口 ========== */
-        .作品-link {
-            display: block;
-            background: var(--card);
-            border: 1px solid var(--primary);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            margin: 20px 0;
-            text-decoration: none;
-        }
-
-        .作品-link:hover {
-            background: var(--primary);
-        }
-
-        .作品-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .作品-text {
-            font-size: 0.9em;
-            color: var(--text);
-        }
-
-        .作品-sub {
-            font-size: 0.8em;
-            color: var(--accent);
-            margin-top: 5px;
+        /* ========== 移动端适配 ========== */
+        @media (max-width: 600px) {
+            .hero { padding: 60px 20px 40px; min-height: auto; }
+            .hero-title { font-size: 1.6em; }
+            .hero-stats { gap: 20px; }
+            .stat-number { font-size: 1.5em; }
+            .pain-grid { grid-template-columns: 1fr; }
+            .strength-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .nav-cta { padding: 6px 12px; font-size: 0.8em; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .booking-buttons { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -370,354 +515,188 @@
 
     <!-- 顶部导航 -->
     <nav class="top-nav">
-        <div class="nav-brand">有钳任性横着走的Mel</div>
+        <div class="nav-left">
+            <div class="nav-brand">有钳任性横着走的Mel</div>
+            <a href="#contact" class="nav-cta">约个时间</a>
+        </div>
         <div class="nav-links">
-            <a href="#翻译案例">翻译案例</a>
-            <a href="#翻译工具">翻译工具</a>
-            <a href="#翻译现场">翻译现场</a>
+            <a href="index.html" style="color:var(--text-muted);text-decoration:none;">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="切换配色">🌙</button>
         </div>
     </nav>
 
     <!-- Hero -->
     <section class="hero">
-        <h1 class="hero-title">我是Mel，有钳任性横着走</h1>
+        <p class="hero-role">青少年和家长之间的翻译官</p>
+        <h1 class="hero-title">把彼此听不懂的话<br>翻译成能听懂的心</h1>
         <p class="hero-desc">
-            青少年说："我爸妈根本不懂我"<br>
-            父母说："这孩子怎么越来越难沟通"<br>
-            我是站在中间的那个人<br>
-            把彼此听不懂的话，翻译成能听懂的心
+            孩子说"你不懂我"，家长说"你怎么这样"<br>
+            两个人明明在说话，却像隔着一片海<br>
+            我站在这片海的中间，帮你看见彼此的真实
         </p>
-        <p class="hero-tagline">——用案例、用游戏、用一场又一场的相遇</p>
+
+        <!-- 数据背书 -->
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">个受助家庭</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">小时志愿服务</div>
+            </div>
+        </div>
+
+        <!-- 双按钮 CTA -->
+        <div class="hero-buttons">
+            <a href="#contact" class="btn-primary">💬 预约30分钟通话</a>
+            <a href="casebook.html" class="btn-secondary">📖 查看翻译案例</a>
+        </div>
     </section>
 
-    <!-- 关于Mel（前置） -->
-    <section class="section about-section">
+    <!-- 痛点共鸣 -->
+    <section class="pain-section">
         <div class="section-header">
-            <span class="section-icon">🦀</span>
-            <h2 class="section-title">关于Mel</h2>
+            <h2 class="section-title">你可能正处于这样的困境</h2>
+            <p class="section-subtitle">如果是，那我们聊聊</p>
         </div>
-        <div class="about-text">
-            <p>我是巨蟹座，所以我说自己"有钳任性"。2014年开始做公益，后来发现，帮别人的过程，其实也在治愈自己。</p>
-            <p>我见过太多家长和孩子"互相听不懂"。孩子说"你不懂我"，家长说"你怎么这样"。两个人明明在说话，却像隔着一片海。我站在这片海的中间，试着把两边的话翻译成彼此能听懂的语言。</p>
-            <p>每当看到家长说"我终于懂他了"，孩子说"原来我妈是这样想的"，我就觉得——这件事，值得继续做。我不是什么专家，我只是站在中间的那个人。</p>
+
+        <div class="pain-grid">
+            <div class="pain-card">
+                <div class="pain-card-header">👨‍👩‍👧 如果你是家长</div>
+                <ul class="pain-list">
+                    <li class="pain-item">孩子说"你不懂我"，你不知道哪里出了问题</li>
+                    <li class="pain-item">每次沟通都变成争吵，最后谁都不说话</li>
+                    <li class="pain-item">孩子越来越沉默，你担心却不知如何开口</li>
+                    <li class="pain-item">你只关心成绩，孩子觉得你不在乎TA这个人</li>
+                </ul>
+            </div>
+
+            <div class="pain-card">
+                <div class="pain-card-header">🧒 如果你是青少年</div>
+                <ul class="pain-list">
+                    <li class="pain-item">爸妈从来不真正听你说话，只顾着说他们的</li>
+                    <li class="pain-item">你有自己的想法，但说出来就被否定</li>
+                    <li class="pain-item">家里像战场，你只想躲进房间</li>
+                    <li class="pain-item">你觉得孤独，明明家里有人却没人懂你</li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <!-- 翻译案例 -->
-    <section class="section" id="翻译案例">
-        <div class="section-header">
-            <span class="section-icon">📖</span>
-            <h2 class="section-title">翻译案例</h2>
-        </div>
-        <p class="section-desc">每一次翻译，都是一个故事。家长带着困惑来，孩子带着委屈来。我用倾听和理解，帮他们看见彼此的真实。</p>
+    <!-- 能力聚焦 -->
+    <section class="strength-section">
+        <h2 class="strength-title">我最擅长帮你走出如下困境</h2>
 
-        <div class="article-card">
-            <div class="article-title">张女士：焦虑兜底能力</div>
-            <div class="article-excerpt">她每天盯着女儿的"不足"，焦虑到睡不着。直到她说出"我之前得过癌症"，一切都有了答案。</div>
-            <div class="article-result">翻译结果：从焦虑成绩到焦虑生命，她终于看见自己的真实恐惧</div>
-            <a href="story-1.html" class="article-link" target="_blank">阅读全文 →</a>
-        </div>
+        <div class="strength-grid">
+            <div class="strength-card">
+                <div class="strength-icon">🌉</div>
+                <div class="strength-name">亲子沟通障碍</div>
+                <div class="strength-desc">当双方都在说话却谁也听不懂谁，我帮你翻译各自的真实意思</div>
+            </div>
 
-        <div class="article-card">
-            <div class="article-title">关女士：多维焦虑与边界混乱</div>
-            <div class="article-excerpt">作为母亲，她觉得自己应该"什么都管"。孩子的学习、丈夫的事业、老人的健康，每一件事都压在她身上。</div>
-            <div class="article-result">翻译结果：从"我什么都管"到"我把边界还给他们"</div>
-            <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
-        </div>
+            <div class="strength-card">
+                <div class="strength-icon">🎓</div>
+                <div class="strength-name">厌学/情绪问题</div>
+                <div class="strength-desc">孩子不想上学、情绪失控背后，往往有说不出口的原因</div>
+            </div>
 
-        <div class="article-card">
-            <div class="article-title">厌学孩子：默默陪伴的力量</div>
-            <div class="article-excerpt">孩子说"我不想上学"，家长的第一反应是"你怎么能这样"。但有一种陪伴，不出声、不追问、不评判。</div>
-            <div class="article-result">翻译结果：从"你怎么能这样"到"原来他需要的只是默默陪伴"</div>
-            <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
-        </div>
-
-        <a href="articles.html" class="article-link" target="_blank" style="display:block;text-align:center;margin-top:15px;padding:12px;background:var(--card);border-radius:8px;">查看更多翻译案例 →</a>
-    </section>
-
-    <!-- 翻译工具 -->
-    <section class="section" id="翻译工具">
-        <div class="section-header">
-            <span class="section-icon">🧪</span>
-            <h2 class="section-title">翻译工具</h2>
-        </div>
-        <p class="section-desc">翻译之前，先让双方"看见"。这些心理学小游戏，帮助家长和孩子看见自己的盲点、看见彼此的差异。当看见了，翻译就有了起点。</p>
-        <div class="games-grid">
-            <a href="找茬挑战.html" class="game-card">
-                <span class="game-icon">🔍</span>
-                <span class="game-name">找茬挑战</span>
-                <span class="game-effect">变化盲视</span>
-                <span class="game-translation">家长总说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</span>
-            </a>
-            <a href="中断的记忆.html" class="game-card">
-                <span class="game-icon">⏱️</span>
-                <span class="game-name">中断的记忆</span>
-                <span class="game-effect">蔡格尼克效应</span>
-                <span class="game-translation">为什么孩子总记得"那件事还没做完"？帮家长理解未完成任务的执念</span>
-            </a>
-            <a href="AI性格透视.html" class="game-card">
-                <span class="game-icon">🤖</span>
-                <span class="game-name">AI性格透视</span>
-                <span class="game-effect">巴纳姆效应</span>
-                <span class="game-translation">为什么我们总觉得星座很准？帮家长看见"标签化"的危险</span>
-            </a>
-            <a href="颜色快判.html" class="game-card">
-                <span class="game-icon">🎨</span>
-                <span class="game-name">颜色快判</span>
-                <span class="game-effect">斯特鲁普效应</span>
-                <span class="game-translation">当信息和情绪冲突时，大脑会先反应哪个？帮家长理解孩子的情绪反应</span>
-            </a>
-            <a href="生日引力场.html" class="game-card">
-                <span class="game-icon">🎂</span>
-                <span class="game-name">生日引力场</span>
-                <span class="game-effect">自我参照效应</span>
-                <span class="game-translation">孩子说"我生日你都不记得"，家长说"我记得啊"，谁的记忆更深刻？</span>
-            </a>
-            <a href="阿希从众实验.html" class="game-card">
-                <span class="game-icon">🧠</span>
-                <span class="game-name">阿希从众实验</span>
-                <span class="game-effect">从众效应</span>
-                <span class="game-translation">当所有人都说"是"，你敢说"不"吗？帮家长理解群体压力的影响</span>
-            </a>
-            <a href="师恩难忘挂画生成器.html" class="game-card">
-                <span class="game-icon">🖼️</span>
-                <span class="game-name">挂画生成器</span>
-                <span class="game-effect">实用工具</span>
-                <span class="game-translation">让感恩可视化</span>
-            </a>
+            <div class="strength-card">
+                <div class="strength-icon">🏠</div>
+                <div class="strength-name">家庭关系紧张</div>
+                <div class="strength-desc">长期累积的误解和委屈，需要一个中立的翻译官来解开</div>
+            </div>
         </div>
     </section>
 
-    <!-- 翻译现场 -->
-    <section class="section" id="翻译现场">
-        <div class="section-header">
-            <span class="section-icon">🌸</span>
-            <h2 class="section-title">翻译现场</h2>
+    <!-- 预约流程 -->
+    <section class="booking-section" id="contact">
+        <div class="booking-header">
+            <h2 class="booking-title">预约30分钟通话</h2>
+            <p class="booking-subtitle">一次简短、有用的对话，帮你理清问题</p>
+            <span class="booking-free">✓ 免费 · 无压力</span>
         </div>
-        <p class="section-desc">翻译不是只在咨询室。从社区到学校，从热线到花艺沙龙，每一次相遇，都是一次翻译的机会。我把孩子的需求翻译给家长，把家长的苦心翻译给孩子，把社会的善意翻译给需要的人。</p>
 
-        <!-- 社区关爱 -->
-        <div class="公益-category">
-            <div class="公益-title">🏠 社区关爱活动 <a href="activity-community.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：翻译不同年龄层彼此理解的需求</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/社区关爱活动2014年10月广州市海珠区江南中街道.jpg" alt="社区关爱">
-                    <div class="公益-info">
-                        <div class="公益-date">2014年10月</div>
-                        <div class="公益-location">海珠区江南中街道</div>
-                    </div>
+        <div class="booking-steps">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">发一条小红书私信</div>
+                    <div class="step-desc">告诉我你是家长还是孩子，现在最困扰你们的沟通难题是什么。几句话就够了。</div>
                 </div>
-                <div class="公益-item">
-                    <img src="照片素材/社区关爱活动2016年9月广州市荔湾区华林街道.JPG" alt="社区关爱">
-                    <div class="公益-info">
-                        <div class="公益-date">2016年9月</div>
-                        <div class="公益-location">荔湾区华林街道</div>
-                    </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">预约30分钟通话</div>
+                    <div class="step-desc">我会听听你们现在的情况、试过什么方法、我能怎么帮上忙。有时候问题不在孩子，我会直说。</div>
                 </div>
-                <div class="公益-item">
-                    <img src="照片素材/社区关爱活动2017年10月广州市海珠区江南中街道.JPG" alt="社区关爱">
-                    <div class="公益-info">
-                        <div class="公益-date">2017年10月</div>
-                        <div class="公益-location">海珠区江南中街道</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/社区关爱活动2018年10月蒋光鼐小学二年级.JPG" alt="社区关爱">
-                    <div class="公益-info">
-                        <div class="公益-date">2018年10月</div>
-                        <div class="公益-location">蒋光鼐小学</div>
-                    </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">如果合适，给出下一步建议</div>
+                    <div class="step-desc">可能是后续深入咨询、一个沟通工具，或者只是推荐一本书。不推销、不套模板。</div>
                 </div>
             </div>
         </div>
 
-        <!-- 儿童安全步行 -->
-        <div class="公益-category">
-            <div class="公益-title">🚸 儿童安全步行活动 <a href="activity-safety.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：把安全知识翻译成孩子能懂的语言</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/儿童安全步行活动2014年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全步行">
-                    <div class="公益-info">
-                        <div class="公益-date">2014年12月</div>
-                        <div class="公益-location">江南幼儿园</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/儿童安全步行活动2017年12月广州市海珠区儿福幼儿园.jpeg" alt="儿童安全步行">
-                    <div class="公益-info">
-                        <div class="公益-date">2017年12月</div>
-                        <div class="公益-location">儿福幼儿园</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/儿童安全步行活动2018年1月广州市荔湾区蒋光鼐小学一年级.JPG" alt="儿童安全步行">
-                    <div class="公益-info">
-                        <div class="公益-date">2018年1月</div>
-                        <div class="公益-location">蒋光鼐小学</div>
-                    </div>
-                </div>
-            </div>
+        <div class="booking-buttons">
+            <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
+                <span>📱</span>
+                <span>小红书私信</span>
+            </a>
+            <a href="mailto:19469728@qq.com?subject=预约30分钟通话&body=Hi Mel，我是家长/孩子，现在最困扰我们的是..." class="btn-email">
+                <span>✉️</span>
+                <span>邮件联系</span>
+            </a>
         </div>
 
-        <!-- 图书馆活动 -->
-        <div class="公益-category">
-            <div class="公益-title">📚 图书馆活动 <a href="activity-library.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：做孩子阅读世界和家长期待之间的翻译官</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.JPG" alt="图书捐赠">
-                    <div class="公益-info">
-                        <div class="公益-date">2017年11月</div>
-                        <div class="公益-location">郁南镇小学</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队.JPG" alt="微澜图书馆">
-                    <div class="公益-info">
-                        <div class="公益-date">2022年9-12月</div>
-                        <div class="公益-location">微澜图书馆21馆</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 生涯规划 -->
-        <div class="公益-category">
-            <div class="公益-title">🎯 生涯规划活动 <a href="activity-career.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：把孩子的梦想翻译给家长，把家长的担忧翻译成孩子能接受的建议</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划">
-                    <div class="公益-info">
-                        <div class="公益-date">2022年4月</div>
-                        <div class="公益-location">华南师范大学附属中学</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/生涯规划活动2024年4月暨南大学学生模拟面试活动.jpg" alt="模拟面试">
-                    <div class="公益-info">
-                        <div class="公益-date">2024年4月</div>
-                        <div class="公益-location">暨南大学</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/生涯规划活动2024年月广州中学高一级.JPG" alt="生涯规划">
-                    <div class="公益-info">
-                        <div class="公益-date">2024年</div>
-                        <div class="公益-location">广州中学</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="参观大学">
-                    <div class="公益-info">
-                        <div class="公益-date">2024年7月</div>
-                        <div class="公益-location">广州市第一中学</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 老母亲疯会 -->
-        <div class="公益-category">
-            <div class="公益-title">☕ 老母亲疯会 <a href="activity-moms.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：把妈妈们的心声翻译成社会能听懂的语言</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营">
-                    <div class="公益-info">
-                        <div class="公益-date">2025年3月</div>
-                        <div class="公益-location">心静瑜伽馆</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会">
-                    <div class="公益-info">
-                        <div class="公益-date">2026年5月</div>
-                        <div class="公益-location">广州市海珠区</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 花艺减压沙龙 -->
-        <div class="公益-category">
-            <div class="公益-title">💐 花艺减压沙龙 <a href="activity-flower.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：把说不出口的情绪翻译成美丽的作品</p>
-            <div class="公益-grid">
-                <div class="公益-item">
-                    <img src="照片素材/花艺减压沙龙2024年6月广州市海珠区金碧花园.jpg" alt="花艺减压">
-                    <div class="公益-info">
-                        <div class="公益-date">2024年6月</div>
-                        <div class="公益-location">金碧花园</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/花艺减压沙龙2024年9月广州市天河区珠江新城.jpg" alt="花艺减压">
-                    <div class="公益-info">
-                        <div class="公益-date">2024年9月</div>
-                        <div class="公益-location">珠江新城</div>
-                    </div>
-                </div>
-                <div class="公益-item">
-                    <img src="照片素材/花艺减压沙龙2025年3月广州市天河区珠江新城.JPG" alt="花艺减压">
-                    <div class="公益-info">
-                        <div class="公益-date">2025年3月</div>
-                        <div class="公益-location">珠江新城</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 华南师大心晴热线 -->
-        <div class="公益-category">
-            <div class="公益-title">📞 华南师大"心晴热线" <a href="activity-hotline.html" target="_blank" style="font-size:0.75em;color:var(--accent);margin-left:10px;text-decoration:none;">查看详情 →</a></div>
-            <p class="公益-翻译">翻译角色：把求助者的困惑翻译成他们能理解的答案</p>
-        </div>
-
-        <!-- 作品入口 -->
-        <a href="flower-gallery.html" class="作品-link" target="_blank">
-            <div class="作品-icon">🌸</div>
-            <div class="作品-text">翻译情绪的作品</div>
-            <div class="作品-sub">错过花艺沙龙的朋友，看看我把情绪翻译成了什么</div>
-        </a>
-
-        <a href="photo-gallery.html" class="作品-link" target="_blank">
-            <div class="作品-icon">📷</div>
-            <div class="作品-text">翻译美好的镜头</div>
-            <div class="作品-sub">那些我用镜头捕捉的翻译时刻</div>
-        </a>
-    </section>
-
-    <!-- 联系方式 -->
-    <section class="section">
-        <div class="contact-section">
-            <div class="contact-title">找到我</div>
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <div class="contact-label">小红书</div>
-                    <div class="contact-value">@有钳任性横着走的Mel</div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-label">邮箱</div>
-                    <div class="contact-value">19469728@qq.com</div>
-                </div>
-            </div>
-        </div>
+        <p class="booking-note">通常1天内回复</p>
     </section>
 
     <!-- 底部 -->
     <footer class="footer">
         <p>有钳任性横着走的Mel</p>
         <p class="footer-line">应用心理学硕士 · 工商管理硕士</p>
-        <p class="footer-line">2014年起，站在青少年和家长中间<br>做那个把彼此听不懂的话翻译成能听懂的人</p>
+        <p class="footer-line">站在青少年和家长中间，做那个翻译的人</p>
     </footer>
 
     <!-- 返回顶部 -->
     <div class="back-top" onclick="scrollToTop()">↑</div>
 
     <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            const currentTheme = html.getAttribute('data-theme');
+
+            if (currentTheme === 'light') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 页面加载时读取用户偏好
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+            }
+        }
+
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -731,6 +710,8 @@
                 btn.style.display = 'none';
             }
         });
+
+        initTheme();
     </script>
 </body>
 </html>

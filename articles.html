@@ -17,6 +17,19 @@
             --text-muted: #9899AC;
         }
 
+        /* 浅色模式 */
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -24,20 +37,100 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.7;
-            padding: 20px;
-            padding-bottom: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a.active { color: var(--accent); font-weight: 600; }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 页面内容 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
         }
 
         .page-header {
             text-align: center;
-            padding: 30px 0;
-            border-bottom: 1px solid var(--card);
+            padding: 20px 0;
             margin-bottom: 30px;
         }
 
         .page-title {
             font-size: 1.5em;
-            color: var(--primary-light);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
@@ -49,21 +142,18 @@
             line-height: 1.7;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.9em;
-        }
-
-        .back-link:hover { text-decoration: underline; }
-
         .article-card {
             background: var(--card);
             border-radius: 12px;
             padding: 18px;
             margin-bottom: 12px;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
         }
 
         .article-title {
@@ -96,148 +186,232 @@
 
         .article-link:hover { text-decoration: underline; }
 
-        /* 联系方式 */
-        .contact-section {
+        /* 预约区域 */
+        .booking-section {
             margin-top: 40px;
-            padding: 25px 20px;
+            padding: 30px 20px;
             background: var(--card);
-            border-radius: 12px;
+            border-radius: 16px;
             text-align: center;
         }
 
-        .contact-title {
-            font-size: 1em;
-            color: var(--primary-light);
+        .booking-title {
+            font-size: 1.1em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .booking-subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
             margin-bottom: 15px;
         }
 
-        .contact-grid {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .contact-item {
-            text-align: center;
-        }
-
-        .contact-label {
+        .booking-free {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), var(--primary-light));
+            color: white;
+            padding: 5px 14px;
+            border-radius: 15px;
             font-size: 0.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .booking-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-xiaohongshu {
+            background: linear-gradient(135deg, #FF2442, #FE2C55);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-xiaohongshu:hover { transform: translateY(-2px); }
+
+        .btn-email {
+            background: var(--bg);
+            color: var(--text);
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-email:hover { background: var(--primary); }
+
+        .booking-note {
+            margin-top: 15px;
+            font-size: 0.75em;
             color: var(--text-muted);
         }
 
-        .contact-value {
-            font-size: 0.95em;
-            color: var(--accent);
-            margin-top: 5px;
-        }
-
-        /* 返回首页按钮 */
-        .home-btn {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-size: 0.9em;
-        }
-
-        .home-btn:hover {
-            opacity: 0.9;
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            border-top: 1px solid var(--card);
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html#翻译案例" class="back-link">← 返回首页</a>
-
-    <div class="page-header">
-        <h1 class="page-title">翻译案例</h1>
-        <p class="page-desc">每一次翻译，都是一个故事。家长带着困惑来，孩子带着委屈来。我用倾听和理解，帮他们看见彼此的真实。</p>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">张女士：焦虑兜底能力</div>
-        <div class="article-excerpt">她每天盯着女儿的"不足"，焦虑到睡不着。直到她说出"我之前得过癌症"，一切都有了答案——她不是在焦虑成绩，而是在焦虑：万一我不在了，这个孩子能不能独立活下去？</div>
-        <div class="article-result">翻译结果：从焦虑成绩到焦虑生命，她终于看见自己的真实恐惧</div>
-        <a href="story-1.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">关女士：多维焦虑与边界混乱</div>
-        <div class="article-excerpt">作为母亲，她觉得自己应该"什么都管"。孩子的学习、丈夫的事业、老人的健康，每一件事都压在她身上。但她越努力，家里越混乱——因为她把自己活成了所有人的"情绪垃圾桶"。</div>
-        <div class="article-result">翻译结果：从"我什么都管"到"我把边界还给他们"</div>
-        <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">厌学孩子：默默陪伴的力量</div>
-        <div class="article-excerpt">孩子说"我不想上学"，家长的第一反应是"你怎么能这样"。但有一种陪伴，不出声、不追问、不评判，只是安静地在他身边。后来孩子说："那种默默陪伴我的人，是最好的。"</div>
-        <div class="article-result">翻译结果：从"你怎么能这样"到"原来他需要的只是默默陪伴"</div>
-        <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">嘉嘉：实习与深造的抉择迷茫</div>
-        <div class="article-excerpt">大学毕业前，她纠结要不要继续读研。父母说"读研更好找工作"，朋友说"早点工作赚经验"。但真正让她卡住的，不是两条路哪条更好，而是她不确定自己想要什么。</div>
-        <div class="article-result">翻译结果：从"听别人的意见"到"听见自己内心的声音"</div>
-        <a href="story-4.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">父母焦虑的核心是兜底能力</div>
-        <div class="article-excerpt">你以为在为孩子操心，其实是在为自己的无力感买单。孩子成绩一下滑，你整宿睡不着觉；孩子一句"我不想上学"，你能脑补出他一事无成的全部剧本。但你真正焦虑的，从来不是成绩——而是你不确定，当有一天你护不了孩子的时候，他能不能兜住自己的人生。</div>
-        <div class="article-result">翻译结果：从盯着"不足"到看见自己无法掌控的未来</div>
-        <a href="article-1.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">高考倒数10天，家长最重要的是"稳住"</div>
-        <div class="article-excerpt">最后十天，比的不是谁更努力，而是谁更稳。当家长频繁送水果、不断问进度、走路轻手轻脚时，孩子感受到的不是关心，是"全家人都在等我考好"。心理学有个耶克斯-多德森定律：中等程度的动机，才能带来最佳表现。</div>
-        <div class="article-result">翻译结果：从"施压者"变成"稳定器"，让家有日常感</div>
-        <a href="article-2.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">你以为自己在反击，其实你在允许伤害继续</div>
-        <div class="article-excerpt">很多人以为"澄清真相""据理力争"是在保护自己。但心理学告诉我们：当你不断去澄清、解释、反驳时，你其实是在反复激活那段创伤记忆。每一次"反击"，都在加深痛苦。放过别人，才是真正放过自己。</div>
-        <div class="article-result">翻译结果：从"反复激活伤口"到"停止让过去控制现在"</div>
-        <a href="article-3.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">为什么我们都要活成父母心目中理想的样子</div>
-        <div class="article-excerpt">很多孩子终其一生都在努力成为父母眼中的"好孩子"。他们不敢表达真实想法，不敢追求自己的热爱，因为害怕辜负父母的期待。但这条路走久了，会发现自己活得不像自己。</div>
-        <div class="article-result">翻译结果：从"演一个理想的孩子"到"找回真实的自己"</div>
-        <a href="article-4.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <div class="article-card">
-        <div class="article-title">妈妈这一角色正在压垮她</div>
-        <div class="article-excerpt">"妈妈"这个角色，承载了太多期待：既要温柔体贴，又要坚强独立；既要教育孩子，又要支持丈夫；既要工作出色，又要家庭美满。当一个女性被"妈妈"这个身份全面包裹时，她作为"自己"的那部分，正在一点点消失。</div>
-        <div class="article-result">翻译结果：从"妈妈"回到"自己"，找回被包裹的身份</div>
-        <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
-    </div>
-
-    <!-- 联系方式 -->
-    <div class="contact-section">
-        <div class="contact-title">找到我</div>
-        <div class="contact-grid">
-            <div class="contact-item">
-                <div class="contact-label">小红书</div>
-                <div class="contact-value">@有钳任性横着走的Mel</div>
-            </div>
-            <div class="contact-item">
-                <div class="contact-label">邮箱</div>
-                <div class="contact-value">19469728@qq.com</div>
-            </div>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
         </div>
-        <a href="index.html" class="home-btn">返回首页</a>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html" class="active">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">看见心声</h1>
+            <p class="page-desc">每一次相遇，都是一个故事。家长带着困惑来，孩子带着委屈来。我用倾听和理解，帮他们看见彼此的真实。</p>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">张女士：焦虑兜底能力</div>
+            <div class="article-excerpt">她每天盯着女儿的"不足"，焦虑到睡不着。直到她说出"我之前得过癌症"，一切都有了答案——她不是在焦虑成绩，而是在焦虑：万一我不在了，这个孩子能不能独立活下去？</div>
+            <div class="article-result">看见心声：从焦虑成绩到焦虑生命，她终于看见自己的真实恐惧</div>
+            <a href="story-1.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">关女士：多维焦虑与边界混乱</div>
+            <div class="article-excerpt">作为母亲，她觉得自己应该"什么都管"。孩子的学习、丈夫的事业、老人的健康，每一件事都压在她身上。但她越努力，家里越混乱——因为她把自己活成了所有人的"情绪垃圾桶"。</div>
+            <div class="article-result">看见心声：从"我什么都管"到"我把边界还给他们"</div>
+            <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">厌学孩子：默默陪伴的力量</div>
+            <div class="article-excerpt">孩子说"我不想上学"，家长的第一反应是"你怎么能这样"。但有一种陪伴，不出声、不追问、不评判，只是安静地在他身边。后来孩子说："那种默默陪伴我的人，是最好的。"</div>
+            <div class="article-result">看见心声：从"你怎么能这样"到"原来他需要的只是默默陪伴"</div>
+            <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">嘉嘉：实习与深造的抉择迷茫</div>
+            <div class="article-excerpt">大学毕业前，她纠结要不要继续读研。父母说"读研更好找工作"，朋友说"早点工作赚经验"。但真正让她卡住的，不是两条路哪条更好，而是她不确定自己想要什么。</div>
+            <div class="article-result">看见心声：从"听别人的意见"到"听见自己内心的声音"</div>
+            <a href="story-4.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">父母焦虑的核心是兜底能力</div>
+            <div class="article-excerpt">你以为在为孩子操心，其实是在为自己的无力感买单。孩子成绩一下滑，你整宿睡不着觉；孩子一句"我不想上学"，你能脑补出他一事无成的全部剧本。但你真正焦虑的，从来不是成绩——而是你不确定，当有一天你护不了孩子的时候，他能不能兜住自己的人生。</div>
+            <div class="article-result">看见心声：从盯着"不足"到看见自己无法掌控的未来</div>
+            <a href="article-1.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">高考倒数10天，家长最重要的是"稳住"</div>
+            <div class="article-excerpt">最后十天，比的不是谁更努力，而是谁更稳。当家长频繁送水果、不断问进度、走路轻手轻脚时，孩子感受到的不是关心，是"全家人都在等我考好"。心理学有个耶克斯-多德森定律：中等程度的动机，才能带来最佳表现。</div>
+            <div class="article-result">看见心声：从"施压者"变成"稳定器"，让家有日常感</div>
+            <a href="article-2.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">你以为自己在反击，其实你在允许伤害继续</div>
+            <div class="article-excerpt">很多人以为"澄清真相""据理力争"是在保护自己。但心理学告诉我们：当你不断去澄清、解释、反驳时，你其实是在反复激活那段创伤记忆。每一次"反击"，都在加深痛苦。放过别人，才是真正放过自己。</div>
+            <div class="article-result">看见心声：从"反复激活伤口"到"停止让过去控制现在"</div>
+            <a href="article-3.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">为什么我们都要活成父母心目中理想的样子</div>
+            <div class="article-excerpt">很多孩子终其一生都在努力成为父母眼中的"好孩子"。他们不敢表达真实想法，不敢追求自己的热爱，因为害怕辜负父母的期待。但这条路走久了，会发现自己活得不像自己。</div>
+            <div class="article-result">看见心声：从"演一个理想的孩子"到"找回真实的自己"</div>
+            <a href="article-4.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <div class="article-card">
+            <div class="article-title">妈妈这一角色正在压垮她</div>
+            <div class="article-excerpt">"妈妈"这个角色，承载了太多期待：既要温柔体贴，又要坚强独立；既要教育孩子，又要支持丈夫；既要工作出色，又要家庭美满。当一个女性被"妈妈"这个身份全面包裹时，她作为"自己"的那部分，正在一点点消失。</div>
+            <div class="article-result">看见心声：从"妈妈"回到"自己"，找回被包裹的身份</div>
+            <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
+        </div>
+
+        <!-- 预约区域 -->
+        <div class="booking-section">
+            <h3 class="booking-title">预约30分钟通话</h3>
+            <p class="booking-subtitle">一次简短、有用的对话，帮你理清问题</p>
+            <span class="booking-free">✓ 免费 · 无压力</span>
+            <div class="booking-buttons">
+                <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
+                    <span>📱</span>
+                    <span>小红书私信</span>
+                </a>
+                <a href="mailto:19469728@qq.com?subject=预约30分钟通话" class="btn-email">
+                    <span>✉️</span>
+                    <span>邮件联系</span>
+                </a>
+            </div>
+            <p class="booking-note">通常1天内回复</p>
+        </div>
     </div>
 
+    <!-- 底部 -->
+    <footer class="footer">
+        <p>有钳任性横着走的Mel</p>
+        <p style="margin-top:8px;">站在青少年和家长中间，做那个翻译的人</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻译案例 - 有钳任性横着走的Mel</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a.active { color: var(--accent); font-weight: 600; }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 页面头部 */
+        .page-header {
+            padding: 40px 20px 30px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(107,92,231,0.1) 0%, var(--bg) 100%);
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-desc {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            margin-top: 10px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 分类标签 */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: var(--card);
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            background: var(--bg);
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover { color: var(--text); }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 内容区域 */
+        .content-section {
+            padding: 30px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .category-section {
+            display: none;
+        }
+
+        .category-section.active {
+            display: block;
+        }
+
+        .section-label {
+            font-size: 1.1em;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 案例卡片 */
+        .article-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .article-title {
+            font-size: 1.05em;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .article-excerpt {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .article-result {
+            font-size: 0.8em;
+            color: var(--success);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--primary);
+        }
+
+        .article-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .article-link:hover { text-decoration: underline; }
+
+        /* 工具卡片 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .tool-card {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .tool-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            font-size: 1em;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .tool-effect {
+            font-size: 0.8em;
+            color: var(--accent);
+        }
+
+        .tool-desc {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* 现场卡片 */
+        .现场-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .现场-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .现场-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .现场-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .现场-info {
+            padding: 15px;
+        }
+
+        .现场-title {
+            font-size: 0.95em;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .现场-翻译 {
+            font-size: 0.8em;
+            color: var(--success);
+            font-style: italic;
+        }
+
+        .现场-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            border-top: 1px solid var(--card);
+            margin-top: 40px;
+        }
+
+        /* 预约区域 */
+        .booking-section {
+            padding: 40px 20px;
+            background: var(--card);
+            text-align: center;
+        }
+
+        .booking-title {
+            font-size: 1.1em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .booking-subtitle {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .booking-free {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), var(--primary-light));
+            color: white;
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .booking-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-xiaohongshu {
+            background: linear-gradient(135deg, #FF2442, #FE2C55);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-xiaohongshu:hover { transform: translateY(-2px); }
+
+        .btn-email {
+            background: var(--bg);
+            color: var(--text);
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-email:hover { background: var(--primary); }
+
+        .booking-note {
+            margin-top: 15px;
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 返回顶部 */
+        .back-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 99;
+        }
+
+        /* 移动端 */
+        @media (max-width: 600px) {
+            .tools-grid, .现场-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .category-tabs { flex-wrap: wrap; gap: 8px; }
+            .tab-btn { padding: 8px 15px; font-size: 0.85em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html" class="active">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </nav>
+
+    <!-- 页面头部 -->
+    <header class="page-header">
+        <h1 class="page-title">翻译案例</h1>
+        <p class="page-desc">我用案例、游戏、活动，把彼此听不懂的话翻译成能听懂的心</p>
+    </header>
+
+    <!-- 分类标签 -->
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="switchTab('tools')">🧪 心理测验</button>
+        <button class="tab-btn" onclick="switchTab('cases')">📖 看见心声</button>
+        <button class="tab-btn" onclick="switchTab('growth')">🌸 陪伴成长</button>
+    </div>
+
+    <div class="content-section">
+
+        <!-- 心理测验 -->
+        <div id="tools" class="category-section active">
+            <div class="section-label">🧪 心理测验</div>
+            <p style="font-size:0.85em;color:var(--text-muted);margin-bottom:20px;">先让双方"看见"。这些心理学小游戏，帮助家长和孩子看见自己的盲点、看见彼此的差异。</p>
+
+            <div class="tools-grid">
+                <a href="找茬挑战.html" class="tool-card">
+                    <div class="tool-icon">🔍</div>
+                    <div class="tool-name">找茬挑战</div>
+                    <div class="tool-effect">变化盲视</div>
+                    <div class="tool-desc">家长总说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</div>
+                </a>
+
+                <a href="中断的记忆.html" class="tool-card">
+                    <div class="tool-icon">⏱️</div>
+                    <div class="tool-name">中断的记忆</div>
+                    <div class="tool-effect">蔡格尼克效应</div>
+                    <div class="tool-desc">为什么孩子总记得"那件事还没做完"？</div>
+                </a>
+
+                <a href="AI性格透视.html" class="tool-card">
+                    <div class="tool-icon">🤖</div>
+                    <div class="tool-name">AI性格透视</div>
+                    <div class="tool-effect">巴纳姆效应</div>
+                    <div class="tool-desc">为什么我们总觉得星座很准？帮家长看见"标签化"的危险</div>
+                </a>
+
+                <a href="颜色快判.html" class="tool-card">
+                    <div class="tool-icon">🎨</div>
+                    <div class="tool-name">颜色快判</div>
+                    <div class="tool-effect">斯特鲁普效应</div>
+                    <div class="tool-desc">当信息和情绪冲突时，大脑会先反应哪个？</div>
+                </a>
+
+                <a href="生日引力场.html" class="tool-card">
+                    <div class="tool-icon">🎂</div>
+                    <div class="tool-name">生日引力场</div>
+                    <div class="tool-effect">自我参照效应</div>
+                    <div class="tool-desc">孩子说"我生日你都不记得"，谁的记忆更深刻？</div>
+                </a>
+
+                <a href="阿希从众实验.html" class="tool-card">
+                    <div class="tool-icon">🧠</div>
+                    <div class="tool-name">阿希从众实验</div>
+                    <div class="tool-effect">从众效应</div>
+                    <div class="tool-desc">当所有人都说"是"，你敢说"不"吗？</div>
+                </a>
+
+                <a href="师恩难忘挂画生成器.html" class="tool-card">
+                    <div class="tool-icon">🖼️</div>
+                    <div class="tool-name">挂画生成器</div>
+                    <div class="tool-effect">实用工具</div>
+                    <div class="tool-desc">让感恩可视化</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 看见心声 -->
+        <div id="cases" class="category-section">
+            <div class="section-label">📖 看见心声</div>
+            <p style="font-size:0.85em;color:var(--text-muted);margin-bottom:20px;">每一次相遇，都是一个故事。家长带着困惑来，孩子带着委屈来。我用倾听和理解，帮他们看见彼此的真实。</p>
+
+            <div class="article-card">
+                <div class="article-title">张女士：焦虑兜底能力</div>
+                <div class="article-excerpt">她每天盯着女儿的"不足"，焦虑到睡不着。直到她说出"我之前得过癌症"，一切都有了答案。</div>
+                <div class="article-result">看见心声：从焦虑成绩到焦虑生命，她终于看见自己的真实恐惧</div>
+                <a href="story-1.html" class="article-link" target="_blank">阅读全文 →</a>
+            </div>
+
+            <div class="article-card">
+                <div class="article-title">关女士：多维焦虑与边界混乱</div>
+                <div class="article-excerpt">作为母亲，她觉得自己应该"什么都管"。孩子的学习、丈夫的事业、老人的健康，每一件事都压在她身上。</div>
+                <div class="article-result">看见心声：从"我什么都管"到"我把边界还给他们"</div>
+                <a href="article-5.html" class="article-link" target="_blank">阅读全文 →</a>
+            </div>
+
+            <div class="article-card">
+                <div class="article-title">厌学孩子：默默陪伴的力量</div>
+                <div class="article-excerpt">孩子说"我不想上学"，家长的第一反应是"你怎么能这样"。但有一种陪伴，不出声、不追问、不评判。</div>
+                <div class="article-result">看见心声：从"你怎么能这样"到"原来他需要的只是默默陪伴"</div>
+                <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
+            </div>
+
+            <a href="articles.html" target="_blank" style="display:block;text-align:center;padding:15px;background:var(--card);border-radius:10px;color:var(--accent);text-decoration:none;margin-top:20px;">查看更多故事 →</a>
+        </div>
+
+        <!-- 陪伴成长 -->
+        <div id="growth" class="category-section">
+            <div class="section-label">🌸 陪伴成长</div>
+            <p style="font-size:0.85em;color:var(--text-muted);margin-bottom:20px;">从社区到学校，从热线到花艺沙龙，每一次相遇，都是一次陪伴的机会。</p>
+
+            <div class="现场-grid">
+                <div class="现场-card">
+                    <img src="照片素材/社区关爱活动2014年10月广州市海珠区江南中街道.jpg" alt="社区关爱" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">🏠 社区关爱活动</div>
+                        <div class="现场-翻译">陪伴不同年龄层彼此理解</div>
+                        <a href="activity-community.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/儿童安全步行活动2014年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全步行" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">🚸 儿童安全步行活动</div>
+                        <div class="现场-翻译">陪伴孩子学会安全</div>
+                        <a href="activity-safety.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.JPG" alt="图书馆" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">📚 图书馆活动</div>
+                        <div class="现场-翻译">陪伴孩子走进阅读世界</div>
+                        <a href="activity-library.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">🎯 生涯规划活动</div>
+                        <div class="现场-翻译">陪伴青少年探索未来</div>
+                        <a href="activity-career.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲疯会" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">☕ 老母亲疯会</div>
+                        <div class="现场-翻译">陪伴妈妈们释放压力</div>
+                        <a href="activity-moms.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/花艺减压沙龙2024年6月广州市海珠区金碧花园.jpg" alt="花艺沙龙" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">💐 花艺减压沙龙</div>
+                        <div class="现场-翻译">陪伴情绪变成作品</div>
+                        <a href="activity-flower.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="心晴热线" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">📞 华南师大"心晴热线"</div>
+                        <div class="现场-翻译">陪伴求助者找到答案</div>
+                        <a href="activity-hotline.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 作品入口 -->
+            <div style="margin-top:30px;display:flex;gap:15px;flex-wrap:wrap;">
+                <a href="flower-gallery.html" target="_blank" style="flex:1;min-width:200px;background:var(--card);border:1px solid var(--primary);border-radius:12px;padding:20px;text-align:center;text-decoration:none;">
+                    <div style="font-size:28px;margin-bottom:10px;">🌸</div>
+                    <div style="font-size:0.9em;color:var(--text);">情绪的花艺作品</div>
+                    <div style="font-size:0.8em;color:var(--accent);margin-top:5px;">花艺作品展示</div>
+                </a>
+                <a href="photo-gallery.html" target="_blank" style="flex:1;min-width:200px;background:var(--card);border:1px solid var(--primary);border-radius:12px;padding:20px;text-align:center;text-decoration:none;">
+                    <div style="font-size:28px;margin-bottom:10px;">📷</div>
+                    <div style="font-size:0.9em;color:var(--text);">美好的镜头瞬间</div>
+                    <div style="font-size:0.8em;color:var(--accent);margin-top:5px;">摄影作品展示</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预约区域 -->
+    <div class="booking-section">
+        <h3 class="booking-title">预约30分钟通话</h3>
+        <p class="booking-subtitle">一次简短、有用的对话，帮你理清问题</p>
+        <span class="booking-free">✓ 免费 · 无压力</span>
+        <div class="booking-buttons">
+            <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
+                <span>📱</span>
+                <span>小红书私信</span>
+            </a>
+            <a href="mailto:19469728@qq.com?subject=预约30分钟通话" class="btn-email">
+                <span>✉️</span>
+                <span>邮件联系</span>
+            </a>
+        </div>
+        <p class="booking-note">通常1天内回复</p>
+    </div>
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <p>有钳任性横着走的Mel</p>
+        <p style="margin-top:8px;">站在青少年和家长中间，做那个翻译的人</p>
+    </footer>
+
+    <!-- 返回顶部 -->
+    <div class="back-top" onclick="scrollToTop()">↑</div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.category-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.back-top');
+            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+
+        initTheme();
+    </script>
+</body>
+</html>
