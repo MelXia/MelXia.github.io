@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记忆与干扰：认知突围战</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .intro-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* 进度指示 */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .step-indicator.active {
+            opacity: 1;
+        }
+
+        .step-indicator.completed {
+            opacity: 1;
+            color: var(--success);
+        }
+
+        .step-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        .step-indicator.active .step-dot {
+            background: var(--primary);
+        }
+
+        .step-indicator.completed .step-dot {
+            background: var(--success);
+        }
+
+        .step-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 闪现显示区 */
+        .flash-display {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            position: relative;
+            min-height: 120px;
+        }
+
+        .flash-items {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flash-item {
+            font-size: 1.8em;
+            padding: 15px 25px;
+            background: var(--card);
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .timer-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--accent);
+            animation: countdown 1s ease-in-out;
+        }
+
+        @keyframes countdown {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        }
+
+        /* 计时器 */
+        .timer-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.1s linear;
+        }
+
+        .timer-text {
+            font-size: 1.2em;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* 选择区 */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .selection-item {
+            padding: 15px 10px;
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .selection-item:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .selection-item.selected {
+            background: var(--primary);
+            border-color: var(--primary-light);
+            color: white;
+        }
+
+        .selection-item.correct {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .selection-item.wrong {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .selection-item.missed {
+            border: 2px dashed var(--warning);
+        }
+
+        .selection-count {
+            color: var(--text-muted);
+            margin: 15px 0;
+            font-size: 1em;
+        }
+
+        /* 反应时显示 */
+        .reaction-time {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: inline-block;
+        }
+
+        .reaction-time span {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-light);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .chart-title {
+            font-size: 1.1em;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }
+
+        .chart-y-axis-left,
+        .chart-y-axis-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .chart-y-axis-left {
+            left: 0;
+        }
+
+        .chart-y-axis-right {
+            right: 0;
+        }
+
+        .y-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .chart-area {
+            position: absolute;
+            left: 45px;
+            right: 45px;
+            top: 10px;
+            bottom: 40px;
+        }
+
+        .chart-x-axis {
+            position: absolute;
+            bottom: 0;
+            left: 45px;
+            right: 45px;
+            height: 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .x-label {
+            font-size: 0.85em;
+            color: var(--text);
+        }
+
+        /* 图表线条 */
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+        }
+
+        .chart-grid-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--card);
+            opacity: 0.5;
+        }
+
+        .data-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .data-point:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        .data-point.accuracy {
+            background: var(--success);
+            border: 2px solid white;
+        }
+
+        .data-point.time {
+            background: var(--accent);
+            border: 2px solid white;
+        }
+
+        .chart-line-svg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 图例 */
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.accuracy {
+            background: var(--success);
+            border: 2px solid white;
+        }
+
+        .legend-dot.time {
+            background: var(--accent);
+            border: 2px solid white;
+        }
+
+        /* 结果统计 */
+        .result-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            font-weight: bold;
+            color: var(--primary-light);
+        }
+
+        .result-value.highlight-good {
+            color: var(--success);
+        }
+
+        .result-value.highlight-bad {
+            color: var(--accent);
+        }
+
+        /* 洞察卡片 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .insight-box h3 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-box p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 轮次标签 */
+        .round-label {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .round-label.fruit {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .round-label.job {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .selection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .progress-steps {
+                gap: 5px;
+            }
+
+            .step-label {
+                font-size: 0.65em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 进度指示 -->
+        <div class="progress-steps" id="progressSteps">
+            <div class="step-indicator" id="step1">
+                <div class="step-dot">1</div>
+                <span class="step-label">基准测试</span>
+            </div>
+            <div class="step-indicator" id="step2">
+                <div class="step-dot">2</div>
+                <span class="step-label">干扰测试</span>
+            </div>
+            <div class="step-indicator" id="step3">
+                <div class="step-dot">3</div>
+                <span class="step-label">跨类别</span>
+            </div>
+            <div class="step-indicator" id="step4">
+                <div class="step-dot">4</div>
+                <span class="step-label">发现规律</span>
+            </div>
+        </div>
+
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="intro-icon">🧠</div>
+            <h1>记忆与干扰：认知突围战</h1>
+            <p class="subtitle">一个关于大脑记忆规律的心理学实验游戏<br>探索"前摄抑制"如何影响你的记忆</p>
+            <button class="btn btn-primary" onclick="startGame()">开始挑战</button>
+        </div>
+
+        <!-- 屏幕2：第一轮（基准测试） -->
+        <div class="screen" id="screen-round1">
+            <div class="round-label fruit">第一轮 · 基准测试</div>
+            <h2>记住这些水果</h2>
+            <p class="subtitle">屏幕将闪现<span style="color:var(--accent);font-weight:bold;"> 5 种水果</span>，持续 5 秒</p>
+
+            <div class="timer-text">倒计时：<span id="timer1">3</span> 秒</div>
+            <div class="timer-bar">
+                <div class="timer-fill" id="timerFill1" style="width: 100%"></div>
+            </div>
+
+            <div class="flash-display" id="flashDisplay1">
+                <div class="flash-items" id="flashItems1"></div>
+            </div>
+        </div>
+
+        <!-- 屏幕3：第一轮选择 -->
+        <div class="screen" id="screen-select1">
+            <div class="round-label fruit">第一轮 · 选择</div>
+            <h2>选出你记住的水果</h2>
+            <p class="subtitle">在下方选择刚才看到的 <span style="color:var(--accent);font-weight:bold;">5 种水果</span></p>
+
+            <div class="selection-grid" id="selectGrid1"></div>
+
+            <div class="selection-count">已选择：<span id="selectedCount1">0</span> / 5 个</div>
+
+            <div class="reaction-time">反应时：<span id="reactionTime1">0</span> ms</div>
+
+            <button class="btn btn-primary" id="submitBtn1" disabled onclick="submitRound(1)">提交答案</button>
+        </div>
+
+        <!-- 屏幕4：第二轮（前摄干扰测试） -->
+        <div class="screen" id="screen-round2">
+            <div class="round-label fruit">第二轮 · 前摄干扰测试</div>
+            <h2>记住这些水果</h2>
+            <p class="subtitle">屏幕将闪现另外 <span style="color:var(--accent);font-weight:bold;">5 种水果</span>，持续 5 秒<br><strong>注意：第一轮的水果记忆可能会干扰你！</strong></p>
+
+            <div class="timer-text">倒计时：<span id="timer2">3</span> 秒</div>
+            <div class="timer-bar">
+                <div class="timer-fill" id="timerFill2" style="width: 100%"></div>
+            </div>
+
+            <div class="flash-display" id="flashDisplay2">
+                <div class="flash-items" id="flashItems2"></div>
+            </div>
+        </div>
+
+        <!-- 屏幕5：第二轮选择 -->
+        <div class="screen" id="screen-select2">
+            <div class="round-label fruit">第二轮 · 选择</div>
+            <h2>选出你记住的水果</h2>
+            <p class="subtitle">在下方选择刚才看到的 <span style="color:var(--accent);font-weight:bold;">5 种水果</span>（不是第一轮的！）</p>
+
+            <div class="selection-grid" id="selectGrid2"></div>
+
+            <div class="selection-count">已选择：<span id="selectedCount2">0</span> / 5 个</div>
+
+            <div class="reaction-time">反应时：<span id="reactionTime2">0</span> ms</div>
+
+            <button class="btn btn-primary" id="submitBtn2" disabled onclick="submitRound(2)">提交答案</button>
+        </div>
+
+        <!-- 屏幕6：第三轮（跨类别测试） -->
+        <div class="screen" id="screen-round3">
+            <div class="round-label job">第三轮 · 跨类别测试</div>
+            <h2>记住这些职业</h2>
+            <p class="subtitle">屏幕将闪现 <span style="color:var(--accent);font-weight:bold;">5 种职业</span>，持续 5 秒<br><strong>这次换了一个类别，干扰应该会减弱！</strong></p>
+
+            <div class="timer-text">倒计时：<span id="timer3">3</span> 秒</div>
+            <div class="timer-bar">
+                <div class="timer-fill" id="timerFill3" style="width: 100%"></div>
+            </div>
+
+            <div class="flash-display" id="flashDisplay3">
+                <div class="flash-items" id="flashItems3"></div>
+            </div>
+        </div>
+
+        <!-- 屏幕7：第三轮选择 -->
+        <div class="screen" id="screen-select3">
+            <div class="round-label job">第三轮 · 选择</div>
+            <h2>选出你记住的职业</h2>
+            <p class="subtitle">在下方选择刚才看到的 <span style="color:var(--accent);font-weight:bold;">5 种职业</span></p>
+
+            <div class="selection-grid" id="selectGrid3"></div>
+
+            <div class="selection-count">已选择：<span id="selectedCount3">0</span> / 5 个</div>
+
+            <div class="reaction-time">反应时：<span id="reactionTime3">0</span> ms</div>
+
+            <button class="btn btn-primary" id="submitBtn3" disabled onclick="submitRound(3)">提交答案</button>
+        </div>
+
+        <!-- 屏幕8：结果图表 -->
+        <div class="screen" id="screen-results">
+            <h2>实验结果分析</h2>
+            <p class="subtitle">看看你的大脑表现如何</p>
+
+            <div class="chart-container">
+                <div class="chart-title">📊 三轮测试数据对比</div>
+                <div class="chart-wrapper">
+                    <!-- 左Y轴：正确率 -->
+                    <div class="chart-y-axis-left">
+                        <div class="y-label">100%</div>
+                        <div class="y-label">75%</div>
+                        <div class="y-label">50%</div>
+                        <div class="y-label">25%</div>
+                        <div class="y-label">0%</div>
+                    </div>
+
+                    <!-- 图表区域 -->
+                    <div class="chart-area" id="chartArea">
+                        <svg class="chart-line-svg" id="chartSvg"></svg>
+                    </div>
+
+                    <!-- 右Y轴：反应时 -->
+                    <div class="chart-y-axis-right">
+                        <div class="y-label">5000ms</div>
+                        <div class="y-label">4000ms</div>
+                        <div class="y-label">3000ms</div>
+                        <div class="y-label">2000ms</div>
+                        <div class="y-label">1000ms</div>
+                    </div>
+
+                    <!-- X轴 -->
+                    <div class="chart-x-axis">
+                        <div class="x-label">第一轮<br>(基准)</div>
+                        <div class="x-label">第二轮<br>(干扰)</div>
+                        <div class="x-label">第三轮<br>(跨类别)</div>
+                    </div>
+                </div>
+
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot accuracy"></div>
+                        <span>正确率 (%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot time"></div>
+                        <span>反应时 (ms)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-row">
+                    <span class="result-label">第一轮（基准测试）</span>
+                    <span class="result-value" id="result1">正确率 0%，反应时 0ms</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">第二轮（前摄干扰测试）</span>
+                    <span class="result-value" id="result2">正确率 0%，反应时 0ms</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">第三轮（跨类别测试）</span>
+                    <span class="result-value" id="result3">正确率 0%，反应时 0ms</span>
+                </div>
+                <div class="result-row" style="background:linear-gradient(135deg, rgba(107,92,231,0.1), rgba(255,107,107,0.1));margin-top:10px;border-radius:8px;padding:15px;">
+                    <span class="result-label">💡 预期规律</span>
+                    <span class="result-value" style="font-size:0.85em;">第二轮正确率 ↓ 反应时 ↑ | 第三轮恢复</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <h3>🎯 你的数据说明了什么？</h3>
+                <p id="insightText"></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的心理学原理</button>
+        </div>
+
+        <!-- 屏幕9：科普 -->
+        <div class="screen" id="screen-theory">
+            <h2>前摄抑制与记忆策略</h2>
+            <p class="subtitle">为什么同类信息连续记忆会互相干扰？</p>
+
+            <div class="theory-section">
+                <h3>🔍 什么是前摄抑制？</h3>
+                <p>前摄抑制（Proactive Interference）是指<strong>先前学习的材料对后续学习材料的回忆产生的干扰</strong>。就像你刚背完一组水果，再背另一组水果时，大脑会"混淆"两组内容，导致记忆效果下降。</p>
+                <p>这是大脑的正常工作机制，不是你"记性不好"——你的大脑正在努力处理相似的信息，只是效率受到了影响。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>🧠 为什么第三轮表现更好？</h3>
+                <p>第三轮换成"职业"类别后，正确率回升了。这是因为<strong>语义网络隔离</strong>：水果和职业属于完全不同的知识分类，大脑可以"关掉"水果的记忆通道，重新开启职业通道，干扰自然消失。</p>
+                <p>这就像换了频道，前一频道的声音就不会干扰你听新频道的内容。</p>
+            </div>
+
+            <div class="theory-section">
+                <h3>💡 给学生的学习策略</h3>
+                <ul class="tips-list">
+                    <li><strong>分类交替复习</strong>：不要连续背同一类内容，文理科交替学习可以减少干扰</li>
+                    <li><strong>利用语义隔离</strong>：背完历史年代后，换个科目如数学，大脑会有"新鲜感"</li>
+                    <li><strong>避免冲动答题</strong>：第二轮反应时变长是正常的，给大脑足够时间检索信息</li>
+                    <li><strong>给家长的建议</strong>：孩子"刚背完就忘"不是态度问题，是认知负荷超载，引导他们换换内容</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏数据
+        const FRUITS = ['🍎 苹果', '🍌 香蕉', '🍊 橙子', '🍇 葡萄', '🍉 西瓜', '🍓 草莓', '🍑 桃子', '🥝 猕猴桃', '🍒 樱桃', '🫐 蓝莓', '🥭 芒果', '🍍 菠萝', '🍋 柠檬', '🍐 梨子', '🥥 椰子'];
+        const JOBS = ['👨‍⚕️ 医生', '👩‍🏫 教师', '👮 警察', '👨‍💻 程序员', '👩‍🎨 设计师', '👨‍🍳 厨师', '👩‍💼 律师', '👨‍🔬 科学家', '👩‍🎤 歌手', '👨‍✈️ 飞行员', '👷 建筑师', '🎬 导演', '📷 摄影师', '🧑‍🔧 工程师', '🧑‍🌾 农民'];
+        const TARGET_COUNT = 5; // 每轮需要记住的目标数量
+        const OPTIONS_COUNT = 15; // 选项总数
+
+        let roundData = {
+            1: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+            2: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+            3: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 }
+        };
+
+        let currentRound = 0;
+
+        // 开始游戏
+        function startGame() {
+            currentRound = 1;
+            roundData = {
+                1: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+                2: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+                3: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 }
+            };
+
+            // 生成三轮的目标
+            generateTargets();
+            showRound(1);
+        }
+
+        // 生成目标物品
+        function generateTargets() {
+            // 第一轮：随机5个水果
+            const fruitsCopy = [...FRUITS];
+            shuffleArray(fruitsCopy);
+            roundData[1].targets = fruitsCopy.slice(0, TARGET_COUNT);
+
+            // 第二轮：另外5个水果（不重复）
+            roundData[2].targets = fruitsCopy.slice(TARGET_COUNT, TARGET_COUNT * 2);
+
+            // 第三轮：随机5个职业
+            const jobsCopy = [...JOBS];
+            shuffleArray(jobsCopy);
+            roundData[3].targets = jobsCopy.slice(0, TARGET_COUNT);
+        }
+
+        // 显示某一轮的闪现阶段
+        function showRound(round) {
+            const screenId = `screen-round${round}`;
+            showScreen(screenId);
+
+            // 更新进度指示
+            updateProgress(round);
+
+            // 获取目标物品
+            const targets = roundData[round].targets;
+
+            // 显示物品
+            const flashItems = document.getElementById(`flashItems${round}`);
+            flashItems.innerHTML = '';
+            targets.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'flash-item';
+                div.textContent = item;
+                div.style.animationDelay = `${index * 0.2}s`;
+                flashItems.appendChild(div);
+            });
+
+            // 开始倒计时
+            startFlashTimer(round);
+        }
+
+        // 闪现倒计时
+        function startFlashTimer(round) {
+            let timeLeft = 5;
+            const timerText = document.getElementById(`timer${round}`);
+            const timerFill = document.getElementById(`timerFill${round}`);
+
+            timerText.textContent = timeLeft;
+            timerFill.style.width = '100%';
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerText.textContent = timeLeft;
+                timerFill.style.width = `${(timeLeft / 5) * 100}%`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    // 隐藏物品，进入选择阶段
+                    setTimeout(() => {
+                        showSelection(round);
+                    }, 200);
+                }
+            }, 1000);
+        }
+
+        // 显示选择阶段
+        function showSelection(round) {
+            const screenId = `screen-select${round}`;
+            showScreen(screenId);
+
+            // 记录开始时间
+            roundData[round].startTime = Date.now();
+            roundData[round].selected = [];
+
+            // 获取选项池
+            let optionsPool;
+            let targets;
+            if (round <= 2) {
+                optionsPool = [...FRUITS];
+                targets = roundData[round].targets;
+            } else {
+                optionsPool = [...JOBS];
+                targets = roundData[round].targets;
+            }
+
+            // 创建选择网格（15个选项）
+            const grid = document.getElementById(`selectGrid${round}`);
+            grid.innerHTML = '';
+
+            shuffleArray(optionsPool);
+            optionsPool.slice(0, OPTIONS_COUNT).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'selection-item';
+                div.textContent = item;
+                div.onclick = () => toggleSelection(round, div, item);
+                grid.appendChild(div);
+            });
+
+            // 更新计数
+            updateSelectedCount(round);
+
+            // 禁用提交按钮
+            document.getElementById(`submitBtn${round}`).disabled = true;
+
+            // 启动反应时更新
+            updateReactionTime(round);
+        }
+
+        // 选择/取消选择
+        function toggleSelection(round, element, item) {
+            const selected = roundData[round].selected;
+            const index = selected.indexOf(item);
+
+            if (index > -1) {
+                // 取消选择
+                selected.splice(index, 1);
+                element.classList.remove('selected');
+            } else if (selected.length < TARGET_COUNT) {
+                // 添加选择（最多5个）
+                selected.push(item);
+                element.classList.add('selected');
+            }
+
+            updateSelectedCount(round);
+
+            // 启用/禁用提交按钮
+            document.getElementById(`submitBtn${round}`).disabled = selected.length !== TARGET_COUNT;
+        }
+
+        // 更新已选择数量
+        function updateSelectedCount(round) {
+            document.getElementById(`selectedCount${round}`).textContent = roundData[round].selected.length;
+        }
+
+        // 更新反应时显示
+        function updateReactionTime(round) {
+            const reactionSpan = document.getElementById(`reactionTime${round}`);
+            const startTime = roundData[round].startTime;
+
+            const updateTimer = setInterval(() => {
+                if (document.getElementById(`screen-select${round}`).classList.contains('active')) {
+                    const elapsed = Date.now() - startTime;
+                    reactionSpan.textContent = elapsed;
+                } else {
+                    clearInterval(updateTimer);
+                }
+            }, 50);
+        }
+
+        // 提交某轮答案
+        function submitRound(round) {
+            // 记录结束时间
+            roundData[round].endTime = Date.now();
+
+            // 计算正确数量
+            const targets = roundData[round].targets;
+            const selected = roundData[round].selected;
+            let correct = 0;
+
+            selected.forEach(item => {
+                if (targets.includes(item)) {
+                    correct++;
+                }
+            });
+
+            roundData[round].correct = correct;
+
+            // 标记正确/错误
+            const grid = document.getElementById(`selectGrid${round}`);
+            grid.querySelectorAll('.selection-item').forEach(el => {
+                const item = el.textContent;
+                el.onclick = null; // 禁止继续点击
+
+                if (targets.includes(item)) {
+                    if (selected.includes(item)) {
+                        el.classList.add('correct');
+                    } else {
+                        el.classList.add('missed');
+                    }
+                } else if (selected.includes(item)) {
+                    el.classList.add('wrong');
+                }
+            });
+
+            // 禁用提交按钮
+            document.getElementById(`submitBtn${round}`).disabled = true;
+
+            // 延迟进入下一阶段
+            setTimeout(() => {
+                if (round < 3) {
+                    showRound(round + 1);
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-results');
+            updateProgress(4);
+
+            // 计算每轮数据
+            const results = [];
+            for (let r = 1; r <= 3; r++) {
+                const accuracy = (roundData[r].correct / TARGET_COUNT) * 100;
+                const reactionTime = roundData[r].endTime - roundData[r].startTime;
+                results.push({ accuracy, reactionTime, correct: roundData[r].correct });
+            }
+
+            // 更新结果卡片
+            document.getElementById('result1').innerHTML =
+                `<span class="${results[0].accuracy >= 60 ? 'result-value highlight-good' : 'result-value'}">正确率 ${results[0].accuracy}% (${results[0].correct}/${TARGET_COUNT})，反应时 ${results[0].reactionTime}ms</span>`;
+            document.getElementById('result2').innerHTML =
+                `<span class="${results[1].accuracy >= 60 ? 'result-value highlight-good' : 'result-value highlight-bad'}">正确率 ${results[1].accuracy}% (${results[1].correct}/${TARGET_COUNT})，反应时 ${results[1].reactionTime}ms</span>`;
+            document.getElementById('result3').innerHTML =
+                `<span class="${results[2].accuracy >= 60 ? 'result-value highlight-good' : 'result-value'}">正确率 ${results[2].accuracy}% (${results[2].correct}/${TARGET_COUNT})，反应时 ${results[2].reactionTime}ms</span>`;
+
+            // 绘制图表
+            drawChart(results);
+
+            // 生成洞察文字
+            generateInsight(results);
+        }
+
+        // 绘制图表
+        function drawChart(results) {
+            const chartArea = document.getElementById('chartArea');
+            const svg = document.getElementById('chartSvg');
+            svg.innerHTML = '';
+
+            const width = chartArea.offsetWidth;
+            const height = chartArea.offsetHeight;
+
+            // 计算点位置
+            const xPositions = [width * 0.16, width * 0.5, width * 0.84];
+
+            // 绘制正确率线（绿色）
+            const accuracyPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const accPoints = results.map((r, i) => {
+                const y = height - (r.accuracy / 100) * height;
+                return `${xPositions[i]},${y}`;
+            });
+            accuracyPath.setAttribute('d', `M ${accPoints.join(' L ')}`);
+            accuracyPath.setAttribute('stroke', '#4ECDC4');
+            accuracyPath.setAttribute('stroke-width', '3');
+            accuracyPath.setAttribute('fill', 'none');
+            svg.appendChild(accuracyPath);
+
+            // 绘制反应时线（红色，需要缩放）
+            const maxTime = 5000;
+            const timePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const timePoints = results.map((r, i) => {
+                const normalizedTime = Math.min(r.reactionTime, maxTime);
+                const y = height - (normalizedTime / maxTime) * height;
+                return `${xPositions[i]},${y}`;
+            });
+            timePath.setAttribute('d', `M ${timePoints.join(' L ')}`);
+            timePath.setAttribute('stroke', '#FF6B6B');
+            timePath.setAttribute('stroke-width', '3');
+            timePath.setAttribute('fill', 'none');
+            svg.appendChild(timePath);
+
+            // 绘制数据点
+            results.forEach((r, i) => {
+                // 正确率点
+                const accDot = document.createElement('div');
+                accDot.className = 'data-point accuracy';
+                accDot.style.left = `${xPositions[i] + 45}px`;
+                accDot.style.top = `${height - (r.accuracy / 100) * height + 10}px`;
+                accDot.title = `正确率: ${r.accuracy}%`;
+                chartArea.appendChild(accDot);
+
+                // 反应时点
+                const normalizedTime = Math.min(r.reactionTime, maxTime);
+                const timeDot = document.createElement('div');
+                timeDot.className = 'data-point time';
+                timeDot.style.left = `${xPositions[i] + 45}px`;
+                timeDot.style.top = `${height - (normalizedTime / maxTime) * height + 10}px`;
+                timeDot.title = `反应时: ${r.reactionTime}ms`;
+                chartArea.appendChild(timeDot);
+            });
+
+            // 绘制网格线
+            for (let i = 0; i <= 4; i++) {
+                const line = document.createElement('div');
+                line.className = 'chart-grid-line';
+                line.style.top = `${(i / 4) * height}px`;
+                chartArea.appendChild(line);
+            }
+        }
+
+        // 生成洞察文字
+        function generateInsight(results) {
+            const acc1 = results[0].accuracy;
+            const acc2 = results[1].accuracy;
+            const acc3 = results[2].accuracy;
+            const time1 = results[0].reactionTime;
+            const time2 = results[1].reactionTime;
+            const time3 = results[2].reactionTime;
+
+            let insight = '';
+
+            if (acc2 < acc1 && acc3 > acc2) {
+                insight = `<strong>完美验证了前摄抑制理论！</strong><br><br>
+                第二轮正确率 (${acc2}%) 显著低于第一轮 (${acc1}%)，说明第一轮的水果记忆干扰了第二轮。
+                第三轮正确率 (${acc3}%) 回升，因为换成职业类别，大脑"切换频道"，干扰消失。<br><br>`;
+                if (time2 > time1) {
+                    insight += `第二轮反应时 (${time2}ms) 比第一轮 (${time1}ms) 更长，说明大脑需要额外时间来抑制旧记忆的干扰。`;
+                } else {
+                    insight += `第二轮反应时 (${time2}ms) 反而比第一轮 (${time1}ms) 更短，这可能说明你采取了"快速猜测"策略，但代价是正确率下降。`;
+                }
+            } else if (acc2 >= acc1 && acc3 >= acc1) {
+                insight = `<strong>你的抗干扰能力很强！</strong><br><br>
+                第二轮正确率 (${acc2}%) 和第一轮 (${acc1}%) 相当，说明你的大脑能有效抑制前摄干扰。
+                第三轮 (${acc3}%) 保持稳定，说明跨类别记忆对你来说不是难事。<br><br>
+                这可能说明你的工作记忆容量较大，或者你天生擅长"分类归纳"，能快速隔离不同类别的信息。`;
+            } else if (acc2 < acc1 && acc3 <= acc2) {
+                insight = `<strong>干扰效应持续存在</strong><br><br>
+                第二轮正确率 (${acc2}%) 低于第一轮 (${acc1}%)，符合前摄抑制的预期。
+                但第三轮正确率 (${acc3}%) 并没有回升，可能是因为前两轮的认知负荷累积，或者你对职业类别的记忆能力本身就较弱。<br><br>
+                建议尝试"分段学习"，避免连续记忆过多同类内容。`;
+            } else {
+                insight = `<strong>结果分析</strong><br><br>
+                第一轮正确率：${acc1}% (${results[0].correct}/${TARGET_COUNT})<br>
+                第二轮正确率：${acc2}% (${results[1].correct}/${TARGET_COUNT})<br>
+                第三轮正确率：${acc3}% (${results[2].correct}/${TARGET_COUNT})<br><br>
+                你的数据展示了大脑记忆的基本规律。继续探索下面的心理学原理，了解如何优化你的学习方法！`;
+            }
+
+            document.getElementById('insightText').innerHTML = insight;
+        }
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 更新进度指示
+        function updateProgress(round) {
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step${i}`);
+                step.classList.remove('active', 'completed');
+
+                if (i < round) {
+                    step.classList.add('completed');
+                } else if (i === round) {
+                    step.classList.add('active');
+                }
+            }
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentRound = 0;
+            roundData = {
+                1: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+                2: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 },
+                3: { targets: [], selected: [], startTime: 0, endTime: 0, correct: 0 }
+            };
+
+            // 重置进度
+            updateProgress(0);
+            document.getElementById('step1').classList.add('active');
+        }
+
+        // 洗牌函数
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 移动端菜单
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>

@@ -112,6 +112,75 @@
             color: white;
         }
 
+        /* 汉堡菜单按钮 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* 移动端下拉菜单 */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
         /* 页面头部 */
         .page-header {
             padding: 40px 20px 30px;
@@ -435,6 +504,7 @@
         @media (max-width: 600px) {
             .tools-grid, .现场-grid { grid-template-columns: 1fr; }
             .nav-links { display: none; }
+            .menu-toggle { display: flex; }
             .category-tabs { flex-wrap: wrap; gap: 8px; }
             .tab-btn { padding: 8px 15px; font-size: 0.85em; }
         }
@@ -456,7 +526,21 @@
             <a href="about.html">关于我</a>
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
 
     <!-- 页面头部 -->
     <header class="page-header">
@@ -479,6 +563,15 @@
             <p style="font-size:0.85em;color:var(--text-muted);margin-bottom:20px;">先让双方"看见"。这些心理学小游戏，帮助家长和孩子看见自己的盲点、看见彼此的差异。</p>
 
             <div class="tools-grid">
+                <!-- 新游戏标记 -->
+                <a href="记忆与干扰.html" class="tool-card" style="position:relative;">
+                    <div style="position:absolute;top:8px;right:8px;background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:0.7em;font-weight:600;">NEW</div>
+                    <div class="tool-icon">🧠</div>
+                    <div class="tool-name">记忆与干扰</div>
+                    <div class="tool-effect">前摄抑制</div>
+                    <div class="tool-desc">同类信息连续记忆为何互相干扰？</div>
+                </a>
+
                 <a href="找茬挑战.html" class="tool-card">
                     <div class="tool-icon">🔍</div>
                     <div class="tool-name">找茬挑战</div>
@@ -678,21 +771,37 @@
             const btn = document.querySelector('.theme-toggle');
             if (html.getAttribute('data-theme') === 'light') {
                 html.removeAttribute('data-theme');
-                btn.textContent = '🌙';
+                if (btn) btn.textContent = '🌙';
                 localStorage.setItem('theme', 'dark');
             } else {
                 html.setAttribute('data-theme', 'light');
-                btn.textContent = '☀️';
+                if (btn) btn.textContent = '☀️';
                 localStorage.setItem('theme', 'light');
             }
         }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
 
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
             const btn = document.querySelector('.theme-toggle');
             if (savedTheme === 'light') {
                 document.documentElement.setAttribute('data-theme', 'light');
-                btn.textContent = '☀️';
+                if (btn) btn.textContent = '☀️';
             }
         }
 
@@ -709,7 +818,7 @@
 
         window.addEventListener('scroll', function() {
             const btn = document.querySelector('.back-top');
-            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+            if (btn) btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
         });
 
         initTheme();
