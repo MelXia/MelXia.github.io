@@ -16,6 +16,17 @@
             --text-muted: #9899AC;
         }
 
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -23,6 +34,147 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.8;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
         }
 
         .container {
@@ -31,16 +183,9 @@
             padding: 20px;
         }
 
-        .back-link {
-            display: block;
-            color: var(--primary-light);
-            font-size: 0.9em;
-            margin-bottom: 20px;
-        }
-
         .page-header {
             text-align: center;
-            padding: 20px 0;
+            padding: 40px 20px 30px;
         }
 
         .page-title {
@@ -65,12 +210,25 @@
             background: var(--card);
             border-radius: 12px;
             overflow: hidden;
+            border: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
         }
 
         .gallery-item img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item img:hover {
+            opacity: 0.9;
         }
 
         .gallery-item.wide {
@@ -79,6 +237,74 @@
 
         .gallery-item.wide img {
             height: 280px;
+        }
+
+        /* 购买按钮 */
+        .buy-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 25px;
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--primary);
+        }
+
+        .buy-title {
+            font-size: 1.1em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .buy-desc {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .buy-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-xiaohongshu {
+            background: linear-gradient(135deg, #FF2442, #FE2C55);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-xiaohongshu:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255,36,66,0.3);
+        }
+
+        .btn-email {
+            background: var(--bg);
+            color: var(--text);
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-email:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
         }
 
         .footer-nav {
@@ -92,44 +318,99 @@
             color: var(--primary-light);
             font-size: 0.9em;
         }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+            .gallery { grid-template-columns: 1fr; }
+            .gallery-item.wide { grid-column: span 1; }
+            .gallery-item img, .gallery-item.wide img { height: 180px; }
+            .buy-buttons { flex-direction: column; align-items: center; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← 返回首页</a>
 
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
         <div class="page-header">
             <h1 class="page-title">🌸 Mel的花艺作品</h1>
-            <p class="page-desc">错过花艺减压沙龙的朋友，静静看看这些作品，也挺减压的。</p>
+            <p class="page-desc">错过花艺减压沙龙的朋友，静静看看这些作品，也挺减压的。<br>每一款都是独一无二的高定款。</p>
         </div>
 
         <div class="gallery">
             <div class="gallery-item wide">
-                <img src="照片素材/花艺作品2.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品2.JPG" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品4.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品4.JPG" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品5.jpg" alt="花艺作品">
+                <img src="照片素材/花艺作品5.jpg" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品7.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品7.JPG" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品9.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品9.JPG" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品10.heic" alt="花艺作品">
+                <img src="照片素材/花艺作品10.jpg" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品14.jpg" alt="花艺作品">
+                <img src="照片素材/花艺作品14.jpg" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品15.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品15.JPG" alt="花艺作品" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="照片素材/花艺作品18.JPG" alt="花艺作品">
+                <img src="照片素材/花艺作品18.JPG" alt="花艺作品" loading="lazy">
+            </div>
+        </div>
+
+        <!-- 购买按钮 -->
+        <div class="buy-section">
+            <h3 class="buy-title">想要定制独一无二的花艺作品？</h3>
+            <p class="buy-desc">通过小红书私信或邮件与我沟通，告诉我你喜欢的风格、想要表达的情绪、送花的场合，我们一起创作。</p>
+            <div class="buy-buttons">
+                <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
+                    <span>📱</span>
+                    <span>小红书私信</span>
+                </a>
+                <a href="mailto:19469728@qq.com?subject=定制花艺作品&body=Hi Mel，我想定制一款花艺作品，我喜欢的是..." class="btn-email">
+                    <span>✉️</span>
+                    <span>邮件联系</span>
+                </a>
             </div>
         </div>
 
@@ -137,5 +418,48 @@
             <a href="index.html">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

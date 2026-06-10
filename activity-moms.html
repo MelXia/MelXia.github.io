@@ -15,27 +15,194 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
         .page-header { text-align: center; padding: 25px 0; border-bottom: 1px solid var(--card); margin-bottom: 30px; }
         .page-title { font-size: 1.6em; color: var(--primary-light); margin-bottom: 12px; }
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-        .activity-section { margin-bottom: 35px; }
-        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .activity-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .activity-images img { width: 100%; border-radius: 10px; }
-        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; }
+        .activity-section { margin-bottom: 35px; text-align: center; }
+        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
+        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .activity-images img { max-width: 100%; border-radius: 10px; }
+        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
         .activity-text strong { color: var(--primary-light); }
         .activity-text blockquote { background: linear-gradient(135deg, rgba(107,92,231,0.2), rgba(255,107,107,0.2)); border-left: 3px solid var(--accent); padding: 12px 18px; margin: 15px 0; border-radius: 0 8px 8px 0; }
         .activity-text ul { padding-left: 20px; margin: 10px 0; }
         .activity-text li { margin-bottom: 8px; }
-        .highlight-box { background: rgba(78,205,196,0.1); border: 1px solid var(--success); padding: 15px; border-radius: 10px; margin: 15px 0; }
-        .highlight-box h4 { color: var(--success); margin-bottom: 10px; font-size: 0.95em; }
         .contact-invite { background: rgba(255,107,107,0.1); border: 1px solid var(--accent); padding: 15px; border-radius: 10px; margin: 20px 0; text-align: center; }
         .contact-invite p { color: var(--accent); margin-bottom: 10px; }
         .contact-invite a { color: var(--primary-light); text-decoration: none; }
@@ -49,29 +216,76 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
             <h1 class="page-title">☕ 老母亲疯会</h1>
-            <p class="page-desc">为家长创造一个可以放松、倾诉、被理解的空间。在这里，妈妈们可以暂时放下"母亲"的角色，做回真实的自己。</p>
+            <p class="page-desc">让家长被理解，让情绪被看见。很多亲子矛盾的根源，不在于孩子不听话，而在于家长长期压抑自我、背负多重压力、陷入育儿执念，情绪无处释放、认知固化。我为家长搭建专属松弛空间，翻译家长的隐性情绪、化解育儿执念，让家长先治愈自己，再温柔陪伴孩子。</p>
+        </div>
+
+        <!-- 心理学适配逻辑 -->
+        <div class="activity-section">
+            <div class="activity-text">
+                <p><strong>心理学适配逻辑：</strong>依托家长角色压力、情绪耗竭、认知偏差与身份认同心理。很多亲子矛盾的根源，不在于孩子不听话，而在于家长长期压抑自我、背负多重压力、陷入育儿执念，情绪无处释放、认知固化。我作为组织者，为家长搭建专属松弛空间，翻译家长的隐性情绪、化解育儿执念，让家长先治愈自己，再温柔陪伴孩子。</p>
+                <p>专为家长群体打造情绪释放、自我复盘、彼此赋能的专属平台。跳出"家长必须坚强、必须完美"的固化枷锁，让妈妈们暂时卸下育儿、家庭、职场的多重身份，回归自我、倾诉自我、治愈自我。我以双向共情为核心，让每一位家长的委屈、疲惫、焦虑都被看见、被理解、被治愈，在彼此的经验共鸣中跳出育儿内耗，优化亲子相处模式。</p>
+            </div>
+        </div>
+
+        <!-- 2024年10月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2024年10月 · 心静瑜伽馆（都市隶人减压营）</div>
+            <div class="activity-images">
+                <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营2024" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次减压活动选址静谧松弛的瑜伽馆，为家长打造安全、私密、无评判的倾诉空间。当代家长长期背负育儿压力、家庭琐事、职场焦虑，常年处于情绪紧绷、自我缺失的状态，却很少有专属时间释放情绪、梳理内心。</p>
+                <p>本次参与的十位妈妈互不相识，但在松弛安全的氛围里，大家大胆倾诉育儿委屈、生活疲惫、情绪内耗，释放平日无法言说的压力。没有评判、没有说教、没有攀比，只有真诚的共情与接纳，每一位参与者都实现了深度的情绪宣泄。</p>
+                <p>同时我通过心理学小游戏、认知体验实验，带领大家拆解日常的育儿执念。很多家长终于读懂：多数亲子矛盾，都源于自己的主观臆断。很多时候"孩子不懂事、孩子偷懒、孩子叛逆"，只是家长的片面认知，孩子实则有自己的难处、压力与成长节奏。这场活动让家长放下执念、放下焦虑，学会共情孩子、接纳自己。</p>
+                <blockquote>为了让治愈与赋能常态化，我带动在场家长自发成立「老母亲的微笑」微信群，搭建长期线上陪伴、情感支撑、经验共享的平台。从此家长不再孤军奋战，日常可以互相倾诉困惑、分享经验、彼此鼓励，形成持续的正向赋能氛围。</blockquote>
+            </div>
         </div>
 
         <!-- 2025年3月 -->
         <div class="activity-section">
-            <div class="activity-date">📍 2025年3月 · 心静瑜伽馆</div>
+            <div class="activity-date">📍 2025年3月 · 心静瑜伽馆（心理剧主题）</div>
             <div class="activity-images">
-                <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营2025">
+                <img src="照片素材/老母亲疯会2025年3月广州市海珠区心静瑜伽.jpeg" alt="老母亲疯会2025" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>这是我们第一次组织"老母亲疯会"。当时的出发点是希望通过瑜伽馆这个悠闲放松的地方，为老母亲们提供一个舒服、安全、愿意分享的空间去进行减压，并带出她们日常的一些疑问，在老母亲之间通过讨论获得启发。</p>
-                <p>这个活动虽然是第一次组织，但比想象中更加成功。令我触动的是，虽然参与的十位母亲都是第一次见面，并不是熟人，但她们非常愿意分享自己生活中真实的感受。</p>
-                <blockquote>无论是生活中的鸡飞狗跳，还是激动、落泪、委屈等情绪，都在这里得到了宣泄。这是对互动本身的一种信任。</blockquote>
-                <p>我们也通过一些心理学的小游戏和重重实验，去启发老母亲们：<strong>很多事情"你以为的，只是你以为的"。</strong></p>
-                <ul>
-                    <li>你以为孩子需要你的照顾，其实他们比你想象中更强大</li>
-                    <li>你以为孩子懒，其实他们是遇到了自己讲不出口的麻烦，不知道该如何表达</li>
-                </ul>
+                <p>本次活动以心理剧为核心形式开展，结合专业心理剧疗法帮助家长梳理内心情绪。生活里，很多复杂的感受、纠结的情绪难以用语言精准描述，藏在心底慢慢堆积，既影响自身状态，也容易引发家庭摩擦。而心理剧借助舞台演绎、角色扮演的形式，让参与者把平日里说不清、道不明的情绪、心结与生活场景具象化呈现出来。</p>
+                <p>我作为组织者，引导大家分组编排、登台表演，将育儿日常、内心挣扎、亲子相处中的矛盾场景一一还原。在表演、观看、互动复盘的过程中，大家跳出当局者的视角，以旁观者的身份看清自身情绪来源与相处模式。不少家长表示，当情绪通过表演被表达出来的那一刻，积压许久的压抑感也随之消散。</p>
+                <p>借助心理剧的表达与疗愈作用，参与者不仅释放了负面情绪，也学会换位思考，读懂自己行为背后的心理动因。大家不再一味压抑感受，也能更平和地看待亲子间的分歧，学会用更柔软、理性的方式面对生活与育儿难题。</p>
             </div>
         </div>
 
@@ -79,15 +293,24 @@
         <div class="activity-section">
             <div class="activity-date">📍 2026年5月 · 广州市海珠区</div>
             <div class="activity-images">
-                <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会2026">
+                <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会2026" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>这次参加的老母亲，她们孩子的年龄段比较分散：有小学的、有初中的、有面临高考的、有已经大学毕业的。</p>
-                <p><strong>这些老母亲的特点是愿意分享，且学习能力和反思能力都很强。</strong>通过沟通交流，她们能很快在别人身上看到自己可以改进的地方，并进行思考启发。</p>
-                <p>而且她们很愿意进行彼此之间的情感支持，为此成立了<strong>"老母亲的微笑"</strong>微信群。在日常的互动中，大家有了更多的精神支持与交流。</p>
+                <p>本次活动参与家长覆盖全学段育儿群体，孩子年龄跨度从小学、初中、高考备考到大学毕业，每位家长都有不同的育儿困惑、实战经验与成长感悟。大家拥有极强的反思能力与学习能力，能快速在他人的故事中看见自己的问题、更新自我认知。</p>
+                <p>很多家长反馈，这场活动最大的收获不是学到育儿技巧，而是终于有人懂自己的疲惫与焦虑。一个人的困惑，是一群人的共鸣；一个人的坚持，有一群人的支撑。大家在抱团成长中，告别了育儿孤独，实现了心态松弛与成长升级。</p>
                 <div class="contact-invite">
-                    <p>如果你也想加入我们的"老母亲的微笑"群聊</p>
-                    <p>欢迎同我联系：19469728@qq.com</p>
+                    <p>如果你想加入我们的"老母亲的微笑"群聊</p>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                        <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" style="background: linear-gradient(135deg, #FF2442, #FE2C55); color: white; padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>📱</span>
+                            <span>小红书私信</span>
+                        </a>
+                        <a href="mailto:19469728@qq.com?subject=申请加入老母亲群聊" style="background: var(--bg); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; border: 2px solid var(--primary); display: inline-flex; align-items: center; gap: 6px;">
+                            <span>✉️</span>
+                            <span>邮件联系</span>
+                        </a>
+                    </div>
+                    <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px;">通常1天内回复</p>
                 </div>
             </div>
         </div>
@@ -96,11 +319,10 @@
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>老母亲疯会中，我扮演的"翻译家"角色：</p>
-                <p>• 把妈妈们的心声翻译成她们自己能理解的答案：很多时候我们以为的，只是你以为的</p>
-                <p>• 把"母亲"这个角色翻译成"自己"：你不是妈妈的代名词，你首先是你自己</p>
-                <p>• 把彼此的经验翻译成相互的支持：一个人的困惑，可能是另一个人已经走过的路</p>
-                <p>从第一次的陌生人聚会，到后来的微信群持续支持，老母亲们找到了一个可以卸下盔甲的地方。</p>
+                <p>在老母亲疯会系列活动中，我是家长情绪与自我的翻译官：</p>
+                <p>• 把「家长说不清的焦虑疲惫」翻译成可被理解、可被治愈的情绪</p>
+                <p>• 把「固化的育儿执念」翻译成通透松弛的成长认知</p>
+                <p>• 把「孤军奋战的育儿之路」翻译成彼此支撑、抱团成长的温暖旅程</p>
             </div>
         </div>
 
@@ -108,5 +330,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

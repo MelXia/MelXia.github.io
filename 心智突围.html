@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心智突围 - 执行控制训练游戏</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 进度指示 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg);
+            border-radius: 2px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .round-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .round-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .round-dot.active {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .round-dot.completed {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        /* 规则说明 */
+        .rule-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .rule-title {
+            color: var(--warning-text);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        .rule-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: var(--bg);
+            border-radius: 12px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .shape-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 形状样式 */
+        .shape {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            line-height: 1;
+            transition: opacity 0.1s;
+        }
+
+        .shape.circle {
+            color: var(--primary);
+        }
+
+        .shape.triangle {
+            color: var(--accent);
+        }
+
+        /* 位置指示线 */
+        .position-indicator {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--text-muted);
+            opacity: 0.3;
+        }
+
+        .position-indicator.left {
+            left: 25%;
+        }
+
+        .position-indicator.right {
+            right: 25%;
+        }
+
+        .position-indicator.center {
+            left: 50%;
+            background: var(--warning);
+            opacity: 0.5;
+        }
+
+        /* 按钮区域 */
+        .button-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .side-btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 1em;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .side-btn:hover {
+            background: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .side-btn:active {
+            transform: scale(0.98);
+        }
+
+        .side-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .side-btn.wrong {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* 颜色按钮 */
+        .color-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .color-btn:active {
+            transform: scale(0.95);
+        }
+
+        .color-btn.correct {
+            border-color: white;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .color-btn.wrong {
+            border-color: white;
+            opacity: 0.6;
+        }
+
+        .color-btn.purple { background: var(--primary); color: white; }
+        .color-btn.red { background: var(--accent); color: white; }
+        .color-btn.green { background: var(--success); color: white; }
+        .color-btn.yellow { background: var(--warning); color: #333; }
+
+        /* 统计信息 */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 10px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 反馈信息 */
+        .feedback {
+            font-size: 1em;
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .feedback.wrong {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .chart-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 180px;
+            padding: 15px 10px;
+            position: relative;
+        }
+
+        .chart-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .chart-bar {
+            width: 50px;
+            border-radius: 8px 8px 0 0;
+            transition: height 1s ease;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+        }
+
+        .chart-bar-value {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .chart-label {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* 折线图容器 */
+        .line-chart-overlay {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 150px;
+            pointer-events: none;
+        }
+
+        .line-chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .chart-dot {
+            fill: var(--success);
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .chart-acc-label {
+            font-size: 0.75em;
+            fill: var(--success);
+            font-weight: 600;
+        }
+
+        /* 洞察 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .insight-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+            font-size: 0.85em;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning-text);
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .theory-section p {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.85em;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 6px 0;
+            padding-left: 22px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 0.8em;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .tips-list li strong {
+            color: var(--primary-light);
+        }
+
+        /* 倒计时 */
+        .countdown {
+            font-size: 1em;
+            color: var(--accent);
+            margin: 8px 0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .game-area {
+                height: 160px;
+            }
+
+            .shape {
+                font-size: 60px;
+            }
+
+            .side-btn {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+
+            .color-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 0.85em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+
+            .chart-bar {
+                width: 35px;
+            }
+
+            .chart-wrapper {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🧠</div>
+                <h1>心智突围</h1>
+                <p class="subtitle">执行控制训练体验游戏<br>锻炼你的"大脑指挥官"</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">🎯 什么是执行控制？</div>
+                    <div class="rule-content">
+                        执行控制是大脑前额叶的"总指挥"能力，负责<span class="rule-highlight">抑制习惯反应</span>、<span class="rule-highlight">灵活切换任务</span>、<span class="rule-highlight">抵抗干扰</span>。
+                        <br><br>
+                        这个游戏将通过三轮挑战，测试并训练你的执行控制能力。准备好了吗？
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('screen-round1-intro')">开始训练</button>
+            </div>
+        </div>
+
+        <!-- 第一轮介绍 -->
+        <div class="screen" id="screen-round1-intro">
+            <div class="card">
+                <div class="round-indicator">
+                    <div class="round-dot active">1</div>
+                    <div class="round-dot">2</div>
+                    <div class="round-dot">3</div>
+                </div>
+
+                <h2>第一轮：基础抑制</h2>
+                <p class="subtitle">当三角形出现在左侧或右侧时，点击对应侧的按钮</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">📋 规则说明</div>
+                    <div class="rule-content">
+                        屏幕会闪现<span class="rule-highlight">圆形</span>或<span class="rule-highlight">三角形</span>（显示0.5秒）。<br><br>
+                        ✅ <strong>三角形出现在左侧</strong> → 点击"左侧"按钮<br>
+                        ✅ <strong>三角形出现在右侧</strong> → 点击"右侧"按钮<br>
+                        ❌ <strong>出现圆形</strong> → 不要点击任何按钮，等待即可<br><br>
+                        <em style="color:var(--text-muted);font-size:0.9em;">提示：2秒内无操作将自动进入下一题</em>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">次测试</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0.5秒</div>
+                        <div class="stat-label">显示时长</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startRound(1)">开始第一轮</button>
+            </div>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div class="screen" id="screen-game">
+            <div class="card">
+                <div class="round-indicator">
+                    <div class="round-dot" id="roundDot1">1</div>
+                    <div class="round-dot" id="roundDot2">2</div>
+                    <div class="round-dot" id="roundDot3">3</div>
+                </div>
+
+                <h2 id="gameTitle">第一轮</h2>
+                <p class="subtitle" id="gameSubtitle">点击三角形所在侧的按钮</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gameProgress"></div>
+                </div>
+
+                <div class="game-area" id="gameArea">
+                    <div class="position-indicator left"></div>
+                    <div class="position-indicator right"></div>
+                    <div class="shape-container" id="shapeContainer">
+                    </div>
+                </div>
+
+                <div class="countdown" id="countdown"></div>
+
+                <div class="feedback" id="feedback"></div>
+
+                <div class="button-area" id="buttonArea">
+                    <button class="side-btn" id="leftBtn" onclick="handleButton('left')">← 左侧</button>
+                    <button class="side-btn" id="rightBtn" onclick="handleButton('right')">右侧 →</button>
+                </div>
+
+                <div class="color-buttons" id="colorButtons" style="display:none;">
+                    <button class="color-btn purple" onclick="handleColor('purple')">紫色</button>
+                    <button class="color-btn red" onclick="handleColor('red')">红色</button>
+                    <button class="color-btn green" onclick="handleColor('green')">绿色</button>
+                    <button class="color-btn yellow" onclick="handleColor('yellow')">黄色</button>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-value" id="trialCount">0</div>
+                        <div class="stat-label">当前测试</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="correctCount">0</div>
+                        <div class="stat-label">正确次数</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二轮介绍 -->
+        <div class="screen" id="screen-round2-intro">
+            <div class="card">
+                <div class="round-indicator">
+                    <div class="round-dot completed">1</div>
+                    <div class="round-dot active">2</div>
+                    <div class="round-dot">3</div>
+                </div>
+
+                <h2>第二轮：空间反转</h2>
+                <p class="subtitle">规则变了！点击三角形的对侧</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">📋 新规则</div>
+                    <div class="rule-content">
+                        屏幕会闪现<span class="rule-highlight">圆形</span>或<span class="rule-highlight">三角形</span>（显示0.5秒）。<br><br>
+                        ✅ <strong>三角形出现在左侧</strong> → 点击"右侧"按钮<br>
+                        ✅ <strong>三角形出现在右侧</strong> → 点击"左侧"按钮<br>
+                        ❌ <strong>出现圆形</strong> → 不要点击任何按钮<br><br>
+                        <strong style="color:var(--accent);">难度升级：</strong>你需要抑制"点击同侧"的习惯反应！
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startRound(2)">开始第二轮</button>
+            </div>
+        </div>
+
+        <!-- 第三轮介绍 -->
+        <div class="screen" id="screen-round3-intro">
+            <div class="card">
+                <div class="round-indicator">
+                    <div class="round-dot completed">1</div>
+                    <div class="round-dot completed">2</div>
+                    <div class="round-dot active">3</div>
+                </div>
+
+                <h2>第三轮：跨维度冲突</h2>
+                <p class="subtitle">忽略形状，只看颜色！</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">📋 新规则</div>
+                    <div class="rule-content">
+                        屏幕会闪现<span class="rule-highlight">嵌套图形</span>：大图形内嵌小图形（显示0.5秒）。<br><br>
+                        ✅ <strong>忽略图形大小</strong>，仅判断<span class="rule-highlight">三角形的颜色</span>，点击对应颜色按钮<br><br>
+                        <strong style="color:var(--accent);">难度升级：</strong>这是Stroop效应的变体！形状与颜色产生认知冲突。
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startRound(3)">开始第三轮</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>训练完成！</h2>
+                <p class="subtitle">看看你的"大脑指挥官"表现如何</p>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 反应时（柱状）与正确率（折线）对比</div>
+                    <div class="chart-wrapper" id="chartWrapper">
+                        <!-- 折线图SVG覆盖层 -->
+                        <svg class="line-chart-overlay" id="lineChart">
+                            <polyline class="chart-line" id="accLine" points=""></polyline>
+                            <circle class="chart-dot" id="dot1" r="6"></circle>
+                            <circle class="chart-dot" id="dot2" r="6"></circle>
+                            <circle class="chart-dot" id="dot3" r="6"></circle>
+                            <text class="chart-acc-label" id="accLabel1" text-anchor="middle"></text>
+                            <text class="chart-acc-label" id="accLabel2" text-anchor="middle"></text>
+                            <text class="chart-acc-label" id="accLabel3" text-anchor="middle"></text>
+                        </svg>
+
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt1">-</div>
+                                <div class="chart-bar" id="bar1" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">第一轮</div>
+                        </div>
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt2">-</div>
+                                <div class="chart-bar" id="bar2" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">第二轮</div>
+                        </div>
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt3">-</div>
+                                <div class="chart-bar" id="bar3" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">第三轮</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">💡 你的表现分析</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学</button>
+            </div>
+        </div>
+
+        <!-- 科普页面 -->
+        <div class="screen" id="screen-theory">
+            <div class="card">
+                <h2>执行控制功能</h2>
+                <p class="subtitle">为什么这些任务会越来越难？</p>
+
+                <div class="theory-section">
+                    <h3>🧠 核心心理学理论</h3>
+                    <p><strong>执行控制功能（Executive Control）：</strong>游戏通过不断改变规则，强制玩家抑制习惯性反应，锻炼大脑前额叶皮层的认知灵活性、抑制控制和任务切换能力。</p>
+                    <p><strong>Stroop效应与冲突解决：</strong>第三轮要求忽略图形形状，仅对颜色做出反应。当形状与颜色产生认知冲突时，玩家需要调动执行控制来抑制优势反应（看形状），选择次要反应（看颜色）。</p>
+                    <p><strong>空间工作记忆与心理旋转：</strong>第二轮要求选择"对侧"按钮，迫使玩家在极短时间内进行空间信息的编码、心理旋转与反应映射。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>📈 预期实验结果</h3>
+                    <p><strong>反应时（RT）递增：</strong>第二轮因增加空间转换，反应时显著长于第一轮；第三轮因存在形状与颜色的认知冲突，反应时最长。</p>
+                    <p><strong>正确率波动：</strong>第一轮正确率最高；第二轮易出现"同侧按键"的错误（空间抑制失败）；第三轮易出现"按形状对应的按钮"的错误（Stroop干扰）。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>🎓 给青少年学生：升级你的"大脑指挥官"</h3>
+                    <ul class="tips-list">
+                        <li><strong>锻炼抗干扰能力：</strong>第三轮的"看颜色不看形状"就是现实中的抗干扰训练。考试时遇到难题或外界嘈杂，学会像游戏一样屏蔽无关信息，专注核心目标。</li>
+                        <li><strong>提升思维灵活性：</strong>游戏规则的切换模拟了生活中的突发状况。通过训练，你能更快地适应新规则，减少思维僵化。</li>
+                        <li><strong>培养"停顿"习惯：</strong>0.5秒的闪现要求你快速决策但不盲目冲动。在日常做题时，养成"看清规则再动手"的习惯，减少粗心丢分。</li>
+                    </ul>
+                </div>
+
+                <div class="theory-section">
+                    <h3>👨‍👩‍👧 给家长：科学陪伴，看见成长</h3>
+                    <ul class="tips-list">
+                        <li><strong>理解"粗心"背后的认知负荷：</strong>孩子在第二轮按错方向或第三轮看错颜色，不是态度问题，而是大脑在执行控制上遇到了挑战。多鼓励，少责备。</li>
+                        <li><strong>亲子互动，共同训练：</strong>和孩子一起挑战，比比谁的反应快。这不仅是脑力锻炼，更是高质量的亲子陪伴，让孩子在轻松的氛围中提升专注力。</li>
+                        <li><strong>关注过程，强化策略：</strong>游戏结束后，和孩子聊聊"哪一轮最难？为什么？"引导他们自己发现规律，将游戏中的抗干扰策略迁移到日常学习中。</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+                <button class="btn btn-primary" onclick="resetGame()">再玩一次</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let currentRound = 0;
+        let currentTrial = 0;
+        let totalTrials = 10;
+        let correctInRound = 0;
+        let reactionTimes = [];
+        let currentTrialStartTime = 0;
+        let hasResponded = false;
+        let responseTimeout;
+
+        // 结果数据
+        let results = {
+            round1: { rt: [], correct: 0, total: 0 },
+            round2: { rt: [], correct: 0, total: 0 },
+            round3: { rt: [], correct: 0, total: 0 }
+        };
+
+        // 当前刺激信息
+        let currentStimulus = {
+            shape: '',
+            position: '',
+            color: ''
+        };
+
+        let trialTimeout;
+        let itiTimeout;
+
+        // 颜色映射
+        const colorNames = {
+            'purple': '紫色',
+            'red': '红色',
+            'green': '绿色',
+            'yellow': '黄色'
+        };
+
+        const colorStyles = {
+            'purple': 'color: var(--primary);',
+            'red': 'color: var(--accent);',
+            'green': 'color: var(--success);',
+            'yellow': 'color: var(--warning);'
+        };
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 跳转到心理学原理页面并滚动到顶部
+        function goToTheory() {
+            showScreen('screen-theory');
+            // 使用setTimeout确保DOM更新后再滚动
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
+        }
+
+        // 开始某一轮
+        function startRound(round) {
+            currentRound = round;
+            currentTrial = 0;
+            correctInRound = 0;
+            reactionTimes = [];
+
+            document.getElementById('gameTitle').textContent = `第${['一','二','三'][round-1]}轮`;
+            updateRoundDots(round);
+
+            if (round === 1) {
+                document.getElementById('gameSubtitle').textContent = '点击三角形所在侧的按钮';
+                document.getElementById('buttonArea').style.display = 'flex';
+                document.getElementById('colorButtons').style.display = 'none';
+                document.getElementById('gameArea').querySelector('.position-indicator.left').style.display = 'block';
+                document.getElementById('gameArea').querySelector('.position-indicator.right').style.display = 'block';
+            } else if (round === 2) {
+                document.getElementById('gameSubtitle').textContent = '点击三角形对侧的按钮';
+                document.getElementById('buttonArea').style.display = 'flex';
+                document.getElementById('colorButtons').style.display = 'none';
+                document.getElementById('gameArea').querySelector('.position-indicator.left').style.display = 'block';
+                document.getElementById('gameArea').querySelector('.position-indicator.right').style.display = 'block';
+            } else if (round === 3) {
+                document.getElementById('gameSubtitle').textContent = '忽略大小，点击三角形颜色的按钮';
+                document.getElementById('buttonArea').style.display = 'none';
+                document.getElementById('colorButtons').style.display = 'flex';
+                document.getElementById('gameArea').querySelector('.position-indicator.left').style.display = 'none';
+                document.getElementById('gameArea').querySelector('.position-indicator.right').style.display = 'none';
+            }
+
+            showScreen('screen-game');
+            resetButtons();
+            runNextTrial();
+        }
+
+        // 更新轮次指示器
+        function updateRoundDots(round) {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('roundDot' + i);
+                dot.classList.remove('active', 'completed');
+                if (i < round) {
+                    dot.classList.add('completed');
+                } else if (i === round) {
+                    dot.classList.add('active');
+                }
+            }
+        }
+
+        // 运行下一个测试
+        function runNextTrial() {
+            currentTrial++;
+            hasResponded = false;
+            document.getElementById('trialCount').textContent = currentTrial;
+            document.getElementById('correctCount').textContent = correctInRound;
+            document.getElementById('gameProgress').style.width = (currentTrial / totalTrials * 100) + '%';
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('countdown').textContent = '';
+
+            if (currentTrial > totalTrials) {
+                endRound();
+                return;
+            }
+
+            resetButtons();
+            clearStimulus();
+            clearTimeout(responseTimeout);
+
+            const isi = 800 + Math.random() * 400;
+            itiTimeout = setTimeout(() => {
+                showStimulus();
+            }, isi);
+        }
+
+        // 显示刺激
+        function showStimulus() {
+            const container = document.getElementById('shapeContainer');
+            container.innerHTML = '';
+
+            if (currentRound <= 2) {
+                // 第一轮和第二轮：显示单个形状在左侧或右侧
+                const isTriangle = Math.random() > 0.4; // 60%概率出现三角形
+                const isLeft = Math.random() > 0.5;
+
+                currentStimulus = {
+                    shape: isTriangle ? 'triangle' : 'circle',
+                    position: isLeft ? 'left' : 'right'
+                };
+
+                const shapeHTML = isTriangle ? '△' : '○';
+                const shapeClass = isTriangle ? 'triangle' : 'circle';
+
+                // 位置样式：左侧25%或右侧75%
+                const posPercent = isLeft ? '20%' : '80%';
+                container.innerHTML = `<div class="shape ${shapeClass}" style="position:absolute;left:${posPercent};transform:translateX(-50%);">${shapeHTML}</div>`;
+
+            } else {
+                // 第三轮：显示嵌套图形（随机：大三角形+小圆形 或 大圆形+小三角形）
+                // 玩家需要判断三角形的颜色（不管三角形是大还是小）
+                const colors = ['purple', 'red', 'green', 'yellow'];
+                const isTriangleOuter = Math.random() > 0.5; // 50%概率三角形在外层
+
+                // 三角形颜色（玩家需要判断的颜色）
+                const triangleColor = colors[Math.floor(Math.random() * colors.length)];
+                // 圆形颜色（干扰项，使用不同颜色）
+                const remainingColors = colors.filter(c => c !== triangleColor);
+                const circleColor = remainingColors[Math.floor(Math.random() * remainingColors.length)];
+
+                currentStimulus = {
+                    triangleColor: triangleColor
+                };
+
+                // 颜色样式函数
+                const getColorStyle = (color) => {
+                    if (color === 'purple') return 'color: var(--primary);';
+                    if (color === 'red') return 'color: var(--accent);';
+                    if (color === 'green') return 'color: var(--success);';
+                    if (color === 'yellow') return 'color: var(--warning);';
+                    return '';
+                };
+
+                const triangleStyle = getColorStyle(triangleColor);
+                const circleStyle = getColorStyle(circleColor);
+
+                if (isTriangleOuter) {
+                    // 大三角形 + 小圆形
+                    container.innerHTML = `
+                        <div style="position: relative; display: inline-block;">
+                            <div class="shape triangle" style="${triangleStyle}font-size:120px;">△</div>
+                            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); font-size: 35px; ${circleStyle}">○</div>
+                        </div>
+                    `;
+                } else {
+                    // 大圆形 + 小三角形
+                    container.innerHTML = `
+                        <div style="position: relative; display: inline-block;">
+                            <div class="shape circle" style="${circleStyle}font-size:120px;">○</div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 35px; ${triangleStyle}">△</div>
+                        </div>
+                    `;
+                }
+            }
+
+            currentTrialStartTime = Date.now();
+            hasResponded = false;
+
+            // 0.5秒后隐藏刺激
+            trialTimeout = setTimeout(() => {
+                hideStimulus();
+                // 显示倒计时提示
+                startResponseTimer();
+            }, 500);
+        }
+
+        // 开始响应计时器（刺激显示后开始2秒倒计时）
+        function startResponseTimer() {
+            let timeLeft = 2;
+            const countdownEl = document.getElementById('countdown');
+
+            // 立即显示初始倒计时
+            countdownEl.textContent = `剩余 ${timeLeft} 秒`;
+
+            // 每秒更新倒计时
+            responseTimeout = setInterval(() => {
+                if (hasResponded) {
+                    clearInterval(responseTimeout);
+                    return;
+                }
+                timeLeft--;
+                if (timeLeft > 0) {
+                    countdownEl.textContent = `剩余 ${timeLeft} 秒`;
+                } else {
+                    countdownEl.textContent = '';
+                    clearInterval(responseTimeout);
+                    handleNoResponse();
+                }
+            }, 1000);
+        }
+
+        // 处理无响应
+        function handleNoResponse() {
+            if (hasResponded) return;
+            hasResponded = true;
+            clearTimeout(responseTimeout);
+            document.getElementById('countdown').textContent = '';
+
+            const rt = 2000; // 超时计为2000ms
+            reactionTimes.push(rt);
+
+            if (currentRound <= 2) {
+                // 第一轮和第二轮：圆形时不点击是正确的
+                if (currentStimulus.shape === 'circle') {
+                    // 正确：没有点击
+                    showFeedback(true, null, 'circle');
+                    correctInRound++;
+                    document.getElementById('correctCount').textContent = correctInRound;
+                } else {
+                    // 错误：三角形没有点击
+                    showFeedback(false, null, 'timeout-triangle');
+                }
+            } else {
+                // 第三轮：必须点击
+                showFeedback(false, null, 'timeout-color');
+            }
+
+            clearStimulus();
+            setTimeout(runNextTrial, 800);
+        }
+
+        // 隐藏刺激
+        function hideStimulus() {
+            const shapes = document.querySelectorAll('.shape');
+            shapes.forEach(s => {
+                s.style.opacity = '0';
+            });
+        }
+
+        // 清除刺激
+        function clearStimulus() {
+            document.getElementById('shapeContainer').innerHTML = '';
+        }
+
+        // 处理按钮点击（第一轮和第二轮）
+        function handleButton(side) {
+            if (currentRound > 2 || hasResponded) return;
+
+            hasResponded = true;
+            clearTimeout(responseTimeout);
+            document.getElementById('countdown').textContent = '';
+
+            const rt = Date.now() - currentTrialStartTime;
+            reactionTimes.push(rt);
+
+            let correct = false;
+
+            if (currentStimulus.shape === 'circle') {
+                // 点击了圆形，错误
+                correct = false;
+                showFeedback(false, side, 'circle-clicked');
+            } else if (currentStimulus.shape === 'triangle') {
+                if (currentRound === 1) {
+                    // 第一轮：点击三角形所在侧
+                    correct = (side === currentStimulus.position);
+                } else if (currentRound === 2) {
+                    // 第二轮：点击三角形对侧
+                    correct = (side !== currentStimulus.position);
+                }
+                showFeedback(correct, side, 'triangle');
+            }
+
+            if (correct) {
+                correctInRound++;
+                document.getElementById('correctCount').textContent = correctInRound;
+            }
+
+            clearTimeout(trialTimeout);
+            clearStimulus();
+
+            setTimeout(runNextTrial, 600);
+        }
+
+        // 处理颜色按钮点击（第三轮）
+        function handleColor(color) {
+            if (currentRound !== 3 || hasResponded) return;
+
+            hasResponded = true;
+            clearTimeout(responseTimeout);
+            document.getElementById('countdown').textContent = '';
+
+            const rt = Date.now() - currentTrialStartTime;
+            reactionTimes.push(rt);
+
+            // 正确答案是三角形的颜色
+            const correct = (color === currentStimulus.triangleColor);
+            showColorFeedback(correct, color);
+
+            if (correct) {
+                correctInRound++;
+                document.getElementById('correctCount').textContent = correctInRound;
+            }
+
+            clearTimeout(trialTimeout);
+            clearStimulus();
+
+            setTimeout(runNextTrial, 600);
+        }
+
+        // 显示反馈（位置按钮）
+        function showFeedback(correct, clickedSide, type) {
+            const feedback = document.getElementById('feedback');
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+
+            if (type === 'circle') {
+                feedback.textContent = '✓ 正确！圆形不需要点击';
+                feedback.className = 'feedback correct show';
+            } else if (type === 'circle-clicked') {
+                feedback.textContent = '❌ 这是圆形，不应该点击';
+                feedback.className = 'feedback wrong show';
+                if (clickedSide === 'left') {
+                    leftBtn.classList.add('wrong');
+                } else {
+                    rightBtn.classList.add('wrong');
+                }
+            } else if (type === 'timeout-triangle') {
+                feedback.textContent = '❌ 超时！三角形需要点击';
+                feedback.className = 'feedback wrong show';
+            } else if (type === 'triangle') {
+                if (correct) {
+                    feedback.textContent = '✓ 正确！';
+                    feedback.className = 'feedback correct show';
+                    if (clickedSide === 'left') {
+                        leftBtn.classList.add('correct');
+                    } else {
+                        rightBtn.classList.add('correct');
+                    }
+                } else {
+                    const correctSide = currentRound === 1 ? currentStimulus.position :
+                                       (currentStimulus.position === 'left' ? 'right' : 'left');
+                    feedback.textContent = `❌ 应该点击"${correctSide === 'left' ? '左侧' : '右侧'}"`;
+                    feedback.className = 'feedback wrong show';
+                    if (clickedSide === 'left') {
+                        leftBtn.classList.add('wrong');
+                    } else {
+                        rightBtn.classList.add('wrong');
+                    }
+                }
+            } else if (type === 'timeout-color') {
+                feedback.textContent = `❌ 超时！正确答案是${colorNames[currentStimulus.triangleColor]}`;
+                feedback.className = 'feedback wrong show';
+            }
+        }
+
+        // 显示反馈（颜色按钮）
+        function showColorFeedback(correct, clickedColor) {
+            const feedback = document.getElementById('feedback');
+            const btns = document.querySelectorAll('.color-btn');
+
+            if (correct) {
+                feedback.textContent = '✓ 正确！';
+                feedback.className = 'feedback correct show';
+            } else {
+                feedback.textContent = `❌ 正确答案是${colorNames[currentStimulus.triangleColor]}`;
+                feedback.className = 'feedback wrong show';
+            }
+
+            btns.forEach(btn => {
+                if (btn.classList.contains(clickedColor)) {
+                    btn.classList.add(correct ? 'correct' : 'wrong');
+                }
+            });
+        }
+
+        // 重置按钮状态
+        function resetButtons() {
+            document.getElementById('leftBtn').classList.remove('correct', 'wrong');
+            document.getElementById('rightBtn').classList.remove('correct', 'wrong');
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('correct', 'wrong');
+            });
+        }
+
+        // 结束当前轮
+        function endRound() {
+            clearTimeout(trialTimeout);
+            clearTimeout(itiTimeout);
+            clearTimeout(responseTimeout);
+
+            const roundKey = 'round' + currentRound;
+            results[roundKey].rt = [...reactionTimes];
+            results[roundKey].correct = correctInRound;
+            results[roundKey].total = totalTrials;
+
+            if (currentRound === 1) {
+                showScreen('screen-round2-intro');
+            } else if (currentRound === 2) {
+                showScreen('screen-round3-intro');
+            } else {
+                showResults();
+            }
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-result');
+
+            // 计算各轮平均反应时
+            const avgRT1 = results.round1.rt.length > 0 ?
+                Math.round(results.round1.rt.reduce((a, b) => a + b, 0) / results.round1.rt.length) : 0;
+            const avgRT2 = results.round2.rt.length > 0 ?
+                Math.round(results.round2.rt.reduce((a, b) => a + b, 0) / results.round2.rt.length) : 0;
+            const avgRT3 = results.round3.rt.length > 0 ?
+                Math.round(results.round3.rt.reduce((a, b) => a + b, 0) / results.round3.rt.length) : 0;
+
+            // 计算正确率
+            const acc1 = Math.round(results.round1.correct / results.round1.total * 100);
+            const acc2 = Math.round(results.round2.correct / results.round2.total * 100);
+            const acc3 = Math.round(results.round3.correct / results.round3.total * 100);
+
+            // 更新柱状图
+            const maxRT = Math.max(avgRT1, avgRT2, avgRT3, 100);
+            const scale = 150 / maxRT;
+
+            // 先更新柱状图高度
+            document.getElementById('bar1').style.height = (avgRT1 * scale) + 'px';
+            document.getElementById('bar2').style.height = (avgRT2 * scale) + 'px';
+            document.getElementById('bar3').style.height = (avgRT3 * scale) + 'px';
+
+            document.getElementById('rt1').textContent = avgRT1 + 'ms';
+            document.getElementById('rt2').textContent = avgRT2 + 'ms';
+            document.getElementById('rt3').textContent = avgRT3 + 'ms';
+
+            // 延迟更新折线图（确保DOM布局完成）
+            setTimeout(() => {
+                updateLineChart(acc1, acc2, acc3);
+            }, 100);
+
+            // 生成洞察
+            generateInsight(avgRT1, avgRT2, avgRT3, acc1, acc2, acc3);
+        }
+
+        // 更新折线图
+        function updateLineChart(acc1, acc2, acc3) {
+            const wrapper = document.getElementById('chartWrapper');
+            if (!wrapper) return;
+
+            const wrapperRect = wrapper.getBoundingClientRect();
+
+            // 获取三个柱状图的位置
+            const groups = wrapper.querySelectorAll('.chart-group');
+            if (groups.length < 3) return;
+
+            const positions = [];
+
+            groups.forEach((group, index) => {
+                const rect = group.getBoundingClientRect();
+                const acc = index === 0 ? acc1 : index === 1 ? acc2 : acc3;
+                positions.push({
+                    x: rect.left - wrapperRect.left + rect.width / 2,
+                    y: 170 - acc * 1.5  // 正确率越高，点越高
+                });
+            });
+
+            // 更新正确率标签
+            document.getElementById('accLabel1').textContent = acc1 + '%';
+            document.getElementById('accLabel2').textContent = acc2 + '%';
+            document.getElementById('accLabel3').textContent = acc3 + '%';
+
+            // 更新折线
+            const line = document.getElementById('accLine');
+            if (line) {
+                line.setAttribute('points', `${positions[0].x},${positions[0].y} ${positions[1].x},${positions[1].y} ${positions[2].x},${positions[2].y}`);
+            }
+
+            // 更新点位置
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('dot' + i);
+                const label = document.getElementById('accLabel' + i);
+                if (dot && label) {
+                    dot.setAttribute('cx', positions[i-1].x);
+                    dot.setAttribute('cy', positions[i-1].y);
+                    label.setAttribute('x', positions[i-1].x);
+                    label.setAttribute('y', positions[i-1].y - 12);
+                }
+            }
+        }
+
+        // 生成洞察文字
+        function generateInsight(rt1, rt2, rt3, acc1, acc2, acc3) {
+            let insight = '';
+
+            // 反应时分析
+            if (rt2 > rt1 + 100) {
+                insight += '📈 第二轮反应时明显增加，说明"空间反转"对你的抑制控制提出了挑战。\n\n';
+            }
+            if (rt3 > rt2 + 100 || rt3 > rt1 + 150) {
+                insight += '🎨 第三轮反应时最长，Stroop干扰需要更多认知资源来处理冲突。\n\n';
+            }
+
+            // 正确率分析
+            if (acc2 < acc1 - 15) {
+                insight += '🎯 第二轮正确率下降，"点击对侧"需要抑制强烈的习惯反应，这是正常的。\n\n';
+            }
+            if (acc3 < Math.min(acc1, acc2) - 10) {
+                insight += '⚠️ 第三轮正确率最低，颜色判断时形状信息造成了干扰。\n\n';
+            }
+
+            // 综合评价
+            const avgAcc = (acc1 + acc2 + acc3) / 3;
+            if (avgAcc >= 80) {
+                insight += '💪 整体表现优秀！执行控制能力很强，继续保持！';
+            } else if (avgAcc >= 60) {
+                insight += '👍 整体表现良好！多练习几次，你会看到进步。';
+            } else {
+                insight += '🌟 执行控制可以通过训练提升，建议多练习！';
+            }
+
+            document.getElementById('insightText').textContent = insight;
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentRound = 0;
+            currentTrial = 0;
+            correctInRound = 0;
+            reactionTimes = [];
+            hasResponded = false;
+            results = {
+                round1: { rt: [], correct: 0, total: 0 },
+                round2: { rt: [], correct: 0, total: 0 },
+                round3: { rt: [], correct: 0, total: 0 }
+            };
+
+            document.getElementById('bar1').style.height = '0px';
+            document.getElementById('bar2').style.height = '0px';
+            document.getElementById('bar3').style.height = '0px';
+
+            showScreen('screen-welcome');
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>

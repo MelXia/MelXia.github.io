@@ -15,8 +15,177 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
@@ -40,12 +209,42 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
             <h1 class="page-title">📞 华南师大"心晴热线"</h1>
-            <p class="page-desc">从2023年开始至今，我一直担任该热线的值班志愿者。在电话线的两端，我把求助者的困惑翻译成他们自己能理解的答案。</p>
+            <p class="page-desc">倾听无声困惑，翻译内心答案。自2023年至今，我持续担任华南师范大学「心晴热线」值班志愿者。长期为青少年、家长、青年职场群体提供免费、专业的心理倾听与情绪疏导服务。在电话线的两端，我搭建安全、包容、无评判的倾诉空间，陪伴每一位迷茫的人梳理情绪、重构认知、走出困境。</p>
         </div>
 
         <div class="main-image">
@@ -53,26 +252,17 @@
         </div>
 
         <div class="content-section">
-            <p>华南师范大学"心晴热线"是一条心理援助热线，为广大市民提供心理支持与咨询服务。</p>
-            <p>从2023年开始，我加入成为值班志愿者。每一次接听电话，都是一次与陌生人心灵的相遇。</p>
-            <p><strong>在电话线的两端，我做的最重要的工作，就是"翻译"：</strong></p>
-            <p>• 把求助者的困惑翻译成他们自己能理解的答案</p>
-            <p>• 把他们的焦虑翻译成可以被看见的情绪</p>
-            <p>• 帮助他们找到与自己、与家人和解的方式</p>
-            <blockquote>很多时候，来电者需要的不是"建议"，而是被理解。当他们发现有人在认真听、能够理解他们的感受时，很多答案其实他们心里已经有了。</blockquote>
-            <p>作为一条心理援助热线的志愿者，我最大的收获是：<strong>每一个打来电话的人，其实都在用自己的方式，努力地活着、寻找着出路。</strong></p>
-            <p>能够成为他们寻找路上的一个陪伴者，是我的荣幸。</p>
+            <p>自2023年至今，我持续担任华南师范大学「心晴热线」值班志愿者。长期为青少年、家长、青年职场群体提供免费、专业的心理倾听与情绪疏导服务。在电话线的两端，我搭建安全、包容、无评判的倾诉空间，陪伴每一位迷茫的人梳理情绪、重构认知、走出困境。</p>
         </div>
 
         <!-- Mel的翻译 -->
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>心晴热线中，我扮演的"翻译家"角色：</p>
-                <p>• 把来电者混乱的思绪翻译成清晰的表达：让他们听到自己内心的声音</p>
-                <p>• 把"问题"翻译成"需求"：很多时候他们以为自己在问"该怎么办"，其实是在问"我这样想对不对"</p>
-                <p>• 把专业术语翻译成日常语言：让心理学真正帮助到需要的人</p>
-                <p>每一次通话，都是一次心灵的翻译工作。</p>
+                <p>在心晴热线志愿服务中，我是全龄情绪与内心困惑的翻译官：</p>
+                <p>• 把「混沌的情绪内耗」翻译成清晰的自我认知</p>
+                <p>• 把「无解的亲子与生活矛盾」翻译成可调整的相处方式</p>
+                <p>• 用倾听与共情，让每一份无声的迷茫，都被看见、被读懂、被治愈</p>
             </div>
         </div>
 
@@ -80,5 +270,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

@@ -15,19 +15,188 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
         .page-header { text-align: center; padding: 25px 0; border-bottom: 1px solid var(--card); margin-bottom: 30px; }
         .page-title { font-size: 1.6em; color: var(--primary-light); margin-bottom: 12px; }
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-        .activity-section { margin-bottom: 35px; }
-        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .activity-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .activity-images img { width: 100%; border-radius: 10px; }
-        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; }
+        .activity-section { margin-bottom: 35px; text-align: center; }
+        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
+        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .activity-images img { max-width: 100%; border-radius: 10px; }
+        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
         .activity-text strong { color: var(--primary-light); }
@@ -44,26 +213,109 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
             <h1 class="page-title">🎯 生涯规划活动</h1>
-            <p class="page-desc">帮青少年找到方向，让家长理解孩子的选择。我站在中间，把孩子的梦想翻译给家长听，把家长的担忧翻译成孩子能接受的建议。</p>
+            <p class="page-desc">消解两代人的成长代沟。青少年有梦想、缺路径，有迷茫、缺引导；成年人有经验、有焦虑，却习惯用固有认知定义孩子的未来。我双向翻译彼此的视角，让梦想落地、让焦虑化解。</p>
+        </div>
+
+        <!-- 心理学适配逻辑 -->
+        <div class="activity-section">
+            <div class="activity-text">
+                <p><strong>心理学适配逻辑：</strong>依托青少年自我同一性建立、青年职业探索、成年焦虑与经验固化心理。青少年有梦想、缺路径，有迷茫、缺引导；成年人有经验、有焦虑，却习惯用固有认知定义孩子的未来。两者极易形成代沟：孩子觉得家长不懂新时代，家长觉得孩子不懂现实。我作为组织者，双向翻译彼此的视角，让梦想落地、让焦虑化解。</p>
+                <p>活动覆盖高中生、大学生、青年群体，联动各行各业的社会志愿者，搭建跨年龄、跨职业的生涯交流平台。我以双向沟通为核心，把孩子模糊的理想、迷茫的困惑翻译成清晰可行的成长路径，把成年人的现实经验、善意担忧翻译成孩子愿意接纳的成长建议，让两代人在职业与成长话题上彼此理解、同频成长。</p>
+            </div>
+        </div>
+
+        <!-- 2021年5月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2021年5月 · 广州中学（第一届生涯节）</div>
+            <div class="activity-images">
+                <img src="照片素材/生涯规划活动2021年5月广州中学.jpeg" alt="生涯规划活动2021" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>广州中学首届生涯节活动，面向全体高中生开展生涯启蒙。高中阶段是孩子探索自我、建立目标、思考未来的关键期，很多学生对专业、职业、未来方向一片迷茫；而多数家长对新时代职业赛道认知滞后，容易盲目规划、过度焦虑。</p>
+                <p>我作为志愿者之一，为学生分享、答疑，让学生跳出书本局限，看见真实的职业世界。参与的学生收获了视野与方向，打破了"读书无用、未来迷茫"的消极心态。</p>
+            </div>
         </div>
 
         <!-- 2022年4月 -->
         <div class="activity-section">
             <div class="activity-date">📍 2022年4月 · 华南师范大学附属中学</div>
             <div class="activity-images">
-                <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划活动2022">
+                <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划活动2022" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>在华师大附中就读的学生都是妥妥的学霸，知识渊博，善于思考。对于他们进行职业生涯规划活动，是一个对志愿者来说比较大的挑战。</p>
-                <p>我当时借着储蓄规划这个话题，引出了时间规划的话题：</p>
-                <blockquote>要明白将来的目标，以结果为导向，反向去安排自己每一步的小目标和每一天的具体活动行程，这是非常高效的方法。</blockquote>
-                <p>在短短90分钟的分享过程中，学霸们提出了自己的一些想法和见解，令我也受益匪浅。</p>
-                <p><strong>我最大的反思是：如果有一天我自己的孩子可以成为其中一员，我一定会非常骄傲。</strong></p>
+                <p>本次活动面向华附高二学霸群体开展，这群学生思维成熟、认知深刻、独立思考能力极强，对生涯规划有自己独到的见解，常规浅层分享很难满足他们的需求。我结合学生的认知特点，以储蓄规划为生活化切入点，类比延伸至时间规划、目标规划，为学生传递「结果导向、反向拆解」的高效成长思维。</p>
+                <p>整场分享互动氛围极佳，学生们独到的思考、清晰的逻辑、深刻的认知，也让在场所有成年志愿者深受启发。大家意识到，当代青少年并不幼稚、不盲从，只是缺少适配他们的科学引导。这场双向交流，让学生收获了科学的规划方法，也让成年人看见新时代青少年的优秀与通透。</p>
+            </div>
+        </div>
+
+        <!-- 2023年11月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2023年11月 · 广东工业大学管理学院（职业规划大赛指导）</div>
+            <div class="activity-images">
+                <img src="照片素材/生涯规划活动2023年11月广东工业大学管理学学院职业规划大赛指导.jpeg" alt="职业规划大赛指导" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次我面向高校大学生开展职业规划专项指导。很多大学生拥有专业知识，但缺乏职业认知，对未来就业、赛道选择、自我定位非常模糊，容易跟风参赛、盲目择业。</p>
+                <p>我结合管理学专业特色与当下就业趋势，把复杂的职场规则、专业发展逻辑、大赛核心要求，翻译成学生可落地、可执行的规划思路。参与的大学生纷纷表示，活动帮自己理清了迷茫，找准了方向，告别了盲目内耗。</p>
+            </div>
+        </div>
+
+        <!-- 2023年12月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2023年12月 · 广东工业大学管理学院（模拟面试活动）</div>
+            <div class="activity-images">
+                <img src="照片素材/生涯规划活动2023年12月广东工业大学管理学院模拟面试活动.jpeg" alt="模拟面试活动" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次模拟面试公益活动，聚焦在校大学生通用求职能力搭建，面向广大有就业预备需求的本硕学生开展。多数学生具备扎实的专业功底，但缺乏系统化的求职训练，在简历逻辑、面试表达、职场礼仪等通用模块存在普遍短板。</p>
+                <p>我集结30余名跨行业资深职场志愿者，以标准化、通用性求职体系为核心，一对一协助学生梳理个人优势、优化简历框架、拆解结构化面试逻辑、打磨临场应答状态。本次活动重点补齐学生「通用求职基本功」，帮助大家建立规范、稳定、专业的职场表达体系，完成求职能力的系统化筑基，适配全行业岗位面试需求。</p>
+            </div>
+        </div>
+
+        <!-- 2024年3月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2024年3月 · 广州中学</div>
+            <div class="activity-images">
+                <img src="照片素材/生涯规划活动2024年3月广州中学高一级.JPG" alt="广州中学职业生涯教育" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>活动打破传统课堂的刻板模式，采用兴趣选课、自由交流、实时答疑的松弛形式，让学生敢于提问、敢于表达、敢于分享真实想法。</p>
+                <p>多年持续陪伴中，我见证了一批又一批学生的成长：参与过活动的学生，陆续考上心仪大学、奔赴理想岗位、继续深造求学。对学生而言，生涯活动为他们点亮了方向、提供了路径；对参与的家长与成年志愿者而言，大家亲眼看见青少年的成长潜力，读懂了孩子需要的不是强制规划，而是尊重、引导与机会。</p>
             </div>
         </div>
 
@@ -71,31 +323,11 @@
         <div class="activity-section">
             <div class="activity-date">📍 2024年4月 · 暨南大学</div>
             <div class="activity-images">
-                <img src="照片素材/生涯规划活动2024年4月暨南大学学生模拟面试活动.jpg" alt="模拟面试活动">
+                <img src="照片素材/生涯规划活动2024年4月暨南大学学生模拟面试活动.jpg" alt="模拟面试活动" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>面临毕业就业的大学生对将来有着各自深刻的畅想，但由于他们涉及的面不广，更多是搜集一些非第一手资料的信息。</p>
-                <p>因此，这次生涯规划活动可以让他们面对面地与来自各行各业、各个岗位以及不同职业发展历程的志愿者进行直接交流，提供了一个非常好的深度平台。</p>
-                <p>志愿者们针对<strong>简历修改、面试技巧</strong>等细节，给大学生们提供了很多实战建议。</p>
-            </div>
-        </div>
-
-        <!-- 2024年4月 广州中学 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2024年4月 · 广州中学</div>
-            <div class="activity-images">
-                <img src="照片素材/生涯规划活动2024年月广州中学高一级.JPG" alt="广州中学职业生涯教育">
-            </div>
-            <div class="activity-text">
-                <p>广州中学面向高一学生开展职业生涯教育，当时还有来自各行各业的其他志愿者一同参与。</p>
-                <p>学生们根据自己将来职业发展的兴趣爱好，选择进入对应职业的课堂，听取志愿者的分享。活动的氛围相对轻松愉快，学生可以随时打断志愿者老师，提出他们心目中的问题；我们也不拘泥于幻灯片上既定的内容，与高中的孩子进行直接交流。</p>
-                <p>广州中学非常重视这类活动，每年都会定期举办。我有幸曾两次担任志愿者，与同学们分享了很多自己的心路历程。</p>
-                <p><strong>活动后，我得到了孩子们的认可，并与他们保持着日常沟通：</strong></p>
-                <ul>
-                    <li>当时的孩子后来成功考上了心仪的大学，并在2026年6月本科毕业</li>
-                    <li>有的人参与了当时所期待的工作</li>
-                    <li>有的人选择继续读研究生，进一步深造</li>
-                </ul>
+                <p>本次模拟面试活动，是在通用求职能力基础上的职业认知与择业定位进阶专场，聚焦应届毕业生的真实校招痛点。很多学生具备基础面试能力，但对行业差异、岗位适配度、职业发展路径认知模糊，容易出现"会面试、不会选岗、盲目投递、职业定位偏差"的问题。</p>
+                <p>因此本次活动升级为多行业、多岗位全真模拟+择业复盘模式，邀请不同赛道、不同职级的职场志愿者，结合真实校招场景，帮助学生对比不同岗位的适配性、修正择业认知、理清个人职业路径。活动不再局限于"面试技巧"，而是进阶到职业选择与长期发展，帮助学生把扎实的面试能力，落地到适合自己的精准职业赛道。</p>
             </div>
         </div>
 
@@ -103,15 +335,12 @@
         <div class="activity-section">
             <div class="activity-date">📍 2024年7月 · 广州市第一中学</div>
             <div class="activity-images">
-                <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="参观华南师大">
+                <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="参观华南师大" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>图片显示的是广州市第一中学的同学们去参加华南师大心理学院组织的活动。</p>
-                <p>组织这个活动的初衷，是让高中的孩子可以提前了解大学的校园、生活以及学院的一些情况。即使他们未来不一定选择心理学专业，但也要让他们知道：<strong>高中的生活除了学习之外，还需要扩展视野，为自己的大学学习和生活进行提前规划，将眼光放得更长远。</strong></p>
-                <p>这个过程中也有部分家长参与。当他们看到孩子和志愿者之间的积极互动时，会认识到对于已经接近成年的孩子，沟通交流的方式与幼儿园、小学、初中阶段是非常不同的。</p>
-                <blockquote>除了照顾物质生活和衣食住行，对于他们未来的路，不可以再用要求、命令或者全部安排好的方式，而是要启发他们自己去探索。</blockquote>
-                <p>当问到孩子将来的志愿是什么时，幼儿园或小学生可能比较轻易就能说出某种具体的职业，但当然，他们对这些职业并不会有非常深刻的理解。而去到初中、高中的孩子，反而变得说不出自己未来的职业是什么，因为他们知道自己的想象和实际情况可能有差异。</p>
-                <p><strong>而我们作为家长的，就是提供尽可能多的机会，让他们接触不同的行业和专业，拓宽视野，从而才有机会找到自己真正喜欢的。</strong></p>
+                <p>我组织一中学生走进华南师范大学沉浸式研学，帮助高中生跳出书本局限、拓宽视野、提前感知大学生活。高中阶段的孩子，不再像低龄儿童一样随意畅想未来，而是因认知局限、未知恐惧陷入迷茫，不敢定义未来，容易陷入焦虑与内耗。</p>
+                <p>研学过程中，学生近距离感受大学校园氛围、专业特色与成长节奏，对未来有了更具体、更真切的期待。随行的家长与成年志愿者也收获了全新的育儿与成长认知：青春期孩子不需要被安排人生，需要被给予探索世界、探索自我的机会。</p>
+                <blockquote>真正的教育，是启发探索，而非包办规划。</blockquote>
             </div>
         </div>
 
@@ -119,11 +348,10 @@
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>生涯规划活动中，我扮演的"翻译家"角色：</p>
-                <p>• 把孩子的梦想翻译成可行的路径：从"我想当..."到"我需要做什么"</p>
-                <p>• 把家长的经验翻译成孩子能接受的建议：不是说教，而是分享</p>
-                <p>• 把职业世界翻译给孩子看：不是遥不可及，而是可以探索的</p>
-                <p>从高中到大学，从规划到模拟面试，每一次都是帮助孩子找到"自己想成为什么样的人"的过程。</p>
+                <p>在生涯规划系列活动中，我是青少年与成人世界的生涯翻译官：</p>
+                <p>• 把「孩子模糊的梦想」翻译成清晰可行的成长路径，消解迷茫</p>
+                <p>• 把「家长的焦虑说教」翻译成孩子愿意接纳的陪伴建议，化解代沟</p>
+                <p>• 把「遥远的职业世界」翻译成可探索、可触摸的真实未来，拓宽成长边界</p>
             </div>
         </div>
 
@@ -131,5 +359,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

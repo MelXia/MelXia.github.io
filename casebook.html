@@ -306,44 +306,44 @@
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
         }
 
         .tool-card {
             background: var(--card);
             border: 1px solid var(--primary);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 12px;
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
         .tool-card:hover {
             background: var(--primary);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .tool-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 6px;
         }
 
         .tool-name {
-            font-size: 1em;
+            font-size: 0.95em;
             color: var(--text);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .tool-effect {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: var(--accent);
         }
 
         .tool-desc {
-            font-size: 0.75em;
+            font-size: 0.7em;
             color: var(--text-muted);
-            margin-top: 10px;
-            line-height: 1.5;
+            margin-top: 6px;
+            line-height: 1.4;
         }
 
         /* 现场卡片 */
@@ -545,7 +545,7 @@
     <!-- 页面头部 -->
     <header class="page-header">
         <h1 class="page-title">翻译案例</h1>
-        <p class="page-desc">我用案例、游戏、活动，把彼此听不懂的话翻译成能听懂的心</p>
+        <p class="page-desc">本合集汇总多年来全年龄段亲子公益实践活动，依托发展心理学专业理论，消解亲子间的认知偏差、沟通代沟与情绪错位。孩子说着心事、家长听成叛逆，家长怀着期许、孩子看成约束。</p>
     </header>
 
     <!-- 分类标签 -->
@@ -564,61 +564,69 @@
 
             <div class="tools-grid">
                 <!-- 新游戏标记 -->
-                <a href="记忆与干扰.html" class="tool-card" style="position:relative;">
+                <a href="心智突围.html" class="tool-card" style="position:relative;">
                     <div style="position:absolute;top:8px;right:8px;background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:0.7em;font-weight:600;">NEW</div>
                     <div class="tool-icon">🧠</div>
-                    <div class="tool-name">记忆与干扰</div>
+                    <div class="tool-name">心智突围</div>
+                    <div class="tool-effect">执行控制</div>
+                    <div class="tool-desc">平时成绩都很好，一到考试就粗心大意，怎么办？</div>
+                </a>
+
+                <a href="记忆与干扰.html" class="tool-card" style="position:relative;">
+                    <div style="position:absolute;top:8px;right:8px;background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:0.7em;font-weight:600;">NEW</div>
+                    <div class="tool-icon">📚</div>
+                    <div class="tool-name">记忆干扰</div>
                     <div class="tool-effect">前摄抑制</div>
-                    <div class="tool-desc">同类信息连续记忆为何互相干扰？</div>
+                    <div class="tool-desc">要背的书都背不进去，这孩子就是懒吗？</div>
                 </a>
 
                 <a href="找茬挑战.html" class="tool-card">
                     <div class="tool-icon">🔍</div>
                     <div class="tool-name">找茬挑战</div>
                     <div class="tool-effect">变化盲视</div>
-                    <div class="tool-desc">家长总说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</div>
+                    <div class="tool-desc">家长说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</div>
                 </a>
 
                 <a href="中断的记忆.html" class="tool-card">
                     <div class="tool-icon">⏱️</div>
-                    <div class="tool-name">中断的记忆</div>
+                    <div class="tool-name">中断记忆</div>
                     <div class="tool-effect">蔡格尼克效应</div>
-                    <div class="tool-desc">为什么孩子总记得"那件事还没做完"？</div>
+                    <div class="tool-desc">为什么孩子总惦记"那件事还没做完"？</div>
                 </a>
 
                 <a href="AI性格透视.html" class="tool-card">
                     <div class="tool-icon">🤖</div>
-                    <div class="tool-name">AI性格透视</div>
+                    <div class="tool-name">性格透视</div>
                     <div class="tool-effect">巴纳姆效应</div>
-                    <div class="tool-desc">为什么我们总觉得星座很准？帮家长看见"标签化"的危险</div>
+                    <div class="tool-desc">星座说孩子"性格内向"，他就真的越来越内向？</div>
                 </a>
 
                 <a href="颜色快判.html" class="tool-card">
                     <div class="tool-icon">🎨</div>
                     <div class="tool-name">颜色快判</div>
                     <div class="tool-effect">斯特鲁普效应</div>
-                    <div class="tool-desc">当信息和情绪冲突时，大脑会先反应哪个？</div>
+                    <div class="tool-desc">孩子情绪上来了，道理讲再多也听不进去？</div>
                 </a>
 
                 <a href="生日引力场.html" class="tool-card">
                     <div class="tool-icon">🎂</div>
-                    <div class="tool-name">生日引力场</div>
+                    <div class="tool-name">生日引力</div>
                     <div class="tool-effect">自我参照效应</div>
-                    <div class="tool-desc">孩子说"我生日你都不记得"，谁的记忆更深刻？</div>
+                    <div class="tool-desc">孩子说"我生日你都不记得"，为什么他这么在意？</div>
                 </a>
 
                 <a href="阿希从众实验.html" class="tool-card">
-                    <div class="tool-icon">🧠</div>
-                    <div class="tool-name">阿希从众实验</div>
+                    <div class="tool-icon">👥</div>
+                    <div class="tool-name">从众实验</div>
                     <div class="tool-effect">从众效应</div>
-                    <div class="tool-desc">当所有人都说"是"，你敢说"不"吗？</div>
+                    <div class="tool-desc">孩子明明不想随大流，为什么还是跟着走了？</div>
                 </a>
 
                 <a href="师恩难忘挂画生成器.html" class="tool-card">
                     <div class="tool-icon">🖼️</div>
-                    <div class="tool-name">挂画生成器</div>
+                    <div class="tool-name">挂画生成</div>
                     <div class="tool-effect">实用工具</div>
-                    <div class="tool-desc">让感恩可视化</div>
+                    <div class="tool-desc">让感恩可视化，送给老师的特别礼物</div>
                 </a>
             </div>
         </div>
@@ -649,6 +657,13 @@
                 <a href="story-3.html" class="article-link" target="_blank">阅读全文 →</a>
             </div>
 
+            <div class="article-card">
+                <div class="article-title">"不唠叨的妈妈是最好的"</div>
+                <div class="article-excerpt">高一那年，因为家里出了些事，他书都看不进去。我陪伴他走过了那段最困难的时间。后来孩子说：不唠叨、默默陪伴我的妈妈是最好的。</div>
+                <div class="article-result">看见心声：孩子需要的往往比我们以为的更少——不是说教，而是陪伴</div>
+                <a href="story-2.html" class="article-link" target="_blank">阅读全文 →</a>
+            </div>
+
             <a href="articles.html" target="_blank" style="display:block;text-align:center;padding:15px;background:var(--card);border-radius:10px;color:var(--accent);text-decoration:none;margin-top:20px;">查看更多故事 →</a>
         </div>
 
@@ -668,16 +683,16 @@
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/儿童安全步行活动2014年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全步行" class="现场-img">
+                    <img src="照片素材/儿童安全活动2013年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全" class="现场-img">
                     <div class="现场-info">
-                        <div class="现场-title">🚸 儿童安全步行活动</div>
+                        <div class="现场-title">🚸 儿童安全活动</div>
                         <div class="现场-翻译">陪伴孩子学会安全</div>
                         <a href="activity-safety.html" class="现场-link" target="_blank">查看详情 →</a>
                     </div>
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.JPG" alt="图书馆" class="现场-img">
+                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.jpeg" alt="图书馆" class="现场-img">
                     <div class="现场-info">
                         <div class="现场-title">📚 图书馆活动</div>
                         <div class="现场-翻译">陪伴孩子走进阅读世界</div>
@@ -686,7 +701,7 @@
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/生涯规划活动2022年4月到华南师范大学高二年级分享职业规划.JPG" alt="生涯规划" class="现场-img">
+                    <img src="照片素材/生涯规划活动2021年5月广州中学.jpeg" alt="生涯规划" class="现场-img">
                     <div class="现场-info">
                         <div class="现场-title">🎯 生涯规划活动</div>
                         <div class="现场-翻译">陪伴青少年探索未来</div>
@@ -695,7 +710,7 @@
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲疯会" class="现场-img">
+                    <img src="照片素材/老母亲疯会2024年10月心静瑜伽馆都市隶人减压营.jpg" alt="老母亲疯会" class="现场-img">
                     <div class="现场-info">
                         <div class="现场-title">☕ 老母亲疯会</div>
                         <div class="现场-翻译">陪伴妈妈们释放压力</div>
@@ -704,7 +719,7 @@
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/花艺减压沙龙2024年6月广州市海珠区金碧花园.jpg" alt="花艺沙龙" class="现场-img">
+                    <img src="照片素材/花艺减压沙龙2021年8月广州市海珠区.jpeg" alt="花艺沙龙" class="现场-img">
                     <div class="现场-info">
                         <div class="现场-title">💐 花艺减压沙龙</div>
                         <div class="现场-翻译">陪伴情绪变成作品</div>
@@ -713,11 +728,20 @@
                 </div>
 
                 <div class="现场-card">
-                    <img src="照片素材/生涯规划活动20240724组织广州市第一中学的高一学生参观华南师范大学.jpg" alt="心晴热线" class="现场-img">
+                    <img src="照片素材/心晴热线2023年至今值班志愿者.jpg" alt="心晴热线" class="现场-img">
                     <div class="现场-info">
                         <div class="现场-title">📞 华南师大"心晴热线"</div>
                         <div class="现场-翻译">陪伴求助者找到答案</div>
                         <a href="activity-hotline.html" class="现场-link" target="_blank">查看详情 →</a>
+                    </div>
+                </div>
+
+                <div class="现场-card">
+                    <img src="照片素材/职场减压沙龙2024年7月广州市天河区.jpeg" alt="职场减压" class="现场-img">
+                    <div class="现场-info">
+                        <div class="现场-title">💼 职场减压沙龙</div>
+                        <div class="现场-翻译">陪伴职场人士找到平衡</div>
+                        <a href="activity-workplace.html" class="现场-link" target="_blank">查看详情 →</a>
                     </div>
                 </div>
             </div>

@@ -15,19 +15,188 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
         .page-header { text-align: center; padding: 25px 0; border-bottom: 1px solid var(--card); margin-bottom: 30px; }
         .page-title { font-size: 1.6em; color: var(--primary-light); margin-bottom: 12px; }
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-        .activity-section { margin-bottom: 35px; }
-        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .activity-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .activity-images img { width: 100%; border-radius: 10px; }
-        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; }
+        .activity-section { margin-bottom: 35px; text-align: center; }
+        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
+        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .activity-images img { max-width: 100%; border-radius: 10px; }
+        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
         .activity-text strong { color: var(--primary-light); }
@@ -44,25 +213,62 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
             <h1 class="page-title">📚 图书馆活动</h1>
-            <p class="page-desc">让更多孩子接触书籍，点燃阅读热情。在图书馆里，我不仅是志愿者，更是孩子和家长之间的"阅读翻译官"。</p>
+            <p class="page-desc">读懂孩子行为背后的心声。孩子的调皮、沉默、孤僻、叛逆，往往不是"不听话"，而是内心孤单、委屈、无助、不被看见。我以书籍与阅读为纽带，搭建安静、松弛、安全的陪伴空间。</p>
+        </div>
+
+        <!-- 心理学适配逻辑 -->
+        <div class="activity-section">
+            <div class="activity-text">
+                <p><strong>心理学适配逻辑：</strong>依托儿童依恋心理、留守儿童心理、行为背后的隐性情绪需求。孩子的调皮、沉默、孤僻、叛逆，往往不是"不听话"，而是内心孤单、委屈、无助、不被看见。我作为组织者，以图书馆为温柔载体，把孩子看不懂的情绪、大人读不懂的行为，双向翻译，让每一个孩子的心事被听见、被善待。</p>
+                <p>活动落地乡镇小学与城市社区图书馆，面向留守儿童、城市普通学生、全社会志愿者开放参与。不止是借书、捐书、整理书籍，更是读懂孩子、接纳孩子、陪伴孩子，让志愿者看见"问题行为"背后的真实困境，让孩子在阅读与陪伴中获得温暖与力量。</p>
+            </div>
         </div>
 
         <!-- 2017年11月 -->
         <div class="activity-section">
             <div class="activity-date">📍 2017年11月 · 郁南镇小学</div>
             <div class="activity-images">
-                <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.JPG" alt="图书捐赠2017">
+                <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.jpeg" alt="图书捐赠2017">
             </div>
             <div class="activity-text">
-                <p>我们联合发起了这次公益活动。将公司员工捐赠的图书，驱车几个小时送到郁南镇小学，并进行了图书的分拣、粘标签，建立起一个小型图书馆。</p>
-                <p>这些孩子中很大一部分是留守儿童。他们最感兴趣的除了图书之外，还有我们这群志愿者叔叔阿姨。他们非常热情地和我们交流、互动、玩游戏，问了很多关于大城市的事情。</p>
-                <blockquote>我们在他们的眼中，看到了对认知这个世界的渴望与希望。所以，图书馆活动捐赠的不单是图书，更是希望。</blockquote>
-                <p>我们也请学校对这次活动进行必要的宣传推广，旨在让更多家长重视与孩子的沟通交流。即使不能每天陪伴在身边，也需要了解孩子内心的想法、成长诉求和希望，而不只是单纯在物质上提供支持。</p>
+                <p>志愿者团队驱车数小时奔赴郁南镇小学，完成图书分拣、贴标、分类、上架全流程，为当地乡村孩子搭建起崭新的小型公益图书馆。参与志愿者来自各行各业，大家放下工作与生活的忙碌，真诚奔赴乡村，为乡村孩子拓宽阅读视野。</p>
+                <p>现场相处中我们能清晰感受到，当地多数留守儿童不缺物质帮扶，最缺的是陪伴与对外界的向往。孩子们对志愿者充满好奇，主动沟通、主动提问，渴望了解大城市的生活与更广的世界。很多志愿者深受触动，以往大家对留守儿童的认知，只停留在"需要帮助"，真正相处后才读懂，他们更需要的是被看见、被陪伴、被肯定。</p>
+                <blockquote>这场捐赠不止是送书，更是送希望、送陪伴、送理解。对乡村孩子而言，书籍打开了认知世界的窗口；对志愿者而言，这场实践打破了刻板认知，学会读懂弱势孩子的内心渴望，更懂得珍惜生活、温柔待人。同时我也引导远方家长读懂：孩子的成长，从来不止是物质供给，更需要精神陪伴与情感关注。</blockquote>
             </div>
         </div>
 
@@ -70,18 +276,16 @@
         <div class="activity-section">
             <div class="activity-date">📍 2022年9-12月 · 微澜图书馆21馆</div>
             <div class="activity-images">
-                <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队.JPG" alt="微澜图书馆志愿者">
+                <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队工作照.jpg" alt="微澜图书馆志愿者">
             </div>
             <div class="activity-text">
-                <p>我们作为图书管理员志愿者的身份参与。每隔两周，就会去值班一个上午。</p>
-                <p>除了日常的图书修补、借用、归还这些流程之外，我们都会在孩子们下课时的十几分钟里，向他们介绍图书、推荐一些有趣的图书，并对图书里的内容进行讲解。</p>
-                <p>这个过程对于一些还没做父母的志愿者来说，体会更加深刻。他们以前会觉得孩子们活泼好动、很难管理，甚至有些是"熊孩子"，但这种定期的沟通交流让他们明白：<strong>其实每一个熊孩子背后都有自己的故事。</strong></p>
+                <p>本次我组织志愿者常态化驻守微澜图书馆广州21馆，每两周定点值班，长期开展图书修补、借还登记、阅读引导等志愿服务。志愿者团队涵盖青年学生、职场新人、未婚青年、家长群体等不同身份，大家在长期陪伴中，对孩子的认知发生了彻底改变。</p>
+                <p>很多志愿者最初会觉得，部分孩子活泼好动、难以管教，是典型的"熊孩子"。但在长期、耐心、持续的陪伴中，大家慢慢读懂：没有无缘无故的调皮，也没有天生难管的孩子。孩子的每一种异常行为背后，都藏着未被看见的困境与委屈。</p>
                 <div class="highlight-box">
                     <h4>💡 一个孩子的故事</h4>
-                    <p>曾经有个孩子跟我们说，他在学校受到同班同学的霸凌。每次图书馆开门，他都会留在馆里直到最后一刻，即便关门了也不想走。</p>
-                    <p>我们的志愿者好奇地问他原因，后来才发现，是因为班里有同学会对他进行霸凌，他躲在图书馆是为了避开那个同学。</p>
-                    <p>我们征得了这个孩子的同意，将情况反映给了老师，请老师去进行沟通交流，甚至建议在教室及学校的主要场地增加监控。</p>
+                    <p>其中令所有参与者印象深刻的一例：有孩子长期滞留图书馆、迟迟不愿离开，甚至刻意躲避同学。经耐心沟通后得知，孩子因遭遇校园霸凌，将安静的图书馆当作唯一安全的避风港。我征得孩子同意后，协助对接老师沟通处理，尽力为孩子营造安全的校园环境。</p>
                 </div>
+                <p>这场长期志愿实践，让所有参与者完成了一次重要的认知升级：不要轻易给孩子贴标签、下定义。孩子的沉默、逃避、调皮、叛逆，都是内心情绪的无声表达。我作为组织者，把孩子说不出口的委屈与困惑，翻译给成年人听，让更多人学会看见孩子、理解孩子、善待孩子。</p>
             </div>
         </div>
 
@@ -89,11 +293,10 @@
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>图书馆活动中，我扮演的"翻译家"角色：</p>
-                <p>• 把书籍翻译成孩子能理解的世界：不只是借书还书，而是帮助孩子发现阅读的乐趣</p>
-                <p>• 把"熊孩子"的行为翻译成他们内心的需求：每个"难管"的孩子背后，都有一个需要被理解的故事</p>
-                <p>• 把家长的角色翻译成"陪伴者"：即使不能每天在孩子身边，也要了解他们内心的想法和希望</p>
-                <p>从捐赠图书到发现霸凌，图书馆不仅是存放书的地方，更是存放孩子心事的地方。</p>
+                <p>在图书馆系列活动中，我是孩子行为与内心的双向翻译官：</p>
+                <p>• 把「冰冷的书籍」翻译成孩子能触摸到的世界与希望</p>
+                <p>• 把「孩子的叛逆、孤僻、调皮」翻译成未被看见的委屈与困境</p>
+                <p>• 把「成年人的刻板评判」翻译成温柔的理解与接纳，让阅读空间成为孩子的心灵避风港</p>
             </div>
         </div>
 
@@ -101,5 +304,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

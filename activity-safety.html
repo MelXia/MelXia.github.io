@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>儿童安全步行活动 - 有钳任性横着走的Mel</title>
+    <title>儿童安全活动 - 有钳任性横着走的Mel</title>
     <style>
         :root {
             --primary: #6B5CE7;
@@ -15,19 +15,188 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
         .page-header { text-align: center; padding: 25px 0; border-bottom: 1px solid var(--card); margin-bottom: 30px; }
         .page-title { font-size: 1.6em; color: var(--primary-light); margin-bottom: 12px; }
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-        .activity-section { margin-bottom: 35px; }
-        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .activity-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .activity-images img { width: 100%; border-radius: 10px; }
-        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; }
+        .activity-section { margin-bottom: 35px; text-align: center; }
+        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
+        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .activity-images img { max-width: 100%; border-radius: 10px; }
+        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
         .activity-text strong { color: var(--primary-light); }
@@ -45,45 +214,68 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
-            <h1 class="page-title">🚸 儿童安全步行活动</h1>
-            <p class="page-desc">走进幼儿园和小学，教孩子安全出行。用孩子听得懂的语言讲解安全知识，同时也帮助家长理解如何与孩子沟通安全意识。</p>
+            <h1 class="page-title">🚸 儿童安全活动</h1>
+            <p class="page-desc">活动走进幼儿园、小学，面向低龄儿童开展趣味安全启蒙，同时面向全社会志愿者开放参与。我作为组织者，摒弃传统说教式安全教育，以道具、游戏、竞赛为载体，让枯燥的安全知识变得好玩、好记、好用。</p>
         </div>
 
-        <!-- 2014年12月 -->
+        <!-- 2013年12月 -->
         <div class="activity-section">
-            <div class="activity-date">📍 2014年12月 · 江南幼儿园</div>
+            <div class="activity-date">📍 2013年12月 · 江南幼儿园</div>
             <div class="activity-images">
-                <img src="照片素材/儿童安全步行活动2014年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全步行活动2014">
+                <img src="照片素材/儿童安全活动2013年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全活动2013" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>这是我们组织的第一次活动，当时受到了幼儿园的热烈欢迎。在活动过程中，孩子们学习了<strong>过马路的三部曲</strong>。</p>
-                <p>志愿者们也非常积极，制作了很多精美的小道具。</p>
-                <div class="highlight-box">
-                    <h4>💡 作为翻译家的作用</h4>
-                    <p>通过这个活动之后的余温，以及活动情况的广播，让家长更加重视：即使是低龄儿童，沟通互动也都是非常重要的。</p>
-                </div>
+                <p>这是我落地的首场儿童安全启蒙公益活动。我和志愿者团队一起，精心制作各类趣味精美道具，彻底摒弃刻板的课堂说教，用沉浸式互动的方式，带领孩子轻松学会过马路三步法，掌握基础的出行安全规则。</p>
+                <p>低龄孩子的认知特点是"重体验、轻道理"，但大多数成年人习惯性用命令式语言管控孩子，只会说"不许乱跑、不许乱闯"，却从未耐心告诉孩子"为什么不安全、应该怎么做"。我在本次活动中，把成人眼里简单的安全规则，翻译成孩子能看懂、能记住的趣味体验，让孩子在玩耍中主动吸收安全知识。</p>
+                <blockquote>对参与的志愿者而言，这场活动也是一次深刻的认知更新。很多志愿者原本以为儿童安全教育只是"教孩子知识"，参与后才明白，低龄孩子的教育核心是沟通方式的适配。大家在互动中慢慢读懂，孩子的调皮、好动，不是不听话，而是认知方式和大人完全不同。这场活动让所有参与者学会换位思考，放下成人的固有傲慢，更温柔、更耐心地理解低龄儿童。</blockquote>
             </div>
         </div>
 
-        <!-- 2017年12月 -->
+        <!-- 2014年4月 -->
         <div class="activity-section">
-            <div class="activity-date">📍 2017年12月 · 儿福幼儿园</div>
+            <div class="activity-date">📍 2014年4月 · 儿福幼儿园</div>
             <div class="activity-images">
-                <img src="照片素材/儿童安全步行活动2017年12月广州市海珠区儿福幼儿园.jpeg" alt="儿童安全步行活动2017">
+                <img src="照片素材/儿童安全活动2014年4月广州市海珠区儿福幼儿园.jpeg" alt="儿童安全活动2014" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>在之前"儿童步行安全活动"成功经验的影响下，由幼儿园主动推荐，我们前往周边的姐妹幼儿园开展了同类型的活动。</p>
-                <p>志愿者们将悉心保存、维护的小道具都一并带上，继续传递这一种爱心的行为。</p>
-                <p><strong>他们表示，举行公益活动不仅是为了受益方和受助方，更是为了提升自己：</strong></p>
-                <ul>
-                    <li>锻炼了与陌生人沟通交流的技能</li>
-                    <li>锻炼了活动的组织能力</li>
-                    <li>最重要的是反思了自己作为父母，应该如何更好地与孩子沟通和理解</li>
-                </ul>
+                <p>凭借首场幼儿园安全活动的良好口碑与成熟模式，本次活动由幼儿园主动邀约落地。我沿用成熟的活动体系，志愿者团队妥善保存、迭代优化往期趣味道具，将成熟、优质的公益模式持续复制推广，让更多低龄孩子受益。</p>
+                <p>本次活动最大的价值，是让各行各业的志愿者在公益实践中完成自我提升。很多参与的青年、职场志愿者反馈，通过筹备活动、互动带娃、现场讲解，自己的陌生人沟通能力、活动组织能力、临场应变能力得到了极大锻炼。</p>
+                <blockquote>更重要的是，大家对"儿童沟通"有了全新的理解：和孩子相处，不是靠权威压制，而是靠适配孩子认知的耐心引导。</blockquote>
+                <p>我始终坚持，儿童公益不止是赋能孩子，更是滋养每一位参与的成年人。每一次和孩子真诚互动的过程，都是成年人自我反思、自我成长的过程，让更多人学会理解孩子、包容孩子、温柔对待孩子。</p>
             </div>
         </div>
 
@@ -91,13 +283,38 @@
         <div class="activity-section">
             <div class="activity-date">📍 2018年1月 · 蒋光鼐纪念小学</div>
             <div class="activity-images">
-                <img src="照片素材/儿童安全步行活动2018年1月广州市荔湾区蒋光鼐小学一年级.JPG" alt="儿童安全步行活动2018">
+                <img src="照片素材/儿童安全活动2018年1月广州市荔湾区蒋光鼐小学一年级.JPG" alt="儿童安全活动2018" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>我们将之前在幼儿园成功组织"儿童安全步行活动"的经验带到小学，也是一个全新的尝试。</p>
-                <p>对于小学生来说，基本的过马路安全守则他们已经知道了。要如何让这个活动办得更加有趣、让小学生更加投入？这需要志愿者准备更多精彩的互动游戏，以比赛的形式去开展。</p>
-                <p>这个活动的关键是邀请了家委会成员共同组织。</p>
-                <blockquote>这些家长在参加完活动后，会发现同自己的孩子有了进一步深层次的交流，而不再一味是那种权威式的家长养育方式。他们可以沟通互动，甚至进行平等地位的对话，从而看到孩子成长、成熟、有思考的一面。</blockquote>
+                <p>本次活动我将成熟的幼儿园安全启蒙模式，全新迭代落地小学一年级场景。小学生已经掌握基础安全常识，对简单说教产生审美疲劳，自主意识、独立思考能力更强。为此我全新升级活动形式，放弃单一讲解，采用<strong>「互动游戏 + 小组竞赛」</strong>的模式，充分调动孩子的主动性与参与感，让孩子主动思考、主动学习。</p>
+                <p>本次活动我特别邀请学校家委会成员共同参与组织，让家长全程沉浸式观察孩子的课堂表现、思考方式、互动状态。很多家长参与后深受触动，以往在家中，自己习惯用权威姿态管控孩子，认为孩子年纪小、没有主见，只会被动听话。但在集体活动中，家长第一次看见孩子独立思考、大胆表达、积极参与的成熟一面。</p>
+                <blockquote>不少家长坦言，这场活动彻底改变了自己的育儿沟通方式，不再一味命令、管控、指责，而是学会平等对话、耐心倾听、尊重孩子的想法。我作为组织者，通过一场安全活动，悄悄完成了亲子沟通模式的升级：让家长看见真实的孩子，让孩子拥有被尊重的沟通体验。</blockquote>
+            </div>
+        </div>
+
+        <!-- 2019年6月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2019年6月 · 海珠区（儿童急救主题）</div>
+            <div class="activity-images">
+                <img src="照片素材/儿童安全活动2019年6月广州市海珠区.jpeg" alt="儿童安全活动2019" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次活动我聚焦家庭应急安全短板，专门面向家长与成年志愿者群体开设儿童急救专场。我特邀三甲医院新生儿科医生亲临分享，把专业、严谨、晦涩的儿童急救知识，翻译成普通家庭能听懂、能上手、可实操的居家应急技能。</p>
+                <p>很多成年人平时只关注孩子的出行安全，却忽略了居家突发意外的应急处理能力，遇到孩子受伤、不适容易慌乱无措。</p>
+                <blockquote>本次活动让所有参与的成年人收获满满，大家系统掌握了基础儿童急救方法，缓解了育儿焦虑，明白了安全守护不止是"禁止危险"，更是"拥有应对危险的能力"，以更从容、更专业的姿态守护孩子成长。</blockquote>
+            </div>
+        </div>
+
+        <!-- 2021年4月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2021年4月 · 白云区同和小学（青少年自我保护主题）</div>
+            <div class="activity-images">
+                <img src="照片素材/儿童安全活动2021年4月广州市白云区同和小学.jpeg" alt="儿童安全活动2021" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次活动我面向小学中高年级青少年开展，聚焦青少年自我保护、心理边界、人际防护核心主题。这个年龄段的孩子自主意识快速觉醒，独立活动范围变大，但自我保护意识薄弱、边界认知模糊，遇到困扰习惯沉默隐忍，不愿和长辈沟通，极易形成安全隐患与心理隔阂。</p>
+                <p>我结合青少年心理特点，摒弃低龄化趣味科普，采用案例讲解、情景模拟、互动答疑的成熟模式，引导孩子认识自我边界、学会自我保护、懂得主动求助。</p>
+                <blockquote>青少年的安全不止是人身安全，更包含心理安全与人际边界。很多家长参与后意识到，孩子的沉默、叛逆、回避，往往是不懂求助、缺乏安全感的信号，让自己后续更注重和孩子的深度沟通与情绪关注。</blockquote>
             </div>
         </div>
 
@@ -105,11 +322,10 @@
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>儿童安全步行活动中，我扮演的"翻译家"角色：</p>
-                <p>• 把安全知识翻译成孩子能理解的语言：用游戏、道具、比赛，让枯燥的规则变得有趣</p>
-                <p>• 把家长的角色翻译成新的样子：不是高高在上的教育者，而是可以平等交流的陪伴者</p>
-                <p>• 把活动的意义翻译给家长看：不仅是孩子学到了安全知识，更是家长学会了如何与孩子沟通</p>
-                <p>从幼儿园到小学，从传授知识到家委会参与，每一次都是"翻译方式"的升级。</p>
+                <p>在儿童安全系列活动中，我作为安全认知与亲子沟通的双向翻译官：</p>
+                <p>• 把「生硬的安全规则」翻译成孩子愿意主动吸收的游戏与体验</p>
+                <p>• 把「成人的权威管控」翻译成平等尊重的陪伴沟通</p>
+                <p>• 把「单一的安全科普」翻译成两代人的认知同频，让守护不止有规则，更有理解与温度</p>
             </div>
         </div>
 
@@ -117,5 +333,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>

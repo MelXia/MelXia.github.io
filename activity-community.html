@@ -15,21 +15,188 @@
             --text: #E8E8F0;
             --text-muted: #9899AC;
         }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; padding: 20px; padding-bottom: 60px; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+            padding-bottom: 60px;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
         .container { max-width: 700px; margin: 0 auto; }
         .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-size: 0.9em; }
         .back-link:hover { text-decoration: underline; }
         .page-header { text-align: center; padding: 25px 0; border-bottom: 1px solid var(--card); margin-bottom: 30px; }
         .page-title { font-size: 1.6em; color: var(--primary-light); margin-bottom: 12px; }
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
-        .activity-section { margin-bottom: 35px; }
-        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .activity-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .activity-images img { width: 100%; border-radius: 10px; }
-        .activity-images.single { grid-template-columns: 1fr; }
-        .activity-images.single img { max-width: 100%; }
-        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; }
+        .activity-section { margin-bottom: 35px; text-align: center; }
+        .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
+        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .activity-images img { max-width: 100%; border-radius: 10px; }
+        .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
         .activity-text strong { color: var(--primary-light); }
@@ -45,40 +212,70 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
     <div class="container">
         <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
 
         <div class="page-header">
             <h1 class="page-title">🏠 社区关爱活动</h1>
-            <p class="page-desc">走进社区，服务老人、儿童和家庭。作为沟通桥梁，我帮助不同年龄层的人理解彼此的需求与困难。</p>
+            <p class="page-desc">活动走进各街道、社区与校园，聚焦孤寡老人、困境儿童、困难家庭等弱势群体，以沉浸式公益实践为载体，面向全社会各行各业志愿者开放参与。</p>
         </div>
 
         <!-- 2014年10月 -->
         <div class="activity-section">
             <div class="activity-date">📍 2014年10月 · 海珠区江南中街道</div>
             <div class="activity-images">
-                <img src="照片素材/社区关爱活动2014年10月广州市海珠区江南中街道.jpg" alt="社区关爱活动2014">
+                <img src="照片素材/社区关爱活动2014年10月广州市海珠区江南中街道.jpg" alt="社区关爱活动2014" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>这是第一次组织的公益活动。当时招募了约30名志愿者，探访了10个困难家庭，并为每个家庭送上价值约100元以内的生活物资。</p>
-                <p>在这个过程中，我们鼓励志愿者带上自己3岁以上的孩子共同参与。觉得"赠人玫瑰，手有余香"，应该将这种善心传递给下一代。</p>
-                <blockquote>让孩子明白：做善事、关心身边的人，并不是一件多高大上、多复杂、有距离感的事情，而是我们力所能及，可以发生在身边的每一天。</blockquote>
-                <p>这个活动得到了江南中街道的高度认可，并且颁发了<strong>"以心同行伙伴"</strong>的奖状。我们和志愿者都觉得受到了极大的鼓舞。</p>
+                <p>这是我最早落地的一场社区公益实践活动。本次活动招募30余名社会志愿者，对接10户困难家庭，为每户家庭送上适配日常所需的生活物资，切实缓解基层困难家庭的生活压力。我在活动设计中特别鼓励志愿者携带3岁以上孩子共同参与，让孩童、青少年、成年人共同走入公益场景，形成跨年龄的善意传递氛围。</p>
+                <p>从发展心理学角度来看，低龄孩子的善意观、价值观无法依靠空洞说教建立，必须依托真实体验慢慢扎根。生活中，大人常常习惯性叮嘱孩子"要善良、要助人"，但抽象的道理距离孩子的世界太过遥远。我在本次活动中，刻意把高高在上的"行善大义"，翻译成孩子可以看懂、可以做到的日常小事：走访陪伴、礼貌问候、力所能及的帮忙，让孩子真切明白，善意不需要伟大，只需要愿意行动。</p>
+                <p>这场活动带给所有参与者全新的体验与触动。对孩子而言，他们第一次跳出自我的生活圈，看见不同家庭的生活状态，自然而然生出珍惜、感恩与同理心；对成年志愿者来说，忙碌的日常容易让人陷入生活固化，而这场接地气的基层帮扶，让大家跳出固有视角，重新审视自己的生活与拥有。</p>
+                <blockquote>活动最终获得江南中街道官方认可，获评<strong>"义心同行伙伴"</strong>荣誉称号，也让所有参与者收获了朴素又真实的成长与治愈。</blockquote>
             </div>
         </div>
 
-        <!-- 2016年9月 -->
+        <!-- 2016年10月 -->
         <div class="activity-section">
-            <div class="activity-date">📍 2016年9月 · 荔湾区华林街道</div>
+            <div class="activity-date">📍 2016年10月 · 荔湾区华林街道</div>
             <div class="activity-images">
-                <img src="照片素材/社区关爱活动2016年9月广州市荔湾区华林街道.JPG" alt="社区关爱活动2016">
-                <img src="照片素材/社区关爱活动2016年9月广州市荔湾区华林街道志愿者合照.JPG" alt="志愿者合照2016">
+                <img src="照片素材/社区关爱活动2016年10月广州市荔湾区华林街道志愿者合照.JPG" alt="志愿者合照2016" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>沿用了2014年在海珠区江南中街道的组织策划模式，这次志愿者的规模比之前增加了一倍。</p>
-                <p><strong>这次活动最大的感想：建立一个可以让家长和孩子都去反思生活的平台，是一件非常重要的事情。</strong></p>
-                <p>其意义不在于受帮助的弱势群体，或是他们给予的感激与肯定，更令我动容的是志愿者对自我生活的那种反思。</p>
-                <p>我们每次活动之后，都会有一个分享交流会。这个环节比起单纯地送一些生活必需品更加重要——它能引起大家的反思，对孩子来说，更是一种现身的言传身教。</p>
+                <p>经过两年沉淀，本次志愿者规模直接翻倍，参与者覆盖更多行业、更多年龄段的社会群体，公益辐射面进一步扩大。相较于首场活动侧重物资帮扶与善意体验，我将本次活动的核心重点升级为参与者的自我反思与双向成长，让公益的价值不止惠及受助家庭，更滋养每一位参与的志愿者。</p>
+                <p>不同年龄段的参与者，在公益场景中的收获维度完全不同。青少年有了独立思考的能力，不再满足于简单的"做事帮忙"，更需要通过交流、复盘、表达完成自我成长；成年志愿者长期固定在工作与生活的单一节奏中，很容易形成思维固化，需要通过集体公益交流，获得新的生活启发。</p>
+                <p>因此我在活动收尾，专门增设全员分享交流会，不设年龄门槛、不设身份区别，让每个人都能自由表达真实感受。</p>
+                <blockquote>很多青少年志愿者在分享中坦言，这次活动让自己跳出了学业的单一维度，真切看见生活的多样性，学会换位思考、懂得体谅他人；不少职场志愿者分享，忙碌的工作让人渐渐忽略生活本身，而这场公益与交流，让自己紧绷的心态得到松弛，也学会了更包容地看待生活与他人。</blockquote>
+                <p>我始终相信，公益最珍贵的价值，从来不只是"帮助了谁"，而是让每一个参与的人，都能被温柔治愈、被真实启发，学会理解他人、接纳生活。很多参与者反馈，这场活动让自己第一次在陌生人的真诚分享里，获得了深刻的自我成长。</p>
             </div>
         </div>
 
@@ -86,11 +283,14 @@
         <div class="activity-section">
             <div class="activity-date">📍 2017年10月 · 海珠区江南中街道</div>
             <div class="activity-images">
-                <img src="照片素材/社区关爱活动2017年10月广州市海珠区江南中街道.JPG" alt="社区关爱活动2017">
+                <img src="照片素材/社区关爱活动2017年10月广州市海珠区江南中街道.JPG" alt="社区关爱活动2017" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>志愿者人数超过60人，来参加的孩子也越来越多。这次活动可以用<strong>"驾轻就熟"</strong>来形容。</p>
-                <p>为了进一步肯定孩子们的积极性，我们还手工制作了<strong>"最可爱志愿者"</strong>、<strong>"小小志愿者"</strong>等小奖状作为纪念品送给他们。</p>
+                <p>本次活动志愿者规模突破60人，青少年、孩童参与者占比大幅提升，同时吸纳了更多青年学生、职场新人、全职从业者等多元群体参与，公益队伍的年龄结构、职业结构更加丰富。</p>
+                <p>结合儿童与青少年的心理成长特点，孩子的善意与付出，需要被及时看见、被正向肯定，才能慢慢内化为稳定的品格与自信。为此我专门优化了活动激励体系，手工定制<strong>「最可爱志愿者」「小小志愿者」</strong>等专属荣誉小奖状，给到每一位参与的孩童与青少年志愿者。</p>
+                <p>不同于制式证书，手工奖状更有温度，也更能贴合孩子的心理需求，让他们的每一份真诚付出都能得到专属认可。</p>
+                <blockquote>从参与者的真实反馈来看，这套轻量化、有温度的激励方式效果极佳。孩子们在被肯定的过程中，真切感受到公益的意义与自身的价值，愿意主动参与后续公益活动；成年志愿者也在陪伴孩子、共同服务的过程中，被孩子纯粹的善意打动，心态更加柔软平和，学会在快节奏生活中沉淀自己、温柔待人。</blockquote>
+                <p>整场活动氛围松弛、真诚、温暖，让跨年龄、跨职业的陌生人，在善意同行中彼此治愈、共同成长。</p>
             </div>
         </div>
 
@@ -98,13 +298,28 @@
         <div class="activity-section">
             <div class="activity-date">📍 2018年10月 · 蒋光鼐纪念小学</div>
             <div class="activity-images">
-                <img src="照片素材/社区关爱活动2018年10月蒋光鼐小学二年级.JPG" alt="社区关爱活动2018">
+                <img src="照片素材/社区关爱活动2018年10月蒋光鼐小学二年级.JPG" alt="社区关爱活动2018" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>这次活动的对象是二年级的四个班级。通过互动游戏的方式，志愿者与孩子们进行了沟通交流。</p>
-                <p>这也是一个特别为家庭经济相对紧张的孩子准备的活动，我们为他们准备了<strong>"慰问大书包"</strong>，里面装有各种文具、学习用品和玩具等。</p>
-                <p>这个活动相对于之前与街道对接的社区关怀活动，协作沟通方面相对简单。我的目的是为了给更多新手志愿活动组织者积累经验，从而可以将类似的活动推广到更多有需要的地方。</p>
-                <blockquote>从2014年第一次组织活动时单纯的"赠人玫瑰，手有余香"，到明白要为志愿者提供反思生活的平台，再到这一次培养"活动搞手"的设想——我觉得活动每一次的意义都在提升，有它自己在当时不可替代的价值。</blockquote>
+                <p>本次活动我将公益场景正式落地校园，面向蒋光鼐纪念小学二年级四个班级开展，重点关注家庭经济相对紧张的学生群体，为孩子们搭建平等、温暖、被尊重的成长体验。</p>
+                <p>我摒弃了传统慰问生硬、刻板的形式，全程以轻松的互动游戏为沟通载体，让志愿者和孩子放下距离感、平等交流、真诚互动。同时我特意为孩子们准备了<strong>"慰问大书包"</strong>，内含各类文具、学习用品与益智玩具，兼顾孩子的学习刚需与童心乐趣，让帮扶不刻意、温暖不尴尬。</p>
+                <p>在活动设计上，我重点侧重新手志愿者的能力成长。相较于街道社区的复杂对接，本次校园活动协作流程更轻量化、更易落地，非常适合初次接触公益组织、公益服务的新手志愿者积累经验、打磨能力。</p>
+                <blockquote>很多新手志愿者表示，第一次参与公益服务很紧张，但轻松的校园氛围、真诚的孩子互动，让自己快速适应，不仅锻炼了沟通能力、临场应变能力，也真正读懂了公益的内核：不是施舍，是平等的陪伴、真诚的赋能。</blockquote>
+                <p>这场活动也让我对公益的意义有了更完整的落地认知，从最初单纯的"赠人玫瑰、传递善意"，到后来搭建反思平台、助力参与者成长，再到本次培育更多公益新人、推广可复制的公益模式，每一次升级，都是为了让更多人能走进公益、受益于公益，让温暖与成长持续传递。</p>
+            </div>
+        </div>
+
+        <!-- 2022年8月 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2022年8月 · 白云区（家庭理财储蓄规划主题）</div>
+            <div class="activity-images">
+                <img src="照片素材/社区关爱活动2022年8月广州市白云区.jpeg" alt="社区关爱活动2022" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>很多家庭的沟通矛盾、孩子的成长困惑，都隐藏在日常的金钱观、消费观、规划观里：大人习惯用"省钱、赚钱"的成人逻辑要求孩子，孩子则完全无法理解成人的生活压力，彼此认知错位，很容易引发争执与误解。</p>
+                <p>我作为组织者，把晦涩的理财知识、成人的生活压力、科学的储蓄规划思维，翻译成大众听得懂、用得上的通俗内容。</p>
+                <blockquote>对青少年参与者而言，大家学会了理性消费、合理规划、懂得珍惜；对成年参与者而言，大家跳出了"管控式教育、焦虑式育儿"的误区，学会用更科学、更平和的方式引导孩子、规划家庭生活。</blockquote>
+                <p>不同年龄、不同身份的参与者，在同一场主题活动中各自收获、彼此启发，实现认知互补、双向理解。</p>
             </div>
         </div>
 
@@ -112,15 +327,28 @@
         <div class="activity-section">
             <div class="activity-date">📍 2025年5月 · 大哥哥课堂（青少年性教育）</div>
             <div class="activity-images">
-                <img src="照片素材/社区关爱活动2025年5月3日大哥哥课堂（青少年性教育）.jpg" alt="大哥哥课堂">
+                <img src="照片素材/社区关爱活动2025年5月3日大哥哥课堂（青少年性教育）.jpg" alt="大哥哥课堂" style="max-width: 450px;">
             </div>
             <div class="activity-text">
-                <p>我们邀请了一位华师大文学院的大学生大哥哥，和男孩子们进行了青春期性教育活动。活动得到了孩子们正向的反馈和家长们的积极认可。</p>
-                <p>过往的公益活动多数是由家长志愿者进行的。但考虑到这次活动的特殊性，我们专门请了和孩子们同龄的大学生哥哥来演讲，让他们沟通得更加直接。</p>
+                <p>本次活动我聚焦青春期青少年成长刚需，针对性开设青少年性教育专属课堂。青春期是孩子自我意识觉醒、内心敏感、抵触说教的关键阶段，传统的家长式、老师式教育普遍生硬、避讳、刻板，很容易让孩子产生抵触心理，宁愿沉默也不愿沟通，造成亲子、师生之间的沟通断层。</p>
+                <p>结合青少年同辈认同、平等沟通的心理特质，我特意邀请华南师范大学文学院大学生志愿者担任主讲，跳出传统成人说教的框架，让同龄段的青年哥哥和孩子们平等对话、真诚交流。相比于长辈的叮嘱，同龄人之间的沟通更直接、更坦诚、更少避讳，孩子更愿意倾听、敢于提问、真实表达。</p>
                 <div class="highlight-box">
                     <h4>💡 作为翻译家的创新尝试</h4>
-                    <p>不再使用传统、遮遮掩掩、避讳的方式去进行教育。这是一次新的尝试——让同龄人之间进行更直接、更坦诚的沟通。</p>
+                    <p>整场活动打破了传统性教育遮遮掩掩、回避避讳的固有模式，以开放、正向、科学的视角引导青少年认识自我、保护自我、尊重自我。参与的青少年纷纷表示，这种平等坦诚的沟通，让自己不再对青春期变化迷茫、焦虑；旁观参与的成年志愿者与家长群体也深受启发，终于读懂青春期孩子的真实需求：他们不需要说教和约束，需要的是尊重、理解与正向引导。</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- 2024年7月 职场减压沙龙 -->
+        <div class="activity-section">
+            <div class="activity-date">📍 2024年7月 · 天河区（职场减压沙龙）</div>
+            <div class="activity-images">
+                <img src="照片素材/职场减压沙龙2024年7月广州市天河区.jpeg" alt="职场减压沙龙" style="max-width: 450px;">
+            </div>
+            <div class="activity-text">
+                <p>本次沙龙聚焦上班族的压力内耗、人际信任、团队协作与情绪调节，是从青少年成长延伸至成人自我成长的重要公益板块。很多亲子矛盾、家庭矛盾的根源，不在于教育理念差异，而在于成年人长期积累的职场压力、情绪内耗与人际疲惫，最终变相转嫁到家庭与孩子身上。</p>
+                <p>我作为组织者，把复杂的职场心理、人际相处逻辑、压力疏导方法，翻译成普通人能听懂、能落地的生活方法。大家在轻松的交流氛围中梳理压力、倾诉困惑、互相赋能，学会建立健康的职场信任、良性的合作模式，掌握自我情绪疏导的方式。</p>
+                <blockquote>很多参与者反馈，活动让自己慢慢放下职场内耗，心态更加松弛稳定，而稳定的自我情绪，也让自己在生活中、亲子相处中更包容、更温和。</blockquote>
             </div>
         </div>
 
@@ -128,11 +356,10 @@
         <div class="insight-section">
             <div class="insight-title">💡 Mel的翻译</div>
             <div class="insight-content">
-                <p>社区关爱活动中，我不仅是组织者，更是孩子和家长之间的"翻译家"：</p>
-                <p>• 把"做善事"翻译成孩子能理解的语言：不是遥不可及的大事，而是身边力所能及的小事</p>
-                <p>• 把家长的善意翻译成孩子能感受到的行动：让孩子参与、让孩子体验、让孩子被认可</p>
-                <p>• 把活动的意义翻译给家长看：不只是帮助别人，更是给孩子一个反思生活、学习成长的机会</p>
-                <p>从"赠人玫瑰"到"建立反思平台"再到"培养活动搞手"，每一次活动都是一次翻译的升级。</p>
+                <p>在社区关爱系列活动中，我始终作为跨年龄、跨身份的双向翻译官，连接孩子、青少年与成年参与者：</p>
+                <p>• 把「大人眼中的善意责任」翻译成孩子能理解、能践行的日常小事</p>
+                <p>• 把「孩子纯粹的付出与真诚」翻译成大人能看见、能共情的成长力量</p>
+                <p>• 把「单一的公益帮扶」翻译成所有人的双向成长，让不同年龄、不同职业的参与者彼此读懂、互相治愈</p>
             </div>
         </div>
 
@@ -140,5 +367,48 @@
             <a href="index.html#一起搞事情">← 返回首页</a>
         </div>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
 </body>
 </html>
