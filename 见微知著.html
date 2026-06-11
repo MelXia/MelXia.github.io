@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>见微知著 - 整体优先效应测验</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 进度指示 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg);
+            border-radius: 2px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .trial-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .trial-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .trial-dot.active {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .trial-dot.completed {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        /* 规则说明 */
+        .rule-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .rule-title {
+            color: var(--warning-text);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        .rule-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: var(--bg);
+            border-radius: 12px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .stimulus-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 复合字母容器 - 用小字母组成大字母 */
+        .compound-letter {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            width: 180px;
+            height: 220px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .compound-letter .small-letter {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-light);
+            font-family: 'Arial Black', Arial, sans-serif;
+        }
+
+        /* 目标展示区域 */
+        .target-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .target-shape {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+        }
+
+        .target-shape .cell {
+            width: 20px;
+            height: 20px;
+            border-radius: 2px;
+        }
+
+        .target-shape .cell.filled {
+            background: var(--primary);
+        }
+
+        .target-shape .cell.empty {
+            background: transparent;
+        }
+
+        /* 选择区域 */
+        .choice-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .choice-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 12px;
+            border: 3px solid var(--bg);
+            transition: all 0.3s;
+        }
+
+        .choice-option:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .choice-option.selected {
+            border-color: var(--primary);
+            background: rgba(107, 92, 231, 0.1);
+        }
+
+        .choice-option.correct {
+            border-color: var(--success);
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .choice-option.wrong {
+            border-color: var(--accent);
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .choice-shape {
+            display: grid;
+            gap: 2px;
+        }
+
+        .choice-shape .cell {
+            border-radius: 2px;
+        }
+
+        .choice-label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        /* 按钮区域 */
+        .button-area {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .letter-btn {
+            min-width: 80px;
+            padding: 14px 24px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .letter-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .letter-btn:active {
+            transform: scale(0.98);
+        }
+
+        .letter-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .letter-btn.wrong {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        /* 统计信息 */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 10px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 反馈信息 */
+        .feedback {
+            font-size: 1em;
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .feedback.wrong {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .chart-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 180px;
+            padding: 15px 10px;
+            position: relative;
+        }
+
+        .chart-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .chart-bar {
+            width: 45px;
+            border-radius: 8px 8px 0 0;
+            transition: height 1s ease;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+        }
+
+        .chart-bar-value {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .chart-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* 折线图容器 */
+        .line-chart-overlay {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            right: 30px;
+            height: 150px;
+            pointer-events: none;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .chart-dot {
+            fill: var(--success);
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .chart-acc-label {
+            font-size: 0.7em;
+            fill: var(--success);
+            font-weight: 600;
+        }
+
+        /* 洞察 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .insight-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+            font-size: 0.85em;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning-text);
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .theory-section p {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.85em;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 6px 0;
+            padding-left: 22px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 0.8em;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .tips-list li strong {
+            color: var(--primary-light);
+        }
+
+        /* 倒计时 */
+        .countdown {
+            font-size: 1em;
+            color: var(--accent);
+            margin: 8px 0;
+        }
+
+        /* 试次标签 */
+        .trial-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .game-area {
+                height: 180px;
+            }
+
+            .compound-letter {
+                width: 140px;
+                height: 170px;
+            }
+
+            .compound-letter .small-letter {
+                font-size: 11px;
+            }
+
+            .letter-btn {
+                min-width: 65px;
+                padding: 12px 18px;
+                font-size: 1em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+
+            .chart-bar {
+                width: 35px;
+            }
+
+            .chart-wrapper {
+                height: 150px;
+            }
+
+            .choice-option {
+                padding: 10px;
+            }
+
+            .target-shape .cell {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">翻译案例</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">翻译案例</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🔍</div>
+                <h1>见微知著</h1>
+                <p class="subtitle">整体优先效应体验游戏<br>测试你观察世界的方式</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">🎯 什么是整体优先效应？</div>
+                    <div class="rule-content">
+                        心理学研究发现，人类在加工视觉信息时，倾向于<span class="rule-highlight">优先识别整体特征</span>，再处理局部细节。当整体与局部信息发生冲突时，大脑通常会优先加工整体，导致对局部的识别变慢或出错。<br><br>
+                        这个游戏将通过四个试次，测试你的整体与局部加工偏好。准备好了吗？
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startGame()">开始测试</button>
+            </div>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div class="screen" id="screen-game">
+            <div class="card">
+                <div class="trial-indicator">
+                    <div class="trial-dot active" id="trialDot1">1</div>
+                    <div class="trial-dot" id="trialDot2">2</div>
+                    <div class="trial-dot" id="trialDot3">3</div>
+                    <div class="trial-dot" id="trialDot4">4</div>
+                </div>
+
+                <div class="trial-label" id="trialLabel">试次一：一致条件</div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gameProgress"></div>
+                </div>
+
+                <div class="game-area" id="gameArea">
+                    <div class="stimulus-container" id="stimulusContainer">
+                    </div>
+                </div>
+
+                <div class="countdown" id="countdown"></div>
+
+                <div class="feedback" id="feedback"></div>
+
+                <!-- 字母选择按钮（试次1-3） -->
+                <div class="button-area" id="letterButtons">
+                    <button class="letter-btn" id="btnH" onclick="handleLetterChoice('H')">H</button>
+                    <button class="letter-btn" id="btnS" onclick="handleLetterChoice('S')">S</button>
+                </div>
+
+                <!-- 图形选择区域（试次4） -->
+                <div class="choice-container" id="choiceContainer" style="display:none;">
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-value" id="currentTrial">1</div>
+                        <div class="stat-label">当前试次</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="correctCount">0</div>
+                        <div class="stat-label">正确次数</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>测试完成！</h2>
+                <p class="subtitle">看看你的认知加工方式</p>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 反应时（柱状）与正确率（折线）对比</div>
+                    <div class="chart-wrapper" id="chartWrapper">
+                        <!-- 折线图SVG覆盖层 -->
+                        <svg class="line-chart-overlay" id="lineChart">
+                            <polyline class="chart-line" id="accLine" points=""></polyline>
+                            <circle class="chart-dot" id="dot1" r="6"></circle>
+                            <circle class="chart-dot" id="dot2" r="6"></circle>
+                            <circle class="chart-dot" id="dot3" r="6"></circle>
+                            <circle class="chart-dot" id="dot4" r="6"></circle>
+                            <text class="chart-acc-label" id="accLabel1" text-anchor="middle"></text>
+                            <text class="chart-acc-label" id="accLabel2" text-anchor="middle"></text>
+                            <text class="chart-acc-label" id="accLabel3" text-anchor="middle"></text>
+                            <text class="chart-acc-label" id="accLabel4" text-anchor="middle"></text>
+                        </svg>
+
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt1">-</div>
+                                <div class="chart-bar" id="bar1" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">试次一<br>一致</div>
+                        </div>
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt2">-</div>
+                                <div class="chart-bar" id="bar2" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">试次二<br>局部无关</div>
+                        </div>
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt3">-</div>
+                                <div class="chart-bar" id="bar3" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">试次三<br>冲突</div>
+                        </div>
+                        <div class="chart-group">
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar-value" id="rt4">-</div>
+                                <div class="chart-bar" id="bar4" style="height:0px;"></div>
+                            </div>
+                            <div class="chart-label">试次四<br>维度判断</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">💡 你的表现分析</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学</button>
+            </div>
+        </div>
+
+        <!-- 科普页面 -->
+        <div class="screen" id="screen-theory">
+            <div class="card">
+                <h2>整体优先效应</h2>
+                <p class="subtitle">为什么我们更容易看到整体？</p>
+
+                <div class="theory-section">
+                    <h3>🧠 核心心理学理论</h3>
+                    <p><strong>格式塔心理学（Gestalt Psychology）：</strong>人类视觉系统倾向于将信息组织成有意义的整体，而非孤立的元素。这就是"完形优先效应"——整体先于部分被感知。</p>
+                    <p><strong>Navon任务（1977）：</strong>心理学家Navon设计了经典的复合字母实验，证明了大字母（整体）的识别速度通常快于小字母（局部），且整体信息会对局部识别产生干扰。</p>
+                    <p><strong>认知冲突：</strong>当整体与局部信息不一致（如由小"S"组成的大"H"）时，大脑需要花费更多时间解决冲突，反应时会显著延长。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>📈 预期实验结果</h3>
+                    <p><strong>反应时（RT）递增：</strong>试次三（冲突条件）的反应时将显著长于试次一和试次二。这证明了在认知加工中，大脑先看到了大"H"，当要求识别局部时，整体的干扰导致了认知冲突。</p>
+                    <p><strong>正确率波动：</strong>在试次三中，会有部分被试错误地选择"S"，体现了整体加工对局部加工的压制。</p>
+                    <p><strong>试次四的维度偏好：</strong>如果玩家倾向于选择整体相似的图形，说明其遵循了"整体优先"；若选择局部相似的图形，则说明其更关注"局部特征"。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>🎓 给青少年学生：打破思维定势，提升洞察力</h3>
+                    <ul class="tips-list">
+                        <li><strong>警惕"第一印象"陷阱：</strong>游戏里你很容易第一眼就认出大字母，这在心理学上叫"整体优先"。但在日常学习中，有些题目或文章不能只看表面框架，要刻意训练自己去寻找容易被忽略的"局部细节"。</li>
+                        <li><strong>锻炼抗干扰能力：</strong>当全局信息和细节发生冲突时，大脑会感到困惑。学会在复杂的信息中保持专注，不被庞大的"整体"带偏节奏，是提升逻辑思维的关键。</li>
+                        <li><strong>培养"双重检查"习惯：</strong>在考试或做作业时，先快速把握整体框架，再逐个检查细节。这种"整体-局部"交替的加工方式，能帮你发现更多隐藏的错误。</li>
+                    </ul>
+                </div>
+
+                <div class="theory-section">
+                    <h3>👨‍👩‍👧 给家长：理解认知差异，包容不同视角</h3>
+                    <ul class="tips-list">
+                        <li><strong>尊重孩子的观察方式：</strong>有些孩子天生更关注细节，而有些孩子更看重整体轮廓。当孩子看问题与您不同时，可能只是他们的认知加工顺序不一样，并非故意顶嘴或粗心。</li>
+                        <li><strong>理解"粗心"的背后：</strong>孩子在试次三中按错按钮，不是态度问题，而是大脑在处理整体与局部冲突时遇到了挑战。多鼓励，少责备。</li>
+                        <li><strong>拓展跨文化视野：</strong>您可以告诉孩子，世界上并不是所有人都像我们一样习惯先看整体。例如非洲辛巴部落的人，或者某些特定神经发育特质的人群，他们往往拥有极强的"局部加工"能力。这能帮助孩子建立包容心，明白"条条大路通罗马"，不同的思维方式都有其独特的价值。</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+                <button class="btn btn-primary" onclick="resetGame()">再玩一次</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let currentTrial = 0;
+        let correctCount = 0;
+        let trialStartTime = 0;
+        let hasResponded = false;
+
+        // 结果数据
+        let results = {
+            trial1: { rt: 0, correct: false, expectedLocal: 'H' },
+            trial2: { rt: 0, correct: false, expectedLocal: 'H' },
+            trial3: { rt: 0, correct: false, expectedLocal: 'S' },
+            trial4: { rt: 0, correct: false, choice: '' }
+        };
+
+        // 当前刺激信息
+        let currentStimulus = {
+            globalLetter: '',
+            localLetter: '',
+            expectedLocal: ''
+        };
+
+        let stimulusTimeout;
+        let responseTimer;
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 跳转到心理学原理页面
+        function goToTheory() {
+            showScreen('screen-theory');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
+        }
+
+        // 开始游戏
+        function startGame() {
+            currentTrial = 0;
+            correctCount = 0;
+            hasResponded = false;
+
+            results = {
+                trial1: { rt: 0, correct: false, expectedLocal: 'H' },
+                trial2: { rt: 0, correct: false, expectedLocal: 'H' },
+                trial3: { rt: 0, correct: false, expectedLocal: 'S' },
+                trial4: { rt: 0, correct: false, choice: '' }
+            };
+
+            showScreen('screen-game');
+            runNextTrial();
+        }
+
+        // 运行下一个试次
+        function runNextTrial() {
+            currentTrial++;
+            hasResponded = false;
+
+            document.getElementById('currentTrial').textContent = currentTrial;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('gameProgress').style.width = (currentTrial / 4 * 100) + '%';
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('countdown').textContent = '';
+
+            // 更新试次指示器
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('trialDot' + i);
+                dot.classList.remove('active', 'completed');
+                if (i < currentTrial) {
+                    dot.classList.add('completed');
+                } else if (i === currentTrial) {
+                    dot.classList.add('active');
+                }
+            }
+
+            // 根据试次设置
+            if (currentTrial <= 3) {
+                // 试次1-3：字母识别
+                document.getElementById('letterButtons').style.display = 'flex';
+                document.getElementById('choiceContainer').style.display = 'none';
+                setupLetterTrial(currentTrial);
+            } else {
+                // 试次4：图形相似度判断
+                document.getElementById('letterButtons').style.display = 'none';
+                document.getElementById('choiceContainer').style.display = 'flex';
+                setupShapeTrial();
+            }
+
+            resetButtons();
+        }
+
+        // 设置字母识别试次（试次1-3）
+        function setupLetterTrial(trialNum) {
+            const container = document.getElementById('stimulusContainer');
+            const labels = [
+                '试次一：一致条件',
+                '试次二：局部无关条件',
+                '试次三：冲突条件'
+            ];
+
+            document.getElementById('trialLabel').textContent = labels[trialNum - 1];
+
+            // 定义每个试次的刺激
+            let globalLetter, localLetter, expectedLocal;
+
+            if (trialNum === 1) {
+                // 一致条件：大H由小H组成
+                globalLetter = 'H';
+                localLetter = 'H';
+                expectedLocal = 'H';
+            } else if (trialNum === 2) {
+                // 局部无关条件：大H由小三角形组成
+                globalLetter = 'H';
+                localLetter = '△';
+                expectedLocal = 'H'; // 应该识别大字母
+            } else if (trialNum === 3) {
+                // 冲突条件：大H由小S组成
+                globalLetter = 'H';
+                localLetter = 'S';
+                expectedLocal = 'S'; // 局部是S，但整体是H，会产生冲突
+            }
+
+            currentStimulus = {
+                globalLetter: globalLetter,
+                localLetter: localLetter,
+                expectedLocal: expectedLocal
+            };
+
+            // 生成复合字母HTML
+            container.innerHTML = generateCompoundLetter(globalLetter, localLetter);
+
+            // 显示刺激
+            trialStartTime = Date.now();
+
+            // 1秒后隐藏刺激，开始等待响应
+            stimulusTimeout = setTimeout(() => {
+                container.innerHTML = '<div style="color:var(--text-muted);font-size:0.9em;">请选择你看到的局部字母</div>';
+                startResponseTimer();
+            }, 1000);
+        }
+
+        // 生成复合字母（用小字符组成大字母）
+        function generateCompoundLetter(globalLetter, localChar) {
+            // 大字母的形状定义（7x9网格）
+            const patterns = {
+                'H': [
+                    [0,0,0,0,0,0,0],
+                    [0,1,0,0,0,1,0],
+                    [0,1,0,0,0,1,0],
+                    [0,1,0,0,0,1,0],
+                    [0,1,1,1,1,1,0],
+                    [0,1,0,0,0,1,0],
+                    [0,1,0,0,0,1,0],
+                    [0,1,0,0,0,1,0],
+                    [0,0,0,0,0,0,0]
+                ],
+                'S': [
+                    [0,0,0,0,0,0,0],
+                    [0,0,1,1,1,1,0],
+                    [0,1,0,0,0,0,0],
+                    [0,1,0,0,0,0,0],
+                    [0,0,1,1,1,1,0],
+                    [0,0,0,0,0,1,0],
+                    [0,0,0,0,0,1,0],
+                    [0,1,1,1,1,0,0],
+                    [0,0,0,0,0,0,0]
+                ]
+            };
+
+            const pattern = patterns[globalLetter];
+            if (!pattern) return '';
+
+            let html = '<div class="compound-letter">';
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 7; col++) {
+                    if (pattern[row][col] === 1) {
+                        html += `<span class="small-letter">${localChar}</span>`;
+                    } else {
+                        html += `<span class="small-letter" style="opacity:0;">${localChar}</span>`;
+                    }
+                }
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        // 设置图形相似度判断试次（试次4）
+        function setupShapeTrial() {
+            document.getElementById('trialLabel').textContent = '试次四：图形相似度判断';
+
+            const container = document.getElementById('stimulusContainer');
+
+            // 目标：小正方形构成的大正方形
+            container.innerHTML = `
+                <div class="target-display">
+                    <div style="font-size:0.9em;color:var(--text-muted);margin-bottom:10px;">目标图形</div>
+                    <div class="target-shape" id="targetShape">
+                        ${generateShape('square-in-square')}
+                    </div>
+                </div>
+            `;
+
+            // 设置选择选项
+            const choiceContainer = document.getElementById('choiceContainer');
+            choiceContainer.innerHTML = `
+                <div class="choice-option" id="choiceA" onclick="handleShapeChoice('A')">
+                    <div class="choice-shape" style="grid-template-columns: repeat(5, 1fr);">
+                        ${generateShape('circle-in-square', true)}
+                    </div>
+                    <div class="choice-label">选项 A</div>
+                </div>
+                <div class="choice-option" id="choiceB" onclick="handleShapeChoice('B')">
+                    <div class="choice-shape" style="grid-template-columns: repeat(3, 1fr);">
+                        ${generateShape('square-in-circle', true)}
+                    </div>
+                    <div class="choice-label">选项 B</div>
+                </div>
+            `;
+
+            trialStartTime = Date.now();
+        }
+
+        // 生成形状
+        function generateShape(type, small = false) {
+            const size = small ? '16px' : '20px';
+            let html = '';
+
+            if (type === 'square-in-square') {
+                // 小正方形构成的大正方形 (5x5)
+                const square5x5 = [
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1]
+                ];
+                for (let row of square5x5) {
+                    for (let cell of row) {
+                        html += `<div class="cell ${cell ? 'filled' : 'empty'}" style="width:${size};height:${size};background:var(--primary);"></div>`;
+                    }
+                }
+            } else if (type === 'circle-in-square') {
+                // 小圆形构成的大正方形 (整体相似)
+                const square5x5 = [
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1]
+                ];
+                for (let row of square5x5) {
+                    for (let cell of row) {
+                        html += `<div class="cell ${cell ? 'filled' : 'empty'}" style="width:${size};height:${size};background:var(--success);border-radius:50%;"></div>`;
+                    }
+                }
+            } else if (type === 'square-in-circle') {
+                // 小正方形构成的圆形 (局部相似)
+                const circle = [
+                    [0,1,1,1,0],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [1,1,1,1,1],
+                    [0,1,1,1,0]
+                ];
+                for (let row of circle) {
+                    for (let cell of row) {
+                        if (cell) {
+                            html += `<div class="cell filled" style="width:${size};height:${size};background:var(--primary);"></div>`;
+                        } else {
+                            html += `<div class="cell empty" style="width:${size};height:${size};"></div>`;
+                        }
+                    }
+                }
+            }
+
+            return html;
+        }
+
+        // 开始响应计时器
+        function startResponseTimer() {
+            let timeLeft = 3;
+            const countdownEl = document.getElementById('countdown');
+            countdownEl.textContent = `剩余 ${timeLeft} 秒`;
+
+            responseTimer = setInterval(() => {
+                if (hasResponded) {
+                    clearInterval(responseTimer);
+                    return;
+                }
+                timeLeft--;
+                if (timeLeft > 0) {
+                    countdownEl.textContent = `剩余 ${timeLeft} 秒`;
+                } else {
+                    countdownEl.textContent = '';
+                    clearInterval(responseTimer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        // 处理超时
+        function handleTimeout() {
+            if (hasResponded) return;
+            hasResponded = true;
+
+            const rt = 3000;
+            const trialKey = 'trial' + currentTrial;
+            results[trialKey].rt = rt;
+            results[trialKey].correct = false;
+
+            showFeedback(false, '超时！请加快反应速度');
+
+            setTimeout(runNextTrialOrEnd, 1000);
+        }
+
+        // 处理字母选择（试次1-3）
+        function handleLetterChoice(choice) {
+            if (hasResponded || currentTrial > 3) return;
+            hasResponded = true;
+
+            clearTimeout(stimulusTimeout);
+            clearInterval(responseTimer);
+            document.getElementById('countdown').textContent = '';
+
+            const rt = Date.now() - trialStartTime;
+            const expected = currentStimulus.expectedLocal;
+            const correct = (choice === expected);
+
+            const trialKey = 'trial' + currentTrial;
+            results[trialKey].rt = rt;
+            results[trialKey].correct = correct;
+
+            // 更新按钮状态
+            const btnH = document.getElementById('btnH');
+            const btnS = document.getElementById('btnS');
+
+            if (correct) {
+                correctCount++;
+                document.getElementById('correctCount').textContent = correctCount;
+                if (choice === 'H') {
+                    btnH.classList.add('correct');
+                } else {
+                    btnS.classList.add('correct');
+                }
+                showFeedback(true, '正确！');
+            } else {
+                if (choice === 'H') {
+                    btnH.classList.add('wrong');
+                    btnS.classList.add('correct');
+                } else {
+                    btnS.classList.add('wrong');
+                    btnH.classList.add('correct');
+                }
+                showFeedback(false, `错误！正确答案是 ${expected}`);
+            }
+
+            setTimeout(runNextTrialOrEnd, 1000);
+        }
+
+        // 处理图形选择（试次4）
+        function handleShapeChoice(choice) {
+            if (hasResponded || currentTrial !== 4) return;
+            hasResponded = true;
+
+            clearInterval(responseTimer);
+            document.getElementById('countdown').textContent = '';
+
+            const rt = Date.now() - trialStartTime;
+            results.trial4.rt = rt;
+            results.trial4.choice = choice;
+
+            // 选择A = 整体优先，选择B = 局部优先
+            // 两者都是合理的认知方式，只是记录偏好
+            const choiceA = document.getElementById('choiceA');
+            const choiceB = document.getElementById('choiceB');
+
+            if (choice === 'A') {
+                choiceA.classList.add('selected');
+                showFeedback(true, '你选择了整体相似的图形（整体优先）');
+            } else {
+                choiceB.classList.add('selected');
+                showFeedback(true, '你选择了局部相似的图形（局部优先）');
+            }
+
+            setTimeout(runNextTrialOrEnd, 1500);
+        }
+
+        // 显示反馈
+        function showFeedback(correct, message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = (correct ? '✓ ' : '❌ ') + message;
+            feedback.className = 'feedback ' + (correct ? 'correct' : 'wrong') + ' show';
+        }
+
+        // 重置按钮状态
+        function resetButtons() {
+            document.getElementById('btnH').classList.remove('correct', 'wrong');
+            document.getElementById('btnS').classList.remove('correct', 'wrong');
+
+            const choiceA = document.getElementById('choiceA');
+            const choiceB = document.getElementById('choiceB');
+            if (choiceA) choiceA.classList.remove('selected', 'correct', 'wrong');
+            if (choiceB) choiceB.classList.remove('selected', 'correct', 'wrong');
+        }
+
+        // 运行下一个试次或结束
+        function runNextTrialOrEnd() {
+            if (currentTrial >= 4) {
+                showResults();
+            } else {
+                runNextTrial();
+            }
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-result');
+
+            // 计算反应时
+            const rt1 = results.trial1.rt;
+            const rt2 = results.trial2.rt;
+            const rt3 = results.trial3.rt;
+            const rt4 = results.trial4.rt;
+
+            // 计算正确率（前3个试次）
+            let correctTrials = 0;
+            if (results.trial1.correct) correctTrials++;
+            if (results.trial2.correct) correctTrials++;
+            if (results.trial3.correct) correctTrials++;
+            const accuracy = Math.round(correctTrials / 3 * 100);
+
+            // 更新柱状图
+            const maxRT = Math.max(rt1, rt2, rt3, rt4, 500);
+            const scale = 150 / maxRT;
+
+            document.getElementById('bar1').style.height = (rt1 * scale) + 'px';
+            document.getElementById('bar2').style.height = (rt2 * scale) + 'px';
+            document.getElementById('bar3').style.height = (rt3 * scale) + 'px';
+            document.getElementById('bar4').style.height = (rt4 * scale) + 'px';
+
+            document.getElementById('rt1').textContent = rt1 + 'ms';
+            document.getElementById('rt2').textContent = rt2 + 'ms';
+            document.getElementById('rt3').textContent = rt3 + 'ms';
+            document.getElementById('rt4').textContent = rt4 + 'ms';
+
+            // 延迟更新折线图
+            setTimeout(() => {
+                // 正确率：前3个试次的正确情况，第4个试次标记为选择偏好
+                const acc1 = results.trial1.correct ? 100 : 0;
+                const acc2 = results.trial2.correct ? 100 : 0;
+                const acc3 = results.trial3.correct ? 100 : 0;
+                const acc4 = 50; // 第4个试次无对错之分
+
+                updateLineChart(acc1, acc2, acc3, acc4);
+            }, 100);
+
+            // 生成洞察
+            generateInsight(rt1, rt2, rt3, rt4, accuracy);
+        }
+
+        // 更新折线图
+        function updateLineChart(acc1, acc2, acc3, acc4) {
+            const wrapper = document.getElementById('chartWrapper');
+            if (!wrapper) return;
+
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const groups = wrapper.querySelectorAll('.chart-group');
+            if (groups.length < 4) return;
+
+            const positions = [];
+
+            groups.forEach((group, index) => {
+                const rect = group.getBoundingClientRect();
+                const acc = [acc1, acc2, acc3, acc4][index];
+                positions.push({
+                    x: rect.left - wrapperRect.left + rect.width / 2,
+                    y: 170 - acc * 1.5
+                });
+            });
+
+            // 更新正确率标签
+            document.getElementById('accLabel1').textContent = (results.trial1.correct ? '✓' : '✗');
+            document.getElementById('accLabel2').textContent = (results.trial2.correct ? '✓' : '✗');
+            document.getElementById('accLabel3').textContent = (results.trial3.correct ? '✓' : '✗');
+            document.getElementById('accLabel4').textContent = results.trial4.choice;
+
+            // 更新折线
+            const line = document.getElementById('accLine');
+            if (line) {
+                line.setAttribute('points', `${positions[0].x},${positions[0].y} ${positions[1].x},${positions[1].y} ${positions[2].x},${positions[2].y} ${positions[3].x},${positions[3].y}`);
+            }
+
+            // 更新点位置
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('dot' + i);
+                const label = document.getElementById('accLabel' + i);
+                if (dot && label) {
+                    dot.setAttribute('cx', positions[i-1].x);
+                    dot.setAttribute('cy', positions[i-1].y);
+                    label.setAttribute('x', positions[i-1].x);
+                    label.setAttribute('y', positions[i-1].y - 12);
+                }
+            }
+        }
+
+        // 生成洞察文字
+        function generateInsight(rt1, rt2, rt3, rt4, accuracy) {
+            let insight = '';
+
+            // 反应时分析
+            if (rt3 > rt1 + 200 && rt3 > rt2 + 200) {
+                insight += '📈 试次三的反应时明显更长，说明当整体与局部信息冲突时，你的大脑需要更多时间来处理认知冲突。\n\n';
+            } else if (rt3 > rt1 + 100) {
+                insight += '📊 试次三的反应时有所增加，整体信息对局部识别产生了一定干扰。\n\n';
+            }
+
+            // 正确率分析
+            if (!results.trial3.correct && results.trial1.correct && results.trial2.correct) {
+                insight += '🎯 你在冲突条件下选择了大字母"H"而非局部字母"S"，这体现了"整体优先"的典型认知模式。\n\n';
+            } else if (results.trial3.correct) {
+                insight += '✨ 你成功识别了冲突条件下的局部字母，说明你能较好地抑制整体信息的干扰。\n\n';
+            }
+
+            // 试次四分析
+            if (results.trial4.choice === 'A') {
+                insight += '🔍 在图形相似度判断中，你选择了整体相似的图形，倾向于"整体优先"的加工方式。\n\n';
+            } else {
+                insight += '🔎 在图形相似度判断中，你选择了局部相似的图形，展现出较强的"局部加工"能力。\n\n';
+            }
+
+            // 综合评价
+            if (accuracy >= 80) {
+                insight += '💪 整体表现优秀！你的认知加工能力很强，继续保持！';
+            } else if (accuracy >= 50) {
+                insight += '👍 整体表现良好！多练习几次，你会看到进步。';
+            } else {
+                insight += '🌟 每个人的认知加工方式都不同，了解自己的特点最重要！';
+            }
+
+            document.getElementById('insightText').textContent = insight;
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentTrial = 0;
+            correctCount = 0;
+            hasResponded = false;
+
+            results = {
+                trial1: { rt: 0, correct: false, expectedLocal: 'H' },
+                trial2: { rt: 0, correct: false, expectedLocal: 'H' },
+                trial3: { rt: 0, correct: false, expectedLocal: 'S' },
+                trial4: { rt: 0, correct: false, choice: '' }
+            };
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('bar' + i).style.height = '0px';
+            }
+
+            showScreen('screen-welcome');
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
