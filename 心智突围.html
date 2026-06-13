@@ -591,42 +591,16 @@
             font-size: 0.85em;
             color: var(--text-muted);
             text-align: center;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
-        /* 折线图容器 */
-        .line-chart-overlay {
-            position: absolute;
-            top: 20px;
-            left: 40px;
-            right: 40px;
-            height: 150px;
-            pointer-events: none;
-        }
-
-        .line-chart-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .chart-line {
-            fill: none;
-            stroke: var(--success);
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .chart-dot {
-            fill: var(--success);
-            stroke: white;
-            stroke-width: 2;
-        }
-
-        .chart-acc-label {
-            font-size: 0.75em;
-            fill: var(--success);
+        /* 正确率显示 */
+        .chart-acc {
+            font-size: 0.8em;
             font-weight: 600;
+            color: var(--success);
+            text-align: center;
+            margin-top: 4px;
         }
 
         /* 洞察 */
@@ -698,11 +672,16 @@
             color: var(--primary-light);
         }
 
-        /* 倒计时 */
+        /* 倒计时 - 移到游戏区域内部显示 */
         .countdown {
-            font-size: 1em;
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 0.85em;
             color: var(--accent);
-            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
         }
 
         /* 响应式 */
@@ -763,7 +742,7 @@
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
-            <a href="casebook.html">翻译案例</a>
+            <a href="casebook.html">助人自助</a>
             <a href="about.html">关于我</a>
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
@@ -777,7 +756,7 @@
     <!-- 移动端下拉菜单 -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html">首页</a>
-        <a href="casebook.html">翻译案例</a>
+        <a href="casebook.html">助人自助</a>
         <a href="about.html">关于我</a>
         <a href="flower-gallery.html">花艺作品</a>
         <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
@@ -861,11 +840,10 @@
                 <div class="game-area" id="gameArea">
                     <div class="position-indicator left"></div>
                     <div class="position-indicator right"></div>
+                    <div class="countdown" id="countdown"></div>
                     <div class="shape-container" id="shapeContainer">
                     </div>
                 </div>
-
-                <div class="countdown" id="countdown"></div>
 
                 <div class="feedback" id="feedback"></div>
 
@@ -953,24 +931,14 @@
                 <p class="subtitle">看看你的"大脑指挥官"表现如何</p>
 
                 <div class="chart-container">
-                    <div class="chart-title">📊 反应时（柱状）与正确率（折线）对比</div>
+                    <div class="chart-title">📊 反应时与正确率对比</div>
                     <div class="chart-wrapper" id="chartWrapper">
-                        <!-- 折线图SVG覆盖层 -->
-                        <svg class="line-chart-overlay" id="lineChart">
-                            <polyline class="chart-line" id="accLine" points=""></polyline>
-                            <circle class="chart-dot" id="dot1" r="6"></circle>
-                            <circle class="chart-dot" id="dot2" r="6"></circle>
-                            <circle class="chart-dot" id="dot3" r="6"></circle>
-                            <text class="chart-acc-label" id="accLabel1" text-anchor="middle"></text>
-                            <text class="chart-acc-label" id="accLabel2" text-anchor="middle"></text>
-                            <text class="chart-acc-label" id="accLabel3" text-anchor="middle"></text>
-                        </svg>
-
                         <div class="chart-group">
                             <div class="chart-bar-wrapper">
                                 <div class="chart-bar-value" id="rt1">-</div>
                                 <div class="chart-bar" id="bar1" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc1">-</div>
                             <div class="chart-label">第一轮</div>
                         </div>
                         <div class="chart-group">
@@ -978,6 +946,7 @@
                                 <div class="chart-bar-value" id="rt2">-</div>
                                 <div class="chart-bar" id="bar2" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc2">-</div>
                             <div class="chart-label">第二轮</div>
                         </div>
                         <div class="chart-group">
@@ -985,6 +954,7 @@
                                 <div class="chart-bar-value" id="rt3">-</div>
                                 <div class="chart-bar" id="bar3" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc3">-</div>
                             <div class="chart-label">第三轮</div>
                         </div>
                     </div>
@@ -1502,7 +1472,7 @@
             const maxRT = Math.max(avgRT1, avgRT2, avgRT3, 100);
             const scale = 150 / maxRT;
 
-            // 先更新柱状图高度
+            // 更新柱状图高度
             document.getElementById('bar1').style.height = (avgRT1 * scale) + 'px';
             document.getElementById('bar2').style.height = (avgRT2 * scale) + 'px';
             document.getElementById('bar3').style.height = (avgRT3 * scale) + 'px';
@@ -1511,59 +1481,13 @@
             document.getElementById('rt2').textContent = avgRT2 + 'ms';
             document.getElementById('rt3').textContent = avgRT3 + 'ms';
 
-            // 延迟更新折线图（确保DOM布局完成）
-            setTimeout(() => {
-                updateLineChart(acc1, acc2, acc3);
-            }, 100);
+            // 更新正确率显示
+            document.getElementById('acc1').textContent = '正确率 ' + acc1 + '%';
+            document.getElementById('acc2').textContent = '正确率 ' + acc2 + '%';
+            document.getElementById('acc3').textContent = '正确率 ' + acc3 + '%';
 
             // 生成洞察
             generateInsight(avgRT1, avgRT2, avgRT3, acc1, acc2, acc3);
-        }
-
-        // 更新折线图
-        function updateLineChart(acc1, acc2, acc3) {
-            const wrapper = document.getElementById('chartWrapper');
-            if (!wrapper) return;
-
-            const wrapperRect = wrapper.getBoundingClientRect();
-
-            // 获取三个柱状图的位置
-            const groups = wrapper.querySelectorAll('.chart-group');
-            if (groups.length < 3) return;
-
-            const positions = [];
-
-            groups.forEach((group, index) => {
-                const rect = group.getBoundingClientRect();
-                const acc = index === 0 ? acc1 : index === 1 ? acc2 : acc3;
-                positions.push({
-                    x: rect.left - wrapperRect.left + rect.width / 2,
-                    y: 170 - acc * 1.5  // 正确率越高，点越高
-                });
-            });
-
-            // 更新正确率标签
-            document.getElementById('accLabel1').textContent = acc1 + '%';
-            document.getElementById('accLabel2').textContent = acc2 + '%';
-            document.getElementById('accLabel3').textContent = acc3 + '%';
-
-            // 更新折线
-            const line = document.getElementById('accLine');
-            if (line) {
-                line.setAttribute('points', `${positions[0].x},${positions[0].y} ${positions[1].x},${positions[1].y} ${positions[2].x},${positions[2].y}`);
-            }
-
-            // 更新点位置
-            for (let i = 1; i <= 3; i++) {
-                const dot = document.getElementById('dot' + i);
-                const label = document.getElementById('accLabel' + i);
-                if (dot && label) {
-                    dot.setAttribute('cx', positions[i-1].x);
-                    dot.setAttribute('cy', positions[i-1].y);
-                    label.setAttribute('x', positions[i-1].x);
-                    label.setAttribute('y', positions[i-1].y - 12);
-                }
-            }
         }
 
         // 生成洞察文字

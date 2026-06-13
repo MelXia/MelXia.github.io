@@ -609,37 +609,16 @@
             font-size: 0.75em;
             color: var(--text-muted);
             text-align: center;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
-        /* 折线图容器 */
-        .line-chart-overlay {
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            right: 30px;
-            height: 150px;
-            pointer-events: none;
-        }
-
-        .chart-line {
-            fill: none;
-            stroke: var(--success);
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .chart-dot {
-            fill: var(--success);
-            stroke: white;
-            stroke-width: 2;
-        }
-
-        .chart-acc-label {
-            font-size: 0.7em;
-            fill: var(--success);
+        /* 正确率显示 */
+        .chart-acc {
+            font-size: 0.75em;
             font-weight: 600;
+            color: var(--success);
+            text-align: center;
+            margin-top: 4px;
         }
 
         /* 洞察 */
@@ -711,11 +690,16 @@
             color: var(--primary-light);
         }
 
-        /* 倒计时 */
+        /* 倒计时 - 移到游戏区域内部显示 */
         .countdown {
-            font-size: 1em;
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 0.85em;
             color: var(--accent);
-            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
         }
 
         /* 试次标签 */
@@ -792,7 +776,7 @@
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
-            <a href="casebook.html">翻译案例</a>
+            <a href="casebook.html">助人自助</a>
             <a href="about.html">关于我</a>
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
@@ -806,7 +790,7 @@
     <!-- 移动端下拉菜单 -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html">首页</a>
-        <a href="casebook.html">翻译案例</a>
+        <a href="casebook.html">助人自助</a>
         <a href="about.html">关于我</a>
         <a href="flower-gallery.html">花艺作品</a>
         <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
@@ -849,11 +833,10 @@
                 </div>
 
                 <div class="game-area" id="gameArea">
+                    <div class="countdown" id="countdown"></div>
                     <div class="stimulus-container" id="stimulusContainer">
                     </div>
                 </div>
-
-                <div class="countdown" id="countdown"></div>
 
                 <div class="feedback" id="feedback"></div>
 
@@ -887,26 +870,14 @@
                 <p class="subtitle">看看你的认知加工方式</p>
 
                 <div class="chart-container">
-                    <div class="chart-title">📊 反应时（柱状）与正确率（折线）对比</div>
+                    <div class="chart-title">📊 反应时与正确率对比</div>
                     <div class="chart-wrapper" id="chartWrapper">
-                        <!-- 折线图SVG覆盖层 -->
-                        <svg class="line-chart-overlay" id="lineChart">
-                            <polyline class="chart-line" id="accLine" points=""></polyline>
-                            <circle class="chart-dot" id="dot1" r="6"></circle>
-                            <circle class="chart-dot" id="dot2" r="6"></circle>
-                            <circle class="chart-dot" id="dot3" r="6"></circle>
-                            <circle class="chart-dot" id="dot4" r="6"></circle>
-                            <text class="chart-acc-label" id="accLabel1" text-anchor="middle"></text>
-                            <text class="chart-acc-label" id="accLabel2" text-anchor="middle"></text>
-                            <text class="chart-acc-label" id="accLabel3" text-anchor="middle"></text>
-                            <text class="chart-acc-label" id="accLabel4" text-anchor="middle"></text>
-                        </svg>
-
                         <div class="chart-group">
                             <div class="chart-bar-wrapper">
                                 <div class="chart-bar-value" id="rt1">-</div>
                                 <div class="chart-bar" id="bar1" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc1">-</div>
                             <div class="chart-label">试次一<br>一致</div>
                         </div>
                         <div class="chart-group">
@@ -914,6 +885,7 @@
                                 <div class="chart-bar-value" id="rt2">-</div>
                                 <div class="chart-bar" id="bar2" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc2">-</div>
                             <div class="chart-label">试次二<br>局部无关</div>
                         </div>
                         <div class="chart-group">
@@ -921,6 +893,7 @@
                                 <div class="chart-bar-value" id="rt3">-</div>
                                 <div class="chart-bar" id="bar3" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc3">-</div>
                             <div class="chart-label">试次三<br>冲突</div>
                         </div>
                         <div class="chart-group">
@@ -928,6 +901,7 @@
                                 <div class="chart-bar-value" id="rt4">-</div>
                                 <div class="chart-bar" id="bar4" style="height:0px;"></div>
                             </div>
+                            <div class="chart-acc" id="acc4">-</div>
                             <div class="chart-label">试次四<br>维度判断</div>
                         </div>
                     </div>
@@ -1436,64 +1410,14 @@
             document.getElementById('rt3').textContent = rt3 + 'ms';
             document.getElementById('rt4').textContent = rt4 + 'ms';
 
-            // 延迟更新折线图
-            setTimeout(() => {
-                // 正确率：前3个试次的正确情况，第4个试次标记为选择偏好
-                const acc1 = results.trial1.correct ? 100 : 0;
-                const acc2 = results.trial2.correct ? 100 : 0;
-                const acc3 = results.trial3.correct ? 100 : 0;
-                const acc4 = 50; // 第4个试次无对错之分
-
-                updateLineChart(acc1, acc2, acc3, acc4);
-            }, 100);
+            // 更新正确率显示
+            document.getElementById('acc1').textContent = (results.trial1.correct ? '✓ 正确' : '✗ 错误');
+            document.getElementById('acc2').textContent = (results.trial2.correct ? '✓ 正确' : '✗ 错误');
+            document.getElementById('acc3').textContent = (results.trial3.correct ? '✓ 正确' : '✗ 错误');
+            document.getElementById('acc4').textContent = '选择 ' + results.trial4.choice;
 
             // 生成洞察
             generateInsight(rt1, rt2, rt3, rt4, accuracy);
-        }
-
-        // 更新折线图
-        function updateLineChart(acc1, acc2, acc3, acc4) {
-            const wrapper = document.getElementById('chartWrapper');
-            if (!wrapper) return;
-
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const groups = wrapper.querySelectorAll('.chart-group');
-            if (groups.length < 4) return;
-
-            const positions = [];
-
-            groups.forEach((group, index) => {
-                const rect = group.getBoundingClientRect();
-                const acc = [acc1, acc2, acc3, acc4][index];
-                positions.push({
-                    x: rect.left - wrapperRect.left + rect.width / 2,
-                    y: 170 - acc * 1.5
-                });
-            });
-
-            // 更新正确率标签
-            document.getElementById('accLabel1').textContent = (results.trial1.correct ? '✓' : '✗');
-            document.getElementById('accLabel2').textContent = (results.trial2.correct ? '✓' : '✗');
-            document.getElementById('accLabel3').textContent = (results.trial3.correct ? '✓' : '✗');
-            document.getElementById('accLabel4').textContent = results.trial4.choice;
-
-            // 更新折线
-            const line = document.getElementById('accLine');
-            if (line) {
-                line.setAttribute('points', `${positions[0].x},${positions[0].y} ${positions[1].x},${positions[1].y} ${positions[2].x},${positions[2].y} ${positions[3].x},${positions[3].y}`);
-            }
-
-            // 更新点位置
-            for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById('dot' + i);
-                const label = document.getElementById('accLabel' + i);
-                if (dot && label) {
-                    dot.setAttribute('cx', positions[i-1].x);
-                    dot.setAttribute('cy', positions[i-1].y);
-                    label.setAttribute('x', positions[i-1].x);
-                    label.setAttribute('y', positions[i-1].y - 12);
-                }
-            }
         }
 
         // 生成洞察文字

@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博弈抉择 - 信任的代价</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 进度指示 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg);
+            border-radius: 2px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .trial-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .trial-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .trial-dot.active {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .trial-dot.completed {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        /* 规则说明 */
+        .rule-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .rule-title {
+            color: var(--warning-text);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        .rule-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            position: relative;
+            width: 100%;
+            background: var(--bg);
+            border-radius: 12px;
+            margin: 15px 0;
+            padding: 20px;
+        }
+
+        /* 卡片展示 */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .player-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        .card-face {
+            width: 100px;
+            height: 140px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .card-face.hidden-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .card-face.hidden-card::before {
+            content: '?';
+            font-size: 3em;
+        }
+
+        .card-face.revealed-card {
+            background: var(--card);
+            border: 3px solid var(--primary);
+            color: var(--primary-light);
+        }
+
+        .card-face.player-card-face {
+            background: var(--card);
+            border: 3px solid var(--success);
+            color: var(--success);
+        }
+
+        .card-face.partner-card-face {
+            background: var(--card);
+            border: 3px solid var(--primary-light);
+            color: var(--primary-light);
+        }
+
+        .card-face.opponent-card-face {
+            background: var(--card);
+            border: 3px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* VS标记 */
+        .vs-marker {
+            display: flex;
+            align-items: center;
+            font-size: 1.2em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* 决策按钮 */
+        .decision-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .decision-btn {
+            min-width: 140px;
+            padding: 14px 24px;
+            font-size: 0.95em;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .decision-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .decision-btn:active {
+            transform: scale(0.98);
+        }
+
+        .decision-btn.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .decision-btn.win {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .decision-btn.loss {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        /* 分数显示 */
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 15px 0;
+        }
+
+        .score-item {
+            text-align: center;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: var(--card);
+        }
+
+        .score-label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .score-value.positive {
+            color: var(--success);
+        }
+
+        .score-value.negative {
+            color: var(--accent);
+        }
+
+        .score-value.total {
+            color: var(--primary-light);
+        }
+
+        /* 反馈信息 */
+        .feedback {
+            font-size: 1em;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 15px 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.win {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .feedback.loss {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        .feedback.info {
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--primary-light);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .chart-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 180px;
+            padding: 15px 10px;
+        }
+
+        .chart-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-bar {
+            width: 40px;
+            border-radius: 6px 6px 0 0;
+            transition: height 1s ease;
+        }
+
+        .chart-bar-value {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .chart-label {
+            font-size: 0.7em;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .chart-acc {
+            font-size: 0.7em;
+            font-weight: 600;
+            color: var(--success);
+            text-align: center;
+        }
+
+        /* 洞察 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .insight-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+            font-size: 0.85em;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning-text);
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .theory-section p {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.85em;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 6px 0;
+            padding-left: 22px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 0.8em;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .tips-list li strong {
+            color: var(--primary-light);
+        }
+
+        /* 统计信息 */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 10px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        /* 对战展示 */
+        .battle-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .battle-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .battle-side-label {
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .battle-result {
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .card-face {
+                width: 80px;
+                height: 110px;
+                font-size: 2em;
+            }
+
+            .cards-container {
+                gap: 20px;
+            }
+
+            .decision-btn {
+                min-width: 110px;
+                padding: 12px 18px;
+                font-size: 0.9em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+
+            .chart-bar {
+                width: 32px;
+            }
+
+            .chart-wrapper {
+                height: 150px;
+            }
+
+            .score-display {
+                gap: 15px;
+            }
+
+            .score-item {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 屏幕1：欢迎 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🃏</div>
+                <h1>博弈抉择</h1>
+                <p class="subtitle">信任的代价<br>测试你在信息不对称下的决策倾向</p>
+
+                <div class="rule-box">
+                    <div class="rule-title">🎯 游戏背景</div>
+                    <div class="rule-content">
+                        在这个游戏中，你需要与虚拟对手进行数字比拼。<br><br>
+                        每人面前都有一张<span class="rule-highlight">被遮挡的卡片</span>，上面写着 0-10 之间的随机数字。<br><br>
+                        <strong>谁的数字更大，谁就获胜！</strong><br><br>
+                        游戏将通过三轮递进，让你体验信息不对称下的信任抉择。
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startGame()">开始游戏</button>
+            </div>
+        </div>
+
+        <!-- 轮次介绍屏幕 -->
+        <div class="screen" id="screen-round-intro">
+            <div class="card">
+                <div class="trial-indicator" id="roundIndicator">
+                    <div class="trial-dot active" id="introDot1">1</div>
+                    <div class="trial-dot" id="introDot2">2</div>
+                    <div class="trial-dot" id="introDot3">3</div>
+                </div>
+
+                <h2 id="roundIntroTitle">第一轮：熟悉规则</h2>
+                <p class="subtitle" id="roundIntroSubtitle">单人模式，了解游戏基本规则</p>
+
+                <div class="rule-box" id="roundRulesBox">
+                    <!-- 动态填充 -->
+                </div>
+
+                <button class="btn btn-primary" id="roundStartBtn" onclick="startRound()">开始</button>
+            </div>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div class="screen" id="screen-game">
+            <div class="card">
+                <div class="trial-indicator" id="gameIndicator">
+                    <div class="trial-dot active" id="gameDot1">1</div>
+                    <div class="trial-dot" id="gameDot2">2</div>
+                    <div class="trial-dot" id="gameDot3">3</div>
+                </div>
+
+                <h2 id="gameTitle">试次 1</h2>
+                <p class="subtitle" id="gameSubtitle">你的卡片 vs 对手卡片</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gameProgress"></div>
+                </div>
+
+                <div class="game-area" id="gameArea">
+                    <!-- 卡片展示 -->
+                    <div class="cards-container" id="cardsContainer">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+
+                <div class="decision-buttons" id="decisionButtons">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div class="score-display">
+                    <div class="score-item">
+                        <div class="score-label">本轮得分</div>
+                        <div class="score-value" id="roundScore">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">累计得分</div>
+                        <div class="score-value total" id="totalScore">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>博弈结束！</h2>
+                <p class="subtitle">看看你的信任策略如何</p>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 各轮得分统计</div>
+                    <div class="chart-wrapper" id="chartWrapper">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">💡 你的表现分析</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学</button>
+            </div>
+        </div>
+
+        <!-- 科普页面 -->
+        <div class="screen" id="screen-theory">
+            <div class="card">
+                <h2>博弈与抉择</h2>
+                <p class="subtitle">社会困境中的心理学原理</p>
+
+                <div class="theory-section">
+                    <h3>🧠 核心心理学理论</h3>
+                    <p><strong>社会困境（Social Dilemmas）：</strong>个体基于自身利益最大化的"理性"选择，往往会导致集体利益受损的非理性结果。这就是"个人理性"与"集体理性"的冲突。</p>
+                    <p><strong>损失厌恶（Loss Aversion）：</strong>行为经济学发现，人类对潜在损失的痛苦感知远大于同等收益的快乐感知。游戏中收益减半、风险减半的机制设计，正是为了触发这种本能反应。</p>
+                    <p><strong>搭便车心理：</strong>在团队中，有些人会选择"少付出、多收益"的策略，这就是搭便车。短期看是聪明的，长期看会破坏团队的信任基础。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>📈 预期博弈结果</h3>
+                    <p><strong>第一轮（单人模式）：</strong>玩家独自与虚拟对手博弈，熟悉规则。每局输赢±10代币，风险和收益对等。</p>
+                    <p><strong>第二轮（合作模式）：</strong>玩家可以选择查看合作者的底牌并合作。合作模式下，双方都赢各得+5，任一输各-5。这是"收益减半、风险减半"的典型损失厌恶情境。</p>
+                    <p><strong>第三轮（自由抉择）：</strong>玩家可以查看合作者的底牌，查看后可以自由选择合作或不合作。这与第二轮的区别在于：第二轮看底牌即绑定合作，第三轮看完底牌后还可以选择单打。这测试的是"信息获取"后的道德抉择。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>👨‍👩‍👧 给家长：读懂孩子的"算计"，做智慧的引导者</h3>
+                    <ul class="tips-list">
+                        <li><strong>从"指责"转向"共情"：</strong>当孩子在团队合作中表现出退缩、不愿意分享或过于计较得失时，请不要轻易给他们贴上"自私"的标签。游戏中的选择告诉我们，这往往是孩子出于对失败和惩罚的恐惧（损失厌恶）。多给孩子一些安全感，告诉他们："即使搞砸了也没关系，爸爸妈妈和你一起承担。"</li>
+                        <li><strong>将家庭打造成"合作训练营"：</strong>在日常生活中，减少"零和博弈"的家庭氛围（如总是拿孩子和别人比）。可以尝试建立"家庭共同目标"，比如全家一起策划一次旅行或完成一项挑战。让孩子体验到，只有当每个人都不遗余力时，大家才能获得最大的快乐和成就感。</li>
+                        <li><strong>培养"关系契约"意识：</strong>通过复盘游戏，引导孩子思考"为什么有时候退让一步反而能赢"。教育孩子在人际交往中，不要只盯着眼前的利益，要明白人与人之间的信任和情谊，才是人生中最宝贵的隐形财富。</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+                <button class="btn btn-primary" onclick="resetGame()">再玩一次</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let currentRound = 0;
+        let currentTrial = 0;
+        let totalScore = 0;
+        let hasResponded = false;
+
+        // 当前卡片数据
+        let currentCards = {
+            player: 0,
+            partner: 0,
+            opponent1: 0,
+            opponent2: 0
+        };
+
+        // 结果数据
+        let results = {
+            round1: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0 },
+            round2: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 },
+            round3: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 }
+        };
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 跳转到心理学原理页面
+        function goToTheory() {
+            showScreen('screen-theory');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
+        }
+
+        // 开始游戏
+        function startGame() {
+            currentRound = 0;
+            currentTrial = 0;
+            totalScore = 0;
+            hasResponded = false;
+
+            results = {
+                round1: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0 },
+                round2: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 },
+                round3: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 }
+            };
+
+            showRoundIntro(1);
+        }
+
+        // 显示轮次介绍
+        function showRoundIntro(round) {
+            currentRound = round;
+            currentTrial = 0;
+
+            // 更新轮次指示器
+            const indicator = document.getElementById('roundIndicator');
+            const maxTrials = round === 1 ? 3 : 5;
+            indicator.innerHTML = '';
+            for (let i = 1; i<=maxTrials; i++) {
+                indicator.innerHTML += `<div class="trial-dot" id="introDot${i}">${i}</div>`;
+            }
+            document.getElementById('introDot1').classList.add('active');
+
+            // 设置介绍内容
+            const titles = ['第一轮：熟悉规则', '第二轮：合作抉择', '第三轮：自由抉择'];
+            const subtitles = [
+                '单人模式，了解游戏基本规则（共3局）',
+                '看底牌即绑定合作（共5局）',
+                '看底牌后可自由选择（共5局）'
+            ];
+
+            document.getElementById('roundIntroTitle').textContent = titles[round - 1];
+            document.getElementById('roundIntroSubtitle').textContent = subtitles[round - 1];
+
+            // 设置规则说明
+            const rulesBox = document.getElementById('roundRulesBox');
+            let rulesHTML = '';
+
+            if (round === 1) {
+                rulesHTML = `
+                    <div class="rule-content">
+                        <p><strong>游戏规则：</strong></p>
+                        <p>• 你和虚拟对手各有一张卡片，上面是 <span class="rule-highlight">0-10</span> 的随机数字</p>
+                        <p>• 双方同时翻开卡片，<span class="rule-highlight">数字大者获胜</span></p>
+                        <p>• 赢了获得 <strong style="color:var(--success)">+10 代币</strong></p>
+                        <p>• 输了扣除 <strong style="color:var(--accent)">-10 代币</strong></p>
+                        <br>
+                        <p style="color:var(--text-muted)">这一轮共3局，让你熟悉游戏规则。</p>
+                    </div>
+                `;
+            } else if (round === 2) {
+                rulesHTML = `
+                    <div class="rule-content">
+                        <p><strong>新规则：合作者加入！</strong></p>
+                        <p>• 你有一个合作者，虚拟对手也有一个对应的对手</p>
+                        <p>• 你可以先看到自己的卡片数字</p>
+                        <p>• 然后决定：是否<span class="rule-highlight">翻开合作者的卡片</span>？</p>
+                        <br>
+                        <p><strong>翻开合作者卡片 = 选择合作：</strong></p>
+                        <p>• 你们两张卡片都要赢，才算是赢</p>
+                        <p>• 赢了：各得 <strong style="color:var(--success)">+5 代币</strong></p>
+                        <p>• 输了：各扣 <strong style="color:var(--accent)">-5 代币</strong></p>
+                        <br>
+                        <p><strong>不翻开 = 单打独斗：</strong></p>
+                        <p>• 赢了：获得 <strong style="color:var(--success)">+10 代币</strong></p>
+                        <p>• 输了：扣除 <strong style="color:var(--accent)">-10 代币</strong></p>
+                        <br>
+                        <p style="color:var(--warning)">⚠️ 收益减半了，风险也减半了——你会选择合作吗？</p>
+                    </div>
+                `;
+            } else if (round === 3) {
+                rulesHTML = `
+                    <div class="rule-content">
+                        <p><strong>新规则：看完底牌后可以自由选择！</strong></p>
+                        <p>• 你可以先看到自己的卡片数字</p>
+                        <p>• 你可以选择<span class="rule-highlight">翻开合作者的卡片</span></p>
+                        <p>• 翻开后，你可以<span class="rule-highlight">自由选择合作或不合作</span></p>
+                        <br>
+                        <p><strong>收益规则：</strong></p>
+                        <p>• 合作模式：双赢各+5，任一输各-5</p>
+                        <p>• 单打模式：赢+10，输-10</p>
+                        <br>
+                        <p style="color:var(--warning)">⚠️ 第二轮看底牌=合作，但这一轮看完底牌后你还可以选择单打！</p>
+                    </div>
+                `;
+            }
+
+            rulesBox.innerHTML = rulesHTML;
+            showScreen('screen-round-intro');
+        }
+
+        // 开始本轮游戏
+        function startRound() {
+            hasResponded = false;
+            document.getElementById('feedback').classList.remove('show');
+            showTrial();
+        }
+
+        // 显示试次
+        function showTrial() {
+            currentTrial++;
+            hasResponded = false;
+
+            const maxTrials = currentRound === 1 ? 3 : 5;
+
+            if (currentTrial > maxTrials) {
+                if (currentRound < 3) {
+                    showRoundIntro(currentRound + 1);
+                } else {
+                    showResults();
+                }
+                return;
+            }
+
+            // 更新试次指示器
+            const indicator = document.getElementById('gameIndicator');
+            indicator.innerHTML = '';
+            for (let i=1; i<=maxTrials; i++) {
+                let dotClass = 'trial-dot';
+                if (i < currentTrial) dotClass += ' completed';
+                if (i === currentTrial) dotClass += ' active';
+                indicator.innerHTML += `<div class="${dotClass}" id="gameDot${i}">${i}</div>`;
+            }
+
+            // 生成卡片数字
+            currentCards.player = Math.floor(Math.random() * 11);
+            currentCards.opponent1 = Math.floor(Math.random() * 11);
+            currentCards.partner = Math.floor(Math.random() * 11);
+            currentCards.opponent2 = Math.floor(Math.random() * 11);
+
+            // 更新标题
+            const titles = ['试次 ', '试次 ', '试次 '];
+            const subtitles = ['你的卡片 vs 对手卡片', '你看到自己的卡片了，要翻开合作者的吗？', '你看到自己的排名了，如何抉择？'];
+            document.getElementById('gameTitle').textContent = `试次 ${currentTrial}`;
+            document.getElementById('gameSubtitle').textContent = subtitles[currentRound - 1];
+
+            // 更新进度
+            document.getElementById('gameProgress').style.width = (currentTrial / maxTrials * 100) + '%';
+
+            // 渲染游戏界面
+            renderGameUI();
+
+            // 更新分数显示
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('roundScore').textContent = '0';
+
+            showScreen('screen-game');
+        }
+
+        // 渲染游戏UI
+        function renderGameUI() {
+            const cardsContainer = document.getElementById('cardsContainer');
+            const decisionButtons = document.getElementById('decisionButtons');
+            const gameArea = document.getElementById('gameArea');
+
+            if (currentRound === 1) {
+                // 第一轮：单人模式
+                cardsContainer.innerHTML = `
+                    <div class="player-card">
+                        <div class="card-label">你的卡片</div>
+                        <div class="card-face player-card-face" id="playerCard">${currentCards.player}</div>
+                    </div>
+                    <div class="vs-marker">VS</div>
+                    <div class="player-card">
+                        <div class="card-label">对手卡片</div>
+                        <div class="card-face hidden-card" id="opponentCard"></div>
+                    </div>
+                `;
+
+                decisionButtons.innerHTML = `
+                    <button class="decision-btn" onclick="revealCards('round1')">翻开卡片</button>
+                `;
+
+            } else if (currentRound === 2) {
+                // 第二轮：合作模式
+                gameArea.innerHTML = `
+                    <div class="cards-container">
+                        <div class="player-card">
+                            <div class="card-label">你的卡片</div>
+                            <div class="card-face player-card-face" id="playerCard">${currentCards.player}</div>
+                        </div>
+                        <div class="vs-marker">VS</div>
+                        <div class="player-card">
+                            <div class="card-label">对手卡片</div>
+                            <div class="card-face hidden-card" id="opponentCard"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <div class="card-label" style="margin-bottom:10px;">合作者的卡片（未翻开）</div>
+                        <div class="card-face hidden-card" id="partnerCard" style="margin:0 auto;cursor:pointer;"></div>
+                    </div>
+                `;
+
+                decisionButtons.innerHTML = `
+                    <button class="decision-btn" onclick="revealPartnerCard()">翻开合作者卡片</button>
+                    <button class="decision-btn" onclick="chooseCompete()">不翻开，单打独斗</button>
+                `;
+
+            } else if (currentRound === 3) {
+                // 第三轮：自由抉择模式（看底牌后可自由选择）
+                gameArea.innerHTML = `
+                    <div class="cards-container">
+                        <div class="player-card">
+                            <div class="card-label">你的卡片</div>
+                            <div class="card-face player-card-face" id="playerCard">${currentCards.player}</div>
+                        </div>
+                        <div class="vs-marker">VS</div>
+                        <div class="player-card">
+                            <div class="card-label">对手卡片</div>
+                            <div class="card-face hidden-card" id="opponentCard"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <div class="card-label" style="margin-bottom:10px;">合作者的卡片（未翻开）</div>
+                        <div class="card-face hidden-card" id="partnerCard" style="margin:0 auto;"></div>
+                    </div>
+                `;
+
+                decisionButtons.innerHTML = `
+                    <button class="decision-btn" id="btnRevealPartner" onclick="revealPartnerCardRound3()">翻开合作者卡片</button>
+                    <button class="decision-btn" id="btnCooperate" onclick="chooseCooperate()" style="display:none;">🤝 合作</button>
+                    <button class="decision-btn" id="btnCompete" onclick="chooseCompete()">⚔️ 单打独斗</button>
+                `;
+            }
+        }
+
+        // 第一轮：翻开卡片
+        function revealCards() {
+            if (hasResponded) return;
+            hasResponded = true;
+
+            const opponentCard = document.getElementById('opponentCard');
+            opponentCard.classList.remove('hidden-card');
+            opponentCard.classList.add('revealed-card');
+            opponentCard.textContent = currentCards.opponent1;
+
+            // 判断输赢
+            const won = currentCards.player > currentCards.opponent1;
+            const score = won ? 10 : -10;
+            totalScore += score;
+
+            // 记录结果
+            results.round1.trials.push({
+                playerCard: currentCards.player,
+                opponentCard: currentCards.opponent1,
+                won: won,
+                score: score
+            });
+            results.round1.totalScore += score;
+
+            // 显示反馈
+            showFeedback(won, score, won ? '你的数字更大！' : '对手的数字更大！');
+
+            // 延迟进入下一试次
+            setTimeout(showTrial, 1500);
+        }
+
+        // 第二轮：翻开合作者卡片
+        function revealPartnerCard() {
+            if (hasResponded) return;
+
+            const partnerCard = document.getElementById('partnerCard');
+            partnerCard.classList.remove('hidden-card');
+            partnerCard.classList.add('partner-card-face');
+            partnerCard.textContent = currentCards.partner;
+
+            // 记录翻看次数
+            results.round2.revealCount++;
+
+            // 显示合作者卡片后，自动进入合作模式
+            hasResponded = true;
+
+            // 延迟显示结果
+            setTimeout(() => {
+                revealAllCards('cooperate');
+            }, 800);
+        }
+
+        // 第二轮：选择单打
+        function chooseCompete() {
+            if (hasResponded) return;
+            hasResponded = true;
+
+            revealAllCards('compete');
+        }
+
+        // 第三轮：翻看合作者底牌后可自由选择
+        function revealPartnerCardRound3() {
+            const partnerCard = document.getElementById('partnerCard');
+            partnerCard.classList.remove('hidden-card');
+            partnerCard.classList.add('partner-card-face');
+            partnerCard.textContent = currentCards.partner;
+
+            // 记录翻看次数
+            results.round3.revealCount++;
+
+            // 隐藏"翻开"按钮，显示"合作"按钮
+            document.getElementById('btnRevealPartner').style.display = 'none';
+            document.getElementById('btnCooperate').style.display = 'inline-block';
+        }
+
+        // 选择合作
+        function chooseCooperate() {
+            if (hasResponded) return;
+            hasResponded = true;
+
+            revealAllCards('cooperate');
+        }
+
+        // 揭示所有卡片
+        function revealAllCards(mode) {
+            const gameArea = document.getElementById('gameArea');
+
+            // 构建完整卡片展示
+            let cardsHTML = '';
+
+            if (currentRound === 2 || currentRound === 3) {
+                cardsHTML = `
+                    <div class="battle-display">
+                        <div class="battle-side">
+                            <div class="battle-side-label">你</div>
+                            <div class="card-face player-card-face">${currentCards.player}</div>
+                        </div>
+                        <div class="vs-marker">VS</div>
+                        <div class="battle-side">
+                            <div class="battle-side-label">对手</div>
+                            <div class="card-face opponent-card-face">${currentCards.opponent1}</div>
+                        </div>
+                    </div>
+                    <div class="battle-display">
+                        <div class="battle-side">
+                            <div class="battle-side-label">合作者</div>
+                            <div class="card-face partner-card-face">${currentCards.partner}</div>
+                        </div>
+                        <div class="vs-marker">VS</div>
+                        <div class="battle-side">
+                            <div class="battle-side-label">对手的合作者</div>
+                            <div class="card-face opponent-card-face">${currentCards.opponent2}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            gameArea.innerHTML = cardsHTML;
+
+            // 计算结果
+            let score = 0;
+            let resultText = '';
+            let won = false;
+
+            if (mode === 'cooperate') {
+                // 合作模式：双方都要赢
+                const playerWon = currentCards.player > currentCards.opponent1;
+                const partnerWon = currentCards.partner > currentCards.opponent2;
+
+                if (playerWon && partnerWon) {
+                    score = 5;
+                    won = true;
+                    resultText = '你们都赢了！合作成功！';
+                } else if (!playerWon && !partnerWon) {
+                    score = -5;
+                    resultText = '你们都输了...';
+                } else if (!playerWon) {
+                    score = -5;
+                    resultText = '你输了，合作者也输了...';
+                } else {
+                    score = -5;
+                    resultText = '你赢了，但合作者输了...';
+                }
+
+                results['round' + currentRound].cooperateCount++;
+            } else {
+                // 单打模式
+                won = currentCards.player > currentCards.opponent1;
+                score = won ? 10 : -10;
+                resultText = won ? '你赢了！' : '你输了...';
+                results['round' + currentRound].competeCount++;
+            }
+
+            totalScore += score;
+
+            // 记录结果
+            results['round' + currentRound].trials.push({
+                playerCard: currentCards.player,
+                partnerCard: currentCards.partner,
+                opponentCard: currentCards.opponent1,
+                opponent2Card: currentCards.opponent2,
+                mode: mode,
+                won: won,
+                score: score
+            });
+            results['round' + currentRound].totalScore += score;
+
+            // 显示反馈
+            showFeedback(won, score, resultText);
+
+            // 更新按钮状态
+            const buttons = document.querySelectorAll('.decision-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (mode === 'cooperate') {
+                    if (btn.textContent.includes('合作')) btn.classList.add('selected');
+                } else {
+                    if (btn.textContent.includes('单打')) btn.classList.add('selected');
+                }
+            });
+
+            // 延迟进入下一试次
+            setTimeout(showTrial, 2000);
+        }
+
+        // 显示反馈
+        function showFeedback(won, score, message) {
+            const feedback = document.getElementById('feedback');
+            const roundScoreEl = document.getElementById('roundScore');
+
+            roundScoreEl.textContent = score >= 0 ? '+' + score : score;
+            roundScoreEl.className = 'score-value ' + (score > 0 ? 'positive' : score < 0 ? 'negative' : '');
+
+            feedback.textContent = (won ? '✓ ' : '✗ ') + message + ' (' + (score >= 0 ? '+' : '') + score + ' 代币)';
+            feedback.className = 'feedback show ' + (won ? 'win' : 'loss');
+        }
+
+        // 显示最终结果
+        function showResults() {
+            showScreen('screen-result');
+
+            const chartWrapper = document.getElementById('chartWrapper');
+            chartWrapper.innerHTML = '';
+
+            // 计算各轮数据
+            const roundScores = [
+                results.round1.totalScore,
+                results.round2.totalScore,
+                results.round3.totalScore
+            ];
+
+            const maxAbsScore = Math.max(...roundScores.map(Math.abs), 10);
+            const scale = 150 / maxAbsScore;
+
+            const roundLabels = ['第一轮<br>单人模式', '第二轮<br>看牌=合作', '第三轮<br>自由抉择'];
+
+            for (let i = 1; i <= 3; i++) {
+                const score = roundScores[i - 1];
+                const barHeight = Math.abs(score) * scale;
+
+                let barColor = score >= 0
+                    ? 'linear-gradient(180deg, var(--success), #3DBDB4)'
+                    : 'linear-gradient(180deg, var(--accent), #E85555)';
+
+                chartWrapper.innerHTML += `
+                    <div class="chart-group">
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar-value" id="score${i}">${score >= 0 ? '+' : ''}${score}</div>
+                            <div class="chart-bar" id="bar${i}" style="height:${barHeight}px;background:${barColor};"></div>
+                        </div>
+                        <div class="chart-acc">合作${results['round' + i].cooperateCount}次</div>
+                        <div class="chart-label">${roundLabels[i - 1]}</div>
+                    </div>
+                `;
+            }
+
+            // 生成洞察
+            generateInsight();
+        }
+
+        // 生成洞察文字
+        function generateInsight() {
+            let insight = '';
+
+            // 分析第二轮行为
+            if (results.round2.revealCount === 5) {
+                insight += '📊 第二轮你每次都选择翻开合作者的卡片，展现了高度的信任倾向。你愿意为了合作关系承担收益减半的风险。\n\n';
+            } else if (results.round2.revealCount > 0 && results.round2.revealCount < 5) {
+                insight += `📊 第二轮你有${results.round2.revealCount}次选择翻开合作者的卡片，${5-results.round2.revealCount}次选择单打独斗。你在信任与自保之间灵活权衡。\n\n`;
+            } else {
+                insight += '📊 第二轮你从未翻开合作者的卡片，完全选择单打独斗。这体现了对风险的强烈规避，但也可能错失合作的机会。\n\n';
+            }
+
+            // 分析第三轮行为
+            if (results.round3.revealCount === 5 && results.round3.cooperateCount === 5) {
+                insight += '🔍 第三轮你每次都翻开合作者的底牌并选择合作，展现了稳定的亲社会行为。即使看到合作者的数字较低，你仍然选择"拉他一把"。\n\n';
+            } else if (results.round3.revealCount === 5 && results.round3.cooperateCount < 5) {
+                insight += `🔍 第三轮你每次都翻开合作者的底牌，但只有${results.round3.cooperateCount}次选择合作。你在看到合作者的数字后，根据情况灵活决策。\n\n`;
+            } else if (results.round3.revealCount > 0 && results.round3.revealCount < 5) {
+                insight += `🔍 第三轮你有${results.round3.revealCount}次翻开合作者的底牌，${5-results.round3.revealCount}次直接单打独斗。你在信息获取和信任之间做出了选择。\n\n`;
+            } else {
+                insight += '🔍 第三轮你从未翻开合作者的底牌，完全选择单打独斗。你更倾向于在未知情况下保护自己的利益。\n\n';
+            }
+
+            // 综合评价
+            const totalCooperate = results.round2.cooperateCount + results.round3.cooperateCount;
+            const totalDecisions = 10;
+
+            if (totalCooperate >= 7) {
+                insight += '🌟 你展现了高度的信任和合作精神！你理解"高级理性"——维护关系比短期利益更重要。这种品质将帮助你在人际关系和团队协作中走得更远。';
+            } else if (totalCooperate >= 4) {
+                insight += '👍 你在信任与自保之间找到了平衡。你会根据情境做出判断，既不盲目信任，也不过度防备。这是成熟的人际策略。';
+            } else {
+                insight += '💪 你倾向于保护自己，避免损失。这无可厚非——损失厌恶是人类的天性。但也许可以试着在某些情况下勇敢地信任一次，体验合作带来的更大收益。';
+            }
+
+            document.getElementById('insightText').textContent = insight;
+        }
+
+        // 重置游戏
+        function resetGame() {
+            currentRound = 0;
+            currentTrial = 0;
+            totalScore = 0;
+            hasResponded = false;
+
+            currentCards = {
+                player: 0,
+                partner: 0,
+                opponent1: 0,
+                opponent2: 0
+            };
+
+            results = {
+                round1: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0 },
+                round2: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 },
+                round3: { trials: [], totalScore: 0, cooperateCount: 0, competeCount: 0, revealCount: 0 }
+            };
+
+            showScreen('screen-welcome');
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
