@@ -101,6 +101,14 @@
 - 个性化洞察分析
 - 完整心理学科普页面（给家长）
 
+**文献引用（APA 7格式）**：
+- Wang, Y. Y., & Wang, Y. S. (2022). Development and validation of an Artificial Intelligence Anxiety Scale: An initial application in predicting motivated learning behavior. *Interactive Learning Environments, 30*(4), 619-634.
+- 王点, 商丽, 孙莉, 刘海蕙, 王可欣. (2026). 人工智能焦虑量表的汉化及信效度检验. *护理研究, 40*(10), 1730-1735.
+
+**推广文案**：居然连AI焦虑都有量表！心理学博士团队研发，20题科学测评，信效度验证。测测你对AI的焦虑有多真实？
+- 个性化洞察分析
+- 完整心理学科普页面（给家长）
+
 ---
 
 ## 本次更新（2026-06-16）
