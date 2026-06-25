@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI焦虑测评 - 了解你对人工智能的真实感受</title>
+    <title>父母控制 - 心理测验</title>
     <style>
         :root {
             --primary: #6B5CE7;
@@ -399,14 +399,14 @@
         .scale-buttons {
             display: flex;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
             margin-top: 15px;
             flex-wrap: wrap;
         }
 
         .scale-btn {
             flex: 1;
-            min-width: 40px;
+            min-width: 60px;
             padding: 12px 8px;
             font-size: 0.75em;
             font-weight: 600;
@@ -433,7 +433,7 @@
 
         .scale-btn-label {
             display: block;
-            font-size: 0.9em;
+            font-size: 0.85em;
             margin-top: 3px;
             opacity: 0.8;
         }
@@ -509,8 +509,8 @@
             margin-top: 5px;
         }
 
-        /* 焦虑等级 */
-        .anxiety-level {
+        /* 控制等级 */
+        .control-level {
             display: inline-block;
             padding: 8px 20px;
             border-radius: 20px;
@@ -519,17 +519,17 @@
             margin: 10px 0;
         }
 
-        .anxiety-level.low {
+        .control-level.low {
             background: rgba(78, 205, 196, 0.2);
             color: var(--success);
         }
 
-        .anxiety-level.medium {
+        .control-level.medium {
             background: rgba(255, 230, 109, 0.2);
             color: var(--warning);
         }
 
-        .anxiety-level.high {
+        .control-level.high {
             background: rgba(255, 107, 107, 0.2);
             color: var(--accent);
         }
@@ -633,15 +633,16 @@
         }
 
         .chart-bar {
-            width: 45px;
+            width: 40px;
             border-radius: 6px 6px 0 0;
             transition: height 1s ease;
         }
 
-        .chart-bar.learning { background: linear-gradient(180deg, var(--primary), var(--primary-light)); }
-        .chart-bar.work { background: linear-gradient(180deg, var(--accent), #E85555); }
-        .chart-bar.social { background: linear-gradient(180deg, var(--warning), #E8D85D); }
-        .chart-bar.config { background: linear-gradient(180deg, var(--success), #3DBDB4); }
+        .chart-bar.love { background: linear-gradient(180deg, #FF6B6B, #E85555); }
+        .chart-bar.guilt { background: linear-gradient(180deg, #6B5CE7, #5B4CD7); }
+        .chart-bar.shame { background: linear-gradient(180deg, #FFE66D, #E8D85D); }
+        .chart-bar.compare { background: linear-gradient(180deg, #4ECDC4, #3DBDB4); }
+        .chart-bar.anxiety { background: linear-gradient(180deg, #FF9F43, #E88A2D); }
 
         .chart-bar-value {
             font-size: 0.75em;
@@ -651,11 +652,11 @@
         }
 
         .chart-label {
-            font-size: 0.65em;
+            font-size: 0.6em;
             color: var(--text-muted);
             text-align: center;
             margin-top: 4px;
-            max-width: 55px;
+            max-width: 50px;
         }
 
         /* 响应式 */
@@ -673,7 +674,7 @@
             }
 
             .scale-btn {
-                min-width: 35px;
+                min-width: 50px;
                 padding: 10px 6px;
                 font-size: 0.7em;
             }
@@ -682,7 +683,7 @@
             .menu-toggle { display: flex; }
 
             .chart-bar {
-                width: 35px;
+                width: 30px;
             }
 
             .chart-wrapper {
@@ -736,9 +737,8 @@
         <!-- 欢迎页面 -->
         <div class="screen active" id="screen-welcome">
             <div class="card">
-                <div class="intro-icon">🤖</div>
-                <h1>AI焦虑测评</h1>
-                <p class="subtitle">了解你对人工智能的真实感受<br>科学评估 · 自我觉察</p>
+                <div class="intro-icon">👨‍👩‍👧</div>
+                <h1>父母心理控制测评</h1>
 
                 <div class="privacy-notice">
                     <div class="privacy-notice-title">🔒 隐私保护</div>
@@ -750,19 +750,19 @@
                 <div class="rule-box">
                     <div class="rule-title">📋 测评说明</div>
                     <div class="rule-content">
-                        本测评包含<strong>20道题目</strong>，约需<strong>5-8分钟</strong>完成。<br><br>
-                        请根据你过去一个月的真实感受，选择最符合你的选项。没有对错之分，请诚实作答。
+                        <strong>适用人群：</strong>中小学生（4年级及以上）可独立完成；成年人请回忆18岁前的感受作答。<br><br>
+                        <strong>题目数量：</strong>24题，约需5-8分钟。<br><br>
+                        请根据你感受到的父母实际教养行为，选择最符合的选项。没有对错之分，请诚实作答。
                     </div>
                 </div>
 
                 <div class="citation-box">
-                    <div class="citation-title">📚 量表来源与信度</div>
+                    <div class="citation-title">📚 来源与信度</div>
                     <div class="citation-text">
-                        <p style="margin-bottom:8px;">本量表由Wang & Wang (2022)编制，经王点、商丽等汉化并验证信效度。</p>
-                        <p style="margin-bottom:8px;">Wang, Y. Y., & Wang, Y. S. (2022). Development and validation of an Artificial Intelligence Anxiety Scale: An initial application in predicting motivated learning behavior. <em>Interactive Learning Environments, 30</em>(4), 619-634.</p>
-                        <p style="margin-bottom:8px;">王点, 商丽, 孙莉, 刘海蕙, 王可欣. (2026). 人工智能焦虑量表的汉化及信效度检验. <em>护理研究, 40</em>(10), 1730-1735.</p>
+                        <p style="margin-bottom:8px;">邢淑芬, 俞美硕, 耿晓敏. (2025). 父母心理控制量表（儿童版）的编制及信效度检验. <em>心理学探新, 45</em>(6), 557-563.</p>
+                        <p>Barber, B. K. (1996). Parental psychological control: Revisiting a neglected construct. <em>Child Development, 67</em>(6), 3296-3319.</p>
                     </div>
-                    <div class="reliability-badge">Cronbach's α = 0.97（总量表）</div>
+                    <div class="reliability-badge">Cronbach's α = 0.97</div>
                 </div>
 
                 <button class="btn btn-primary" onclick="startTest()">开始测评</button>
@@ -772,9 +772,9 @@
         <!-- 测评页面 -->
         <div class="screen" id="screen-test">
             <div class="card">
-                <div class="progress-text" id="progressText">第 1 题 / 共 20 题</div>
+                <div class="progress-text" id="progressText">第 1 题 / 共 24 题</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 5%"></div>
+                    <div class="progress-fill" id="progressFill" style="width: 4%"></div>
                 </div>
 
                 <div class="question-card" id="questionCard">
@@ -791,18 +791,18 @@
         <div class="screen" id="screen-result">
             <div class="card">
                 <h2>测评完成！</h2>
-                <p class="subtitle">看看你的AI焦虑水平</p>
+                <p class="subtitle">看看你感受到的父母心理控制水平</p>
 
                 <div class="total-score-box">
                     <div class="total-score-label">你的总分</div>
                     <div class="total-score-value" id="totalScore">0</div>
-                    <div class="total-score-range">满分 140 分</div>
+                    <div class="total-score-range">满分 96 分</div>
                 </div>
 
-                <div class="anxiety-level" id="anxietyLevel">计算中...</div>
+                <div class="control-level" id="controlLevel">计算中...</div>
 
                 <div class="chart-container">
-                    <div class="chart-title">📊 四维度得分对比</div>
+                    <div class="chart-title">📊 五维度得分对比</div>
                     <div class="chart-wrapper" id="chartWrapper">
                         <!-- 动态填充 -->
                     </div>
@@ -813,7 +813,7 @@
                     <div class="insight-text" id="insightText"></div>
                 </div>
 
-                <!-- 四维度详情 -->
+                <!-- 五维度详情 -->
                 <div id="dimensionDetails">
                     <!-- 动态填充 -->
                 </div>
@@ -825,46 +825,53 @@
         <!-- 科普页面 -->
         <div class="screen" id="screen-theory">
             <div class="card">
-                <h2>什么是AI焦虑？</h2>
+                <h2>什么是父母心理控制？</h2>
                 <p class="subtitle">科学理解，理性应对</p>
 
                 <div class="theory-section">
-                    <h3>🧠 AI焦虑的定义</h3>
-                    <p><strong>人工智能焦虑（Artificial Intelligence Anxiety，AIA）</strong>是指个体在与人工智能技术或产品互动过程中产生的一般性情绪焦虑或恐惧反应。</p>
-                    <p>这种焦虑可能来源于：对新技术的不熟悉、担心被替代、对未知风险的恐惧、以及对"像人一样的机器"的本能不安。</p>
+                    <h3>🧠 父母心理控制的定义</h3>
+                    <p><strong>父母心理控制（Parental Psychological Control）</strong>是指父母通过引发内疚感、羞愧感和爱的撤回等方式侵入子女内心世界，操控子女的思想、情感以及亲子联结，限制子女自主性发展的一种教养行为。</p>
+                    <p>与行为控制不同，心理控制是一种相当隐蔽的侵入性教养，它不直接约束行为，而是通过操纵孩子的心理来达到控制目的。</p>
                 </div>
 
                 <div class="theory-section">
-                    <h3>📈 AI焦虑的四个维度</h3>
-                    <p><strong>📚 学习焦虑（Learning Anxiety）：</strong>学习使用AI技术时的紧张和不安。比如：看不懂AI产品的说明书、跟不上AI的发展速度、担心学不会。</p>
-                    <p><strong>💼 工作替代焦虑（Work Substitution Anxiety）：</strong>担心AI会取代自己的工作或让人变得懒惰、失去能力。这是最常见的AI焦虑来源。</p>
-                    <p><strong>⚠️ 社会技术盲点（Socio-technical Blind Spots）：</strong>对AI可能被滥用、失控、侵犯隐私等潜在问题的担忧。这是一种"预防性焦虑"。</p>
-                    <p><strong>🤖 AI配置焦虑（AI Configuration Anxiety）：</strong>对类人AI（如人形机器人）的本能恐惧。研究发现，当机器太像人时，人们会产生"恐怖谷"效应。</p>
+                    <h3>📈 五种心理控制策略</h3>
+                    <p><strong>💔 爱的撤回（Love Withdrawal）：</strong>父母将自己对孩子的关注、关心和爱取决于孩子是否满足自己的标准。比如："你不听话，妈妈就不爱你了。"</p>
+                    <p><strong>😔 引发内疚（Guilt Induction）：</strong>父母使用内疚诱导策略来迫使孩子服从自己的要求。比如："我为你付出这么多，你怎么能这样对我？"</p>
+                    <p><strong>😳 引发羞愧（Shaming）：</strong>父母在孩子未达到期望时通过负面批评来引发孩子的羞愧感。比如："你看看你，还不如三岁小孩懂事。"</p>
+                    <p><strong>📊 社会比较（Social Comparison）：</strong>父母通过拿孩子与他人比较，让孩子意识到自己与周围他人的差距，从而施加压力。比如："你看别人家的孩子多优秀。"</p>
+                    <p><strong>😰 灌输焦虑（Anxiety Induction）：</strong>父母诱导孩子内心的焦虑，使孩子服从自己的要求。比如："你要是不努力，将来会被社会淘汰。"</p>
                 </div>
 
                 <div class="theory-section">
                     <h3>🎯 分数解读标准</h3>
-                    <p>本测评采用<strong>前27%为高焦虑组、后27%为低焦虑组</strong>的统计标准：</p>
-                    <p><span style="color:var(--success)">● 低焦虑（20-70分）：</span>你对AI持相对开放和积极的态度，焦虑水平较低。</p>
-                    <p><span style="color:var(--warning)">● 中等焦虑（71-100分）：</span>你对AI有一定担忧，这是正常的适应过程。</p>
-                    <p><span style="color:var(--accent)">● 高焦虑（101-140分）：</span>你对AI有较强的焦虑感受，建议关注并学习应对策略。</p>
+                    <p>本量表采用<strong>4点评分</strong>，总分范围24-96分：</p>
+                    <p><span style="color:var(--success)">● 低水平（24-48分）：</span>你感受到的父母心理控制较低，父母可能更尊重你的自主性。</p>
+                    <p><span style="color:var(--warning)">● 中等水平（49-72分）：</span>你感受到的父母心理控制处于中等程度，这是较常见的状态。</p>
+                    <p><span style="color:var(--accent)">● 高水平（73-96分）：</span>你感受到的父母心理控制较高，这可能对你的自主发展和心理健康产生影响。</p>
                 </div>
 
                 <div class="theory-section">
-                    <h3>👨‍👩‍👧 给家长：与孩子一起面对AI时代</h3>
+                    <h3>👨‍👩‍👧 给家长：如何减少心理控制？</h3>
                     <ul class="tips-list">
-                        <li><strong>承认焦虑是正常的：</strong>面对快速变化的AI技术，感到焦虑是人类的天性。不要否定自己或孩子的担忧，而是承认它、理解它。</li>
-                        <li><strong>从"恐惧"转向"了解"：</strong>和孩子一起学习AI知识，了解它的能力和局限。恐惧往往源于未知，了解越多，焦虑越少。</li>
-                        <li><strong>培养"人机协作"思维：</strong>引导孩子思考"AI能帮我做什么"而不是"AI会取代我"。未来是人机协作的时代，善用AI的人更有优势。</li>
-                        <li><strong>保持人类独特价值：</strong>AI不擅长的是创造力、同理心、复杂决策。鼓励孩子发展这些"人类独有"的能力。</li>
+                        <li><strong>觉察自己的教养行为：</strong>当你想说"你不听话我就不爱你了"时，停下来想一想——这是在用爱作为筹码吗？</li>
+                        <li><strong>区分行为与人：</strong>可以批评孩子的具体行为，但不要攻击孩子的人格。比如："这件事做得不对"而非"你真没用"。</li>
+                        <li><strong>减少社会比较：</strong>每个孩子都是独特的个体。与其说"别人家的孩子怎样"，不如关注孩子自己的进步。</li>
+                        <li><strong>接纳孩子的情绪：</strong>当孩子表达不同意见时，不要用内疚或羞愧来压制。允许孩子有自己的想法。</li>
+                        <li><strong>关注过程而非结果：</strong>过度强调未来风险会让孩子焦虑。帮助孩子建立应对能力，而不是灌输恐惧。</li>
                     </ul>
+                </div>
+
+                <div class="theory-section" style="border-left: 4px solid var(--primary); background: linear-gradient(135deg, rgba(107, 92, 231, 0.1), rgba(255, 107, 107, 0.1));">
+                    <h3 style="color: var(--primary-light);">🤔 思考一下</h3>
+                    <p>你能想到，父母心理控制水平较高，有哪些不良后果吗？</p>
                 </div>
 
                 <div class="theory-section">
                     <h3>📚 测评来源</h3>
-                    <p>本测评基于<strong>Wang & Wang (2022)</strong>开发的人工智能焦虑量表（AIAS），经<strong>王点、商丽等</strong>汉化并在医学生中验证信效度。</p>
-                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">Wang, Y. Y., & Wang, Y. S. (2022). Development and validation of an Artificial Intelligence Anxiety Scale: An initial application in predicting motivated learning behavior. <em>Interactive Learning Environments, 30</em>(4), 619-634.</p>
-                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">王点, 商丽, 孙莉, 刘海蕙, 王可欣. (2026). 人工智能焦虑量表的汉化及信效度检验. <em>护理研究, 40</em>(10), 1730-1735.</p>
+                    <p>本测评基于<strong>邢淑芬、俞美硕、耿晓敏（2025）</strong>编制的父母心理控制量表（儿童版），该量表在中国中小学生样本中验证了良好的信效度。</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">邢淑芬, 俞美硕, 耿晓敏. (2025). 父母心理控制量表（儿童版）的编制及信效度检验. <em>心理学探新, 45</em>(6), 557-563.</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">Barber, B. K. (1996). Parental psychological control: Revisiting a neglected construct. <em>Child Development, 67</em>(6), 3296-3319.</p>
                 </div>
 
                 <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
@@ -874,43 +881,45 @@
     </div>
 
     <script>
-        // 量表条目
+        // 量表条目（根据文献表2整理）
         const questions = [
-            // 学习焦虑（8条）
-            { id: 1, dimension: 'learning', dimensionName: '学习焦虑', text: '学习AI技术/产品有关的特殊功能让我感到焦虑' },
-            { id: 2, dimension: 'learning', dimensionName: '学习焦虑', text: '学习如何使用AI技术/产品让我感到焦虑' },
-            { id: 3, dimension: 'learning', dimensionName: '学习焦虑', text: '学习使用AI技术/产品的特定功能让我感到焦虑' },
-            { id: 4, dimension: 'learning', dimensionName: '学习焦虑', text: '学习AI技术/产品的工作原理让我感到焦虑' },
-            { id: 5, dimension: 'learning', dimensionName: '学习焦虑', text: '学习如何与AI技术/产品互动让我感到焦虑' },
-            { id: 6, dimension: 'learning', dimensionName: '学习焦虑', text: '参加有关AI技术/产品开发的课程让我感到焦虑' },
-            { id: 7, dimension: 'learning', dimensionName: '学习焦虑', text: '阅读AI技术/产品的使用说明让我感到焦虑' },
-            { id: 8, dimension: 'learning', dimensionName: '学习焦虑', text: '无法跟上AI技术/产品的发展让我感到焦虑' },
-            // 工作替代焦虑（6条）
-            { id: 9, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心AI技术/产品可能会让我们产生依赖' },
-            { id: 10, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心AI技术/产品可能会让我们变得更懒惰' },
-            { id: 11, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心AI技术/产品可能会取代人类' },
-            { id: 12, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心人形机器人的广泛使用将会夺走人们的工作' },
-            { id: 13, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心一旦我开始使用AI技术/产品，我会变得依赖它们，同时失去一些推理能力' },
-            { id: 14, dimension: 'work', dimensionName: '工作替代焦虑', text: '我担心AI技术/产品会取代某些人的工作' },
-            // 社会技术盲点（4条）
-            { id: 15, dimension: 'social', dimensionName: '社会技术盲点', text: '我担心AI技术/产品可能会被滥用' },
-            { id: 16, dimension: 'social', dimensionName: '社会技术盲点', text: '我担心与AI技术/产品相关的各种潜在问题' },
-            { id: 17, dimension: 'social', dimensionName: '社会技术盲点', text: '我担心AI技术/产品可能会失控并出现故障' },
-            { id: 18, dimension: 'social', dimensionName: '社会技术盲点', text: '我担心AI技术/产品可能会让机器人拥有自主权' },
-            // AI配置焦虑（2条）
-            { id: 19, dimension: 'config', dimensionName: 'AI配置焦虑', text: '我觉得类人AI技术/产品（如人形机器人）令人生畏' },
-            { id: 20, dimension: 'config', dimensionName: 'AI配置焦虑', text: '不知道为什么，但类人AI技术/产品（如人形机器人）让我感到害怕' }
+            // 灌输焦虑（6条）- F1
+            { id: 1, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说，我要是不努力，将来会被社会淘汰。' },
+            { id: 2, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说社会竞争激烈，我现在不努力，这辈子就完了。' },
+            { id: 3, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说，我要考不上好大学，将来没有出路。' },
+            { id: 4, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说，我要是学习不好，考不上好的学校，以后怎么办。' },
+            { id: 5, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说，我要是不努力，将来找不到好工作，怎么养活自己。' },
+            { id: 6, dimension: 'anxiety', dimensionName: '灌输焦虑', text: '妈妈会对我说，我不好好学习，这次考试（比如期末考试、中考等）能考好吗？' },
+            // 引发羞愧（7条）- F2
+            { id: 7, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说她都替我觉得丢人。' },
+            { id: 8, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说我还不如我小时候。' },
+            { id: 9, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说全家人都跟着我丢脸。' },
+            { id: 10, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说我还不如三岁小孩（包括我的弟弟妹妹）做得好。' },
+            { id: 11, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说我还不如她小时候。' },
+            { id: 12, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会说我，你不觉得丢人吗。' },
+            { id: 13, dimension: 'shame', dimensionName: '引发羞愧', text: '当我让妈妈失望时，她会对我说，她的付出是不值得的。' },
+            // 爱的撤回（4条）- F3
+            { id: 14, dimension: 'love', dimensionName: '爱的撤回', text: '当我惹妈妈生气时，她会不和我说话，直到我让她高兴为止。' },
+            { id: 15, dimension: 'love', dimensionName: '爱的撤回', text: '当我让妈妈失望时，她会不理我。' },
+            { id: 16, dimension: 'love', dimensionName: '爱的撤回', text: '当我做了妈妈不喜欢的事，她会对我冷淡和不友好。' },
+            { id: 17, dimension: 'love', dimensionName: '爱的撤回', text: '当我让妈妈失望时，她会冷眼看我。' },
+            // 社会比较（4条）- F4
+            { id: 18, dimension: 'compare', dimensionName: '社会比较', text: '妈妈会对我说，你看别人家的孩子多优秀。' },
+            { id: 19, dimension: 'compare', dimensionName: '社会比较', text: '妈妈会对我说，你看别人家的孩子多努力。' },
+            { id: 20, dimension: 'compare', dimensionName: '社会比较', text: '妈妈会把我和别人家的孩子进行比较。' },
+            { id: 21, dimension: 'compare', dimensionName: '社会比较', text: '当我让妈妈失望时，她会说我不如别人家的孩子好。' },
+            // 引发内疚（3条）- F5
+            { id: 22, dimension: 'guilt', dimensionName: '引发内疚', text: '妈妈会告诉我，她为我付出很多（比如，时间、精力和金钱等）。' },
+            { id: 23, dimension: 'guilt', dimensionName: '引发内疚', text: '妈妈觉得我应该意识到她为我付出了多少。' },
+            { id: 24, dimension: 'guilt', dimensionName: '引发内疚', text: '妈妈会告诉我，为了给我提供一个更好的成长条件，她很节俭。' }
         ];
 
-        // 评分选项
+        // 评分选项（4点评分）
         const scaleOptions = [
-            { value: 1, label: '非常不同意' },
-            { value: 2, label: '不同意' },
-            { value: 3, label: '有点不同意' },
-            { value: 4, label: '中立' },
-            { value: 5, label: '有点同意' },
-            { value: 6, label: '同意' },
-            { value: 7, label: '非常同意' }
+            { value: 1, label: '从不' },
+            { value: 2, label: '偶尔' },
+            { value: 3, label: '经常' },
+            { value: 4, label: '总是' }
         ];
 
         // 测评状态
@@ -941,7 +950,6 @@
             document.getElementById('questionCard').innerHTML = `
                 <div class="question-number">问题 ${q.id}</div>
                 <div class="question-text">${q.text}</div>
-                <div class="question-dimension">维度：${q.dimensionName}</div>
             `;
 
             let buttonsHTML = '';
@@ -990,20 +998,24 @@
         function showResults() {
             showScreen('screen-result');
 
-            // 计算总分
-            const totalScore = answers.reduce((sum, val) => sum + val, 0);
+            // 计算总分（过滤undefined）
+            const validAnswers = answers.filter(a => a !== undefined);
+            const totalScore = validAnswers.reduce((sum, val) => sum + val, 0);
             document.getElementById('totalScore').textContent = totalScore;
 
             // 计算各维度得分
             const dimensions = {
-                learning: { name: '学习焦虑', max: 8 * 7, scores: [], color: 'learning' },
-                work: { name: '工作替代焦虑', max: 6 * 7, scores: [], color: 'work' },
-                social: { name: '社会技术盲点', max: 4 * 7, scores: [], color: 'social' },
-                config: { name: 'AI配置焦虑', max: 2 * 7, scores: [], color: 'config' }
+                love: { name: '爱的撤回', max: 4 * 4, scores: [], color: 'love' },
+                guilt: { name: '引发内疚', max: 3 * 4, scores: [], color: 'guilt' },
+                shame: { name: '引发羞愧', max: 7 * 4, scores: [], color: 'shame' },
+                compare: { name: '社会比较', max: 4 * 4, scores: [], color: 'compare' },
+                anxiety: { name: '灌输焦虑', max: 6 * 4, scores: [], color: 'anxiety' }
             };
 
             questions.forEach((q, index) => {
-                dimensions[q.dimension].scores.push(answers[index]);
+                if (answers[index] !== undefined) {
+                    dimensions[q.dimension].scores.push(answers[index]);
+                }
             });
 
             const dimensionScores = {};
@@ -1036,16 +1048,16 @@
             detailContainer.innerHTML = '';
 
             const dimensionDescriptions = {
-                learning: '你对学习AI相关知识和技能的焦虑程度',
-                work: '你担心AI会取代人类工作或能力的程度',
-                social: '你对AI可能带来的社会风险的担忧程度',
-                config: '你对类人AI（如人形机器人）的恐惧程度'
+                love: '父母将关爱与你的表现挂钩的程度',
+                guilt: '父母让你因自己的行为感到内疚的程度',
+                shame: '父母通过批评让你感到羞愧的程度',
+                compare: '父母拿你和别人家孩子比较的程度',
+                anxiety: '父母通过强调未来风险让你焦虑的程度'
             };
 
             for (const key in dimensions) {
                 const dim = dimensions[key];
                 const score = dimensionScores[key];
-                const percentage = Math.round(score / dim.max * 100);
 
                 detailContainer.innerHTML += `
                     <div class="dimension-result">
@@ -1055,28 +1067,27 @@
                         </div>
                         <div class="dimension-score">
                             <div class="dimension-score-value">${score}/${dim.max}</div>
-                            <div class="dimension-score-label">${percentage}%</div>
                         </div>
                     </div>
                 `;
             }
 
-            // 确定焦虑等级
+            // 确定控制等级（按分数分布划分：前27%低分，后27%高分）
             let levelText, levelClass;
-            if (totalScore <= 70) {
-                levelText = '🌱 低焦虑水平';
+            if (totalScore <= 48) {
+                levelText = '🌱 低心理控制水平（前27%）';
                 levelClass = 'low';
-            } else if (totalScore <= 100) {
-                levelText = '🌿 中等焦虑水平';
+            } else if (totalScore <= 72) {
+                levelText = '🌿 中等心理控制水平';
                 levelClass = 'medium';
             } else {
-                levelText = '🔥 高焦虑水平';
+                levelText = '🔥 高心理控制水平（后27%）';
                 levelClass = 'high';
             }
 
-            const levelEl = document.getElementById('anxietyLevel');
+            const levelEl = document.getElementById('controlLevel');
             levelEl.textContent = levelText;
-            levelEl.className = 'anxiety-level ' + levelClass;
+            levelEl.className = 'control-level ' + levelClass;
 
             // 生成洞察
             generateInsight(totalScore, dimensionScores, dimensions);
@@ -1087,39 +1098,40 @@
             let insight = '';
 
             // 总体水平分析
-            if (totalScore <= 70) {
-                insight += '📊 你对AI技术的整体焦虑水平较低。你对AI持相对开放和积极的态度，这有助于你更好地适应AI时代。\n\n';
-            } else if (totalScore <= 100) {
-                insight += '📊 你对AI技术存在中等程度的焦虑。这种程度的担忧是正常的，说明你在认真思考AI对自己和生活的影响。\n\n';
+            if (totalScore <= 48) {
+                insight += '📊 你感受到的父母心理控制水平较低。这表明父母可能更尊重你的自主性，较少使用内疚、羞愧或爱的撤回等方式来控制你的行为。\n\n';
+            } else if (totalScore <= 72) {
+                insight += '📊 你感受到的父母心理控制处于中等水平。这是较为常见的状态，父母在某些情况下可能会使用心理控制策略，但并非主导性的教养方式。\n\n';
             } else {
-                insight += '📊 你对AI技术的焦虑水平较高。建议你多了解AI的实际能力和局限，焦虑往往源于未知。也可以寻求专业支持。\n\n';
+                insight += '📊 你感受到的父母心理控制水平较高。这表明父母可能频繁使用内疚、羞愧、爱的撤回、社会比较或灌输焦虑等方式来影响你的行为和想法。\n\n';
             }
 
             // 找出最高和最低维度
             let maxDim = '', minDim = '';
-            let maxScore = 0, minScore = 140;
+            let maxPercentage = 0, minPercentage = 1;
 
             for (const key in dimensionScores) {
                 const percentage = dimensionScores[key] / dimensions[key].max;
-                if (percentage > maxScore / dimensions[maxDim]?.max || maxDim === '') {
-                    maxScore = dimensionScores[key];
+                if (percentage > maxPercentage) {
+                    maxPercentage = percentage;
                     maxDim = key;
                 }
-                if (percentage < minScore / dimensions[minDim]?.max || minDim === '') {
-                    minScore = dimensionScores[key];
+                if (percentage < minPercentage) {
+                    minPercentage = percentage;
                     minDim = key;
                 }
             }
 
             const dimNames = {
-                learning: '学习焦虑',
-                work: '工作替代焦虑',
-                social: '社会技术盲点',
-                config: 'AI配置焦虑'
+                love: '爱的撤回',
+                guilt: '引发内疚',
+                shame: '引发羞愧',
+                compare: '社会比较',
+                anxiety: '灌输焦虑'
             };
 
-            insight += `🔍 你最突出的焦虑来源是"${dimNames[maxDim]}"，这反映了你对这方面问题的特别关注。\n\n`;
-            insight += `✨ 相对而言，"${dimNames[minDim]}"是你焦虑最少的维度。`;
+            insight += `🔍 你感受最强烈的心理控制方式是"${dimNames[maxDim]}"，这可能是父母最常用的策略。\n\n`;
+            insight += `✨ 相对而言，"${dimNames[minDim]}"是你感受最少的维度。`;
 
             document.getElementById('insightText').textContent = insight;
         }

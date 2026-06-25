@@ -562,19 +562,26 @@
             <div class="section-label">🧪 心理测验</div>
             <p style="font-size:0.85em;color:var(--text-muted);margin-bottom:20px;">先让双方"看见"。这些心理学小游戏，帮助家长和孩子看见自己的盲点、看见彼此的差异。</p>
 
-            <div class="tools-grid">
-                <!-- AI焦虑测评 - 2026-06-23 最新 -->
-                <a href="AI焦虑测评.html" class="tool-card" style="position:relative;">
+            <div class="tools-grid" id="toolsGrid">
+                <!-- 父母控制测评 - 2026-06-25 -->
+                <a href="父母控制测评.html" class="tool-card" style="position:relative;">
                     <div style="position:absolute;top:8px;right:8px;background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:0.7em;font-weight:600;">NEW</div>
+                    <div class="tool-icon">👨‍👩‍👧</div>
+                    <div class="tool-name">父母控制</div>
+                    <div class="tool-effect">父母心理控制量表</div>
+                    <div class="tool-desc">父母说的话让你内疚、焦虑？测测心理控制程度</div>
+                </a>
+
+                <!-- AI焦虑测评 - 2026-06-23 -->
+                <a href="AI焦虑测评.html" class="tool-card">
                     <div class="tool-icon">🤖</div>
                     <div class="tool-name">AI焦虑测评</div>
                     <div class="tool-effect">人工智能焦虑量表</div>
                     <div class="tool-desc">孩子担心AI会取代人类工作，这种焦虑正常吗？</div>
                 </a>
 
-                <!-- 博弈抉择 -->
-                <a href="博弈抉择.html" class="tool-card" style="position:relative;">
-                    <div style="position:absolute;top:8px;right:8px;background:var(--accent);color:white;padding:2px 8px;border-radius:10px;font-size:0.7em;font-weight:600;">NEW</div>
+                <!-- 博弈抉择 - 2026-06-13（超过7天，不标NEW） -->
+                <a href="博弈抉择.html" class="tool-card">
                     <div class="tool-icon">🃏</div>
                     <div class="tool-name">博弈抉择</div>
                     <div class="tool-effect">社会困境与损失厌恶</div>
@@ -597,7 +604,7 @@
                     <div class="tool-desc">平时成绩都很好，一到考试就粗心大意，怎么办？</div>
                 </a>
 
-                <!-- 记忆与干扰 - 2026-06-09 -->
+                <!-- 记忆与干扰 -->
                 <a href="记忆与干扰.html" class="tool-card">
                     <div class="tool-icon">📚</div>
                     <div class="tool-name">记忆干扰</div>
@@ -605,7 +612,7 @@
                     <div class="tool-desc">要背的书都背不进去，这孩子就是懒吗？</div>
                 </a>
 
-                <!-- 找茬挑战 - 更早 -->
+                <!-- 找茬挑战 -->
                 <a href="找茬挑战.html" class="tool-card">
                     <div class="tool-icon">🔍</div>
                     <div class="tool-name">找茬挑战</div>
@@ -613,6 +620,7 @@
                     <div class="tool-desc">家长说"你怎么没看见"，孩子说"我看见了"，谁在盲视？</div>
                 </a>
 
+                <!-- 中断记忆 -->
                 <a href="中断的记忆.html" class="tool-card">
                     <div class="tool-icon">⏱️</div>
                     <div class="tool-name">中断记忆</div>
@@ -620,41 +628,47 @@
                     <div class="tool-desc">为什么孩子总惦记"那件事还没做完"？</div>
                 </a>
 
-                <a href="AI性格透视.html" class="tool-card">
+                <!-- 以下为隐藏的游戏，点击展开后显示 -->
+                <a href="AI性格透视.html" class="tool-card hidden-game" style="display:none;">
                     <div class="tool-icon">🤖</div>
                     <div class="tool-name">性格透视</div>
                     <div class="tool-effect">巴纳姆效应</div>
                     <div class="tool-desc">星座说孩子"性格内向"，他就真的越来越内向？</div>
                 </a>
 
-                <a href="颜色快判.html" class="tool-card">
+                <a href="颜色快判.html" class="tool-card hidden-game" style="display:none;">
                     <div class="tool-icon">🎨</div>
                     <div class="tool-name">颜色快判</div>
                     <div class="tool-effect">斯特鲁普效应</div>
                     <div class="tool-desc">孩子情绪上来了，道理讲再多也听不进去？</div>
                 </a>
 
-                <a href="生日引力场.html" class="tool-card">
+                <a href="生日引力场.html" class="tool-card hidden-game" style="display:none;">
                     <div class="tool-icon">🎂</div>
                     <div class="tool-name">生日引力</div>
                     <div class="tool-effect">自我参照效应</div>
                     <div class="tool-desc">孩子说"我生日你都不记得"，为什么他这么在意？</div>
                 </a>
 
-                <a href="阿希从众实验.html" class="tool-card">
+                <a href="阿希从众实验.html" class="tool-card hidden-game" style="display:none;">
                     <div class="tool-icon">👥</div>
                     <div class="tool-name">从众实验</div>
                     <div class="tool-effect">从众效应</div>
                     <div class="tool-desc">孩子明明不想随大流，为什么还是跟着走了？</div>
                 </a>
 
-                <a href="师恩难忘挂画生成器.html" class="tool-card">
+                <a href="师恩难忘挂画生成器.html" class="tool-card hidden-game" style="display:none;">
                     <div class="tool-icon">🖼️</div>
                     <div class="tool-name">挂画生成</div>
                     <div class="tool-effect">实用工具</div>
                     <div class="tool-desc">让感恩可视化，送给老师的特别礼物</div>
                 </a>
             </div>
+
+            <!-- 显示更多按钮 -->
+            <button id="showMoreBtn" onclick="toggleMoreGames()" style="display:block;width:100%;padding:12px;margin-top:15px;background:var(--card);border:1px solid var(--primary);border-radius:10px;color:var(--primary-light);font-size:0.9em;cursor:pointer;transition:all 0.3s;">
+                显示更多心理测试 ▼
+            </button>
         </div>
 
         <!-- 看见心声 -->
@@ -861,6 +875,20 @@
             event.target.classList.add('active');
             document.querySelectorAll('.category-section').forEach(section => section.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+        }
+
+        function toggleMoreGames() {
+            const hiddenGames = document.querySelectorAll('.hidden-game');
+            const btn = document.getElementById('showMoreBtn');
+            const isHidden = hiddenGames[0].style.display === 'none';
+
+            if (isHidden) {
+                hiddenGames.forEach(game => game.style.display = 'block');
+                btn.textContent = '收起心理测试 ▲';
+            } else {
+                hiddenGames.forEach(game => game.style.display = 'none');
+                btn.textContent = '显示更多心理测试 ▼';
+            }
         }
 
         function scrollToTop() {
