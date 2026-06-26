@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子女情感支持测评 - 心理测验</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        /* 隐私提示 */
+        .privacy-notice {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(107, 92, 231, 0.15));
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .privacy-notice-title {
+            color: var(--success);
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .privacy-notice-text {
+            color: var(--text);
+            font-size: 0.8em;
+            line-height: 1.5;
+        }
+
+        /* 规则说明 */
+        .rule-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .rule-title {
+            color: var(--warning-text);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        /* 文献引用 */
+        .citation-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+            border-left: 3px solid var(--primary);
+        }
+
+        .citation-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .citation-text {
+            color: var(--text-muted);
+            font-size: 0.75em;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .reliability-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(78, 205, 196, 0.2));
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            color: var(--primary-light);
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        /* 问题卡片 */
+        .question-card {
+            background: var(--bg);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .question-number {
+            color: var(--primary-light);
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            color: var(--text);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* 评分按钮 */
+        .scale-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .scale-btn {
+            flex: 1;
+            min-width: 50px;
+            padding: 12px 5px;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .scale-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .scale-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-light);
+        }
+
+        .scale-btn-label {
+            display: block;
+            font-size: 0.85em;
+            margin-top: 3px;
+            opacity: 0.8;
+        }
+
+        /* 维度结果 */
+        .dimension-result {
+            background: var(--bg);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dimension-info {
+            flex: 1;
+        }
+
+        .dimension-name {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .dimension-desc {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        .dimension-score {
+            text-align: right;
+        }
+
+        .dimension-score-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        /* 总分结果 */
+        .total-score-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .total-score-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .total-score-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .total-score-range {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* 支持等级 */
+        .support-level {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .support-level.low {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        .support-level.medium {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--warning);
+        }
+
+        .support-level.high {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        /* 洞察 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .insight-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+            font-size: 0.85em;
+        }
+
+        /* 科普部分 */
+        .theory-section {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .theory-section h3 {
+            color: var(--warning-text);
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .theory-section p {
+            line-height: 1.7;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-size: 0.85em;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        .tips-list li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .tips-list li strong {
+            color: var(--primary-light);
+        }
+
+        /* 图表 */
+        .chart-container {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .chart-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 160px;
+            padding: 15px 10px;
+        }
+
+        .chart-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chart-bar {
+            width: 40px;
+            border-radius: 6px 6px 0 0;
+            transition: height 1s ease;
+        }
+
+        .chart-bar.bond { background: linear-gradient(180deg, #FF6B6B, #E85555); }
+        .chart-bar.aware { background: linear-gradient(180deg, #6B5CE7, #5B4CD7); }
+        .chart-bar.resonance { background: linear-gradient(180deg, #FFE66D, #E8D85D); }
+        .chart-bar.comm { background: linear-gradient(180deg, #4ECDC4, #3DBDB4); }
+
+        .chart-bar-value {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .chart-label {
+            font-size: 0.6em;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 4px;
+            max-width: 50px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .scale-btn {
+                min-width: 45px;
+                padding: 10px 5px;
+                font-size: 0.7em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+
+            .chart-bar {
+                width: 35px;
+            }
+
+            .chart-wrapper {
+                height: 140px;
+            }
+
+            .dimension-result {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dimension-score {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 欢迎页面 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🤗</div>
+                <h1>青少年父母情感支持量表（子女版）</h1>
+
+                <div class="privacy-notice">
+                    <div class="privacy-notice-title">🔒 隐私保护</div>
+                    <div class="privacy-notice-text">
+                        这是一个静态网页，你的测试结果<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器或数据库。刷新页面后数据将清除，请放心作答。
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <div class="rule-title">📋 测评说明</div>
+                    <div class="rule-content">
+                        <strong>适用人群：</strong>中学生（评估你感受到的父母情感支持程度）。<br><br>
+                        <strong>题目数量：</strong>15题，约需3-5分钟。<br><br>
+                        请根据你感受到的父母真实表现作答。没有对错之分，请诚实作答。
+                    </div>
+                </div>
+
+                <div class="citation-box">
+                    <div class="citation-title">📚 来源与信度</div>
+                    <div class="citation-text">
+                        <p>唐雅君, 黄守桢, 许世梅, 龚楚依, 孟迎芳. (2026). 青少年父母情感支持量表的编制及效度和信度检验. <em>中国心理卫生杂志, 40</em>(3), 249-256.</p>
+                    </div>
+                    <div class="reliability-badge">Cronbach's α = 0.97</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startTest()">开始测评</button>
+            </div>
+        </div>
+
+        <!-- 测评页面 -->
+        <div class="screen" id="screen-test">
+            <div class="card">
+                <div class="progress-text" id="progressText">第 1 题 / 共 15 题</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 6.7%"></div>
+                </div>
+
+                <div class="question-card" id="questionCard">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div class="scale-buttons" id="scaleButtons">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>测评完成！</h2>
+
+                <div class="total-score-box">
+                    <div class="total-score-label">你的总分</div>
+                    <div class="total-score-value" id="totalScore">0</div>
+                    <div class="total-score-range">满分 75 分</div>
+                </div>
+
+                <div class="support-level" id="supportLevel">计算中...</div>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 四维度得分对比</div>
+                    <div class="chart-wrapper" id="chartWrapper">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">💡 你的结果解读</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <!-- 四维度详情 -->
+                <div id="dimensionDetails">
+                    <!-- 动态填充 -->
+                </div>
+
+                <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学原理</button>
+            </div>
+        </div>
+
+        <!-- 科普页面 -->
+        <div class="screen" id="screen-theory">
+            <div class="card">
+                <h2>什么是父母情感支持？</h2>
+
+                <div class="theory-section">
+                    <h3>🧠 父母情感支持的定义</h3>
+                    <p><strong>父母情感支持</strong>是指父母给予的、能够被你感知到的、有助于满足你情感需求、促进你健康成长的心理及行为。</p>
+                    <p>它包括四个核心维度：情感联结、情感觉察、情感共鸣和情感沟通。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>📈 四个维度详解</h3>
+                    <p><strong>❤️ 情感联结：</strong>父母是否悉心照顾你、经常陪伴你、和你保持良好的关系。</p>
+                    <p><strong>👀 情感觉察：</strong>父母是否能第一时间察觉你的情绪变化、在你情绪不好时安慰你、引导你合理宣泄负面情绪、接纳和包容你的负面情绪。</p>
+                    <p><strong>🤝 情感共鸣：</strong>父母是否不拿身份强压你、尊重你的权利、认为你和他们是平等的、尊重你的意见和想法。</p>
+                    <p><strong>💬 情感沟通：</strong>父母是否在你遇到原则性问题时坚持立场并引导你、帮你解决问题、引导你积极正面地看待问题、与你共同协商解决问题。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>🎯 分数解读标准</h3>
+                    <p>本量表采用<strong>5点评分</strong>，总分范围15-75分：</p>
+                    <p><span style="color:var(--accent)">● 低水平（15-37分）：</span>你感受到的父母情感支持较低，可能感到被忽视或不被理解。</p>
+                    <p><span style="color:var(--warning)">● 中等水平（38-55分）：</span>你感受到的父母情感支持处于中等程度。</p>
+                    <p><span style="color:var(--success)">● 高水平（56-75分）：</span>你感受到的父母情感支持较高，能感受到父母的关爱和理解。</p>
+                </div>
+
+                <div class="theory-section">
+                    <h3>🧒 给青少年：如何应对情感支持不足？</h3>
+                    <ul class="tips-list">
+                        <li><strong>表达需求：</strong>尝试用"我需要..."的方式向父母表达你的情感需求，而不是抱怨或指责。</li>
+                        <li><strong>寻找其他支持：</strong>如果父母暂时无法满足你的情感需求，可以向老师、朋友、亲戚等信任的成年人寻求支持。</li>
+                        <li><strong>理解父母：</strong>父母可能因为工作压力、成长经历等原因不擅长表达情感，这不代表他们不爱你。</li>
+                        <li><strong>自我关怀：</strong>学会照顾自己的情绪，通过运动、写日记、兴趣爱好等方式调节心情。</li>
+                        <li><strong>寻求专业帮助：</strong>如果感到长期被忽视或情绪困扰严重，可以寻求学校心理老师或专业心理咨询师的帮助。</li>
+                    </ul>
+                </div>
+
+                <div class="theory-section">
+                    <h3>📚 测评来源</h3>
+                    <p>本测评基于唐雅君等人（2026）编制的感知父母情感支持量表（PPESS），该量表在中学生样本中验证了良好的信效度。</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">唐雅君, 黄守桢, 许世梅, 龚楚依, 孟迎芳. (2026). 青少年父母情感支持量表的编制及效度和信度检验. <em>中国心理卫生杂志, 40</em>(3), 249-256.</p>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+                <button class="btn btn-primary" onclick="resetTest()">重新测评</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 子女版量表条目（PPESS）
+        const questions = [
+            // 感知情感联结（3条）
+            { id: 1, dimension: 'bond', text: '父母悉心照顾我的日常生活。' },
+            { id: 2, dimension: 'bond', text: '父母经常陪伴我。' },
+            { id: 3, dimension: 'bond', text: '我和父母的关系很好。' },
+            // 感知情感觉察（4条）
+            { id: 4, dimension: 'aware', text: '父母能够第一时间察觉到我的情绪变化。' },
+            { id: 5, dimension: 'aware', text: '我情绪不好时，我能感觉到父母讲话比较注意。' },
+            { id: 6, dimension: 'aware', text: '父母会引导我合理宣泄负面情绪。' },
+            { id: 7, dimension: 'aware', text: '父母能够接纳和包容我的负面情绪。' },
+            // 感知情感共鸣（4条）
+            { id: 8, dimension: 'resonance', text: '父母不拿身份强压我。' },
+            { id: 9, dimension: 'resonance', text: '父母尊重我的隐私权、知情权和选择权。' },
+            { id: 10, dimension: 'resonance', text: '我能感觉到，父母认为我和他们是平等的。' },
+            { id: 11, dimension: 'resonance', text: '父母尊重我的意见和想法。' },
+            // 感知情感沟通（4条）
+            { id: 12, dimension: 'comm', text: '当我出现原则性问题（如价值观偏差等），父母会坚持立场并引导我。' },
+            { id: 13, dimension: 'comm', text: '父母总是尽可能帮我想办法解决问题。' },
+            { id: 14, dimension: 'comm', text: '父母引导我要积极正面地看待问题。' },
+            { id: 15, dimension: 'comm', text: '父母经常与我共同协商解决问题。' }
+        ];
+
+        // 评分选项（5点评分）
+        const scaleOptions = [
+            { value: 1, label: '完全不符合' },
+            { value: 2, label: '不太符合' },
+            { value: 3, label: '一般' },
+            { value: 4, label: '比较符合' },
+            { value: 5, label: '完全符合' }
+        ];
+
+        // 测评状态
+        let currentQuestion = 0;
+        let answers = [];
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始测评
+        function startTest() {
+            currentQuestion = 0;
+            answers = [];
+            showQuestion();
+            showScreen('screen-test');
+        }
+
+        // 显示问题
+        function showQuestion() {
+            const q = questions[currentQuestion];
+
+            document.getElementById('progressText').textContent = `第 ${currentQuestion + 1} 题 / 共 ${questions.length} 题`;
+            document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+
+            document.getElementById('questionCard').innerHTML = `
+                <div class="question-number">问题 ${q.id}</div>
+                <div class="question-text">${q.text}</div>
+            `;
+
+            let buttonsHTML = '';
+            scaleOptions.forEach(opt => {
+                buttonsHTML += `
+                    <button class="scale-btn" onclick="selectAnswer(${opt.value})">
+                        ${opt.value}
+                        <span class="scale-btn-label">${opt.label}</span>
+                    </button>
+                `;
+            });
+            document.getElementById('scaleButtons').innerHTML = buttonsHTML;
+
+            if (answers[currentQuestion] !== undefined) {
+                const btns = document.querySelectorAll('.scale-btn');
+                btns[answers[currentQuestion] - 1].classList.add('selected');
+            }
+        }
+
+        // 选择答案
+        function selectAnswer(value) {
+            answers[currentQuestion] = value;
+
+            const btns = document.querySelectorAll('.scale-btn');
+            btns.forEach((btn, index) => {
+                btn.classList.remove('selected');
+                if (index === value - 1) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    showResults();
+                }
+            }, 300);
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-result');
+
+            const validAnswers = answers.filter(a => a !== undefined);
+            const totalScore = validAnswers.reduce((sum, val) => sum + val, 0);
+            document.getElementById('totalScore').textContent = totalScore;
+
+            const dimensions = {
+                bond: { name: '情感联结', max: 3 * 5, scores: [], color: 'bond' },
+                aware: { name: '情感觉察', max: 4 * 5, scores: [], color: 'aware' },
+                resonance: { name: '情感共鸣', max: 4 * 5, scores: [], color: 'resonance' },
+                comm: { name: '情感沟通', max: 4 * 5, scores: [], color: 'comm' }
+            };
+
+            questions.forEach((q, index) => {
+                if (answers[index] !== undefined) {
+                    dimensions[q.dimension].scores.push(answers[index]);
+                }
+            });
+
+            const dimensionScores = {};
+            for (const key in dimensions) {
+                dimensionScores[key] = dimensions[key].scores.reduce((sum, val) => sum + val, 0);
+            }
+
+            // 渲染图表
+            const chartWrapper = document.getElementById('chartWrapper');
+            const maxBarHeight = 130;
+            chartWrapper.innerHTML = '';
+
+            for (const key in dimensions) {
+                const dim = dimensions[key];
+                const score = dimensionScores[key];
+                const percentage = score / dim.max;
+                const barHeight = percentage * maxBarHeight;
+
+                chartWrapper.innerHTML += `
+                    <div class="chart-group">
+                        <div class="chart-bar-value">${score}/${dim.max}</div>
+                        <div class="chart-bar ${dim.color}" style="height: ${barHeight}px;"></div>
+                        <div class="chart-label">${dim.name}</div>
+                    </div>
+                `;
+            }
+
+            // 渲染维度详情
+            const detailContainer = document.getElementById('dimensionDetails');
+            detailContainer.innerHTML = '';
+
+            const dimensionDescriptions = {
+                bond: '感受到的父母情感联结程度',
+                aware: '感受到的父母情感觉察程度',
+                resonance: '感受到的父母情感共鸣程度',
+                comm: '感受到的父母情感沟通程度'
+            };
+
+            for (const key in dimensions) {
+                const dim = dimensions[key];
+                const score = dimensionScores[key];
+
+                detailContainer.innerHTML += `
+                    <div class="dimension-result">
+                        <div class="dimension-info">
+                            <div class="dimension-name">${dim.name}</div>
+                            <div class="dimension-desc">${dimensionDescriptions[key]}</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-score-value">${score}/${dim.max}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 确定支持等级
+            let levelText, levelClass;
+            if (totalScore <= 37) {
+                levelText = '💔 情感支持较低';
+                levelClass = 'low';
+            } else if (totalScore <= 55) {
+                levelText = '💛 情感支持中等';
+                levelClass = 'medium';
+            } else {
+                levelText = '💚 情感支持较高';
+                levelClass = 'high';
+            }
+
+            const levelEl = document.getElementById('supportLevel');
+            levelEl.textContent = levelText;
+            levelEl.className = 'support-level ' + levelClass;
+
+            generateInsight(totalScore, dimensionScores, dimensions);
+        }
+
+        // 生成洞察
+        function generateInsight(totalScore, dimensionScores, dimensions) {
+            let insight = '';
+
+            if (totalScore <= 37) {
+                insight += '📊 你感受到的父母情感支持水平较低。这可能让你感到被忽视或不被理解，建议尝试向父母表达你的情感需求。\n\n';
+            } else if (totalScore <= 55) {
+                insight += '📊 你感受到的父母情感支持处于中等水平。你能感受到一定程度的关爱，但仍有提升空间。\n\n';
+            } else {
+                insight += '📊 你感受到的父母情感支持水平较高。你能感受到父母的关爱和理解，这有助于你的健康成长。\n\n';
+            }
+
+            // 找出最高和最低维度
+            let maxDim = '', minDim = '';
+            let maxPercentage = 0, minPercentage = 1;
+
+            for (const key in dimensionScores) {
+                const percentage = dimensionScores[key] / dimensions[key].max;
+                if (percentage > maxPercentage) {
+                    maxPercentage = percentage;
+                    maxDim = key;
+                }
+                if (percentage < minPercentage) {
+                    minPercentage = percentage;
+                    minDim = key;
+                }
+            }
+
+            const dimNames = {
+                bond: '情感联结',
+                aware: '情感觉察',
+                resonance: '情感共鸣',
+                comm: '情感沟通'
+            };
+
+            insight += `🔍 你感受最强烈的是"${dimNames[maxDim]}"，这是父母做得相对较好的方面。\n\n`;
+            insight += `✨ 相对而言，"${dimNames[minDim]}"是你感受最少的维度。`;
+
+            document.getElementById('insightText').textContent = insight;
+        }
+
+        function goToTheory() {
+            showScreen('screen-theory');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
+        }
+
+        function resetTest() {
+            currentQuestion = 0;
+            answers = [];
+            showScreen('screen-welcome');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
