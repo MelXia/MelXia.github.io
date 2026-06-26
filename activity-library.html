@@ -210,6 +210,41 @@
         .footer-nav { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--card); }
         .footer-nav a { color: var(--primary-light); font-size: 0.9em; text-decoration: none; }
         .footer-nav a:hover { text-decoration: underline; }
+
+        /* Tab切换样式 */
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -219,7 +254,7 @@
             <a href="index.html" style="text-decoration:none;">
                 <div class="nav-brand">有钳任性横着走的Mel</div>
             </a>
-            <a href="index.html#contact" class="nav-cta">约个时间</a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
@@ -259,33 +294,45 @@
             </div>
         </div>
 
-        <!-- 2017年11月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2017年11月 · 郁南镇小学</div>
-            <div class="activity-images">
-                <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.jpeg" alt="图书捐赠2017">
-            </div>
-            <div class="activity-text">
-                <p>志愿者团队驱车数小时奔赴郁南镇小学，完成图书分拣、贴标、分类、上架全流程，为当地乡村孩子搭建起崭新的小型公益图书馆。参与志愿者来自各行各业，大家放下工作与生活的忙碌，真诚奔赴乡村，为乡村孩子拓宽阅读视野。</p>
-                <p>现场相处中我们能清晰感受到，当地多数留守儿童不缺物质帮扶，最缺的是陪伴与对外界的向往。孩子们对志愿者充满好奇，主动沟通、主动提问，渴望了解大城市的生活与更广的世界。很多志愿者深受触动，以往大家对留守儿童的认知，只停留在"需要帮助"，真正相处后才读懂，他们更需要的是被看见、被陪伴、被肯定。</p>
-                <blockquote>这场捐赠不止是送书，更是送希望、送陪伴、送理解。对乡村孩子而言，书籍打开了认知世界的窗口；对志愿者而言，这场实践打破了刻板认知，学会读懂弱势孩子的内心渴望，更懂得珍惜生活、温柔待人。同时我也引导远方家长读懂：孩子的成长，从来不止是物质供给，更需要精神陪伴与情感关注。</blockquote>
+        <!-- Tab切换 -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('event1')">2022年9-12月 · 微澜21馆</button>
+                <button class="tab-btn" onclick="switchTab('event2')">2017年11月 · 郁南镇小学</button>
             </div>
         </div>
 
-        <!-- 2022年9-12月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2022年9-12月 · 微澜图书馆21馆</div>
-            <div class="activity-images">
-                <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队工作照.jpg" alt="微澜图书馆志愿者">
-            </div>
-            <div class="activity-text">
-                <p>本次我组织志愿者常态化驻守微澜图书馆广州21馆，每两周定点值班，长期开展图书修补、借还登记、阅读引导等志愿服务。志愿者团队涵盖青年学生、职场新人、未婚青年、家长群体等不同身份，大家在长期陪伴中，对孩子的认知发生了彻底改变。</p>
-                <p>很多志愿者最初会觉得，部分孩子活泼好动、难以管教，是典型的"熊孩子"。但在长期、耐心、持续的陪伴中，大家慢慢读懂：没有无缘无故的调皮，也没有天生难管的孩子。孩子的每一种异常行为背后，都藏着未被看见的困境与委屈。</p>
-                <div class="highlight-box">
-                    <h4>💡 一个孩子的故事</h4>
-                    <p>其中令所有参与者印象深刻的一例：有孩子长期滞留图书馆、迟迟不愿离开，甚至刻意躲避同学。经耐心沟通后得知，孩子因遭遇校园霸凌，将安静的图书馆当作唯一安全的避风港。我征得孩子同意后，协助对接老师沟通处理，尽力为孩子营造安全的校园环境。</p>
+        <!-- 活动1：2022年9-12月（最新） -->
+        <div id="event1" class="tab-content active">
+            <div class="activity-section">
+                <div class="activity-date">📍 2022年9-12月 · 微澜图书馆21馆</div>
+                <div class="activity-images">
+                    <img src="照片素材/Library项目2022年9月到12月微澜图书馆广州21馆志愿者团队工作照.jpg" alt="微澜图书馆志愿者">
                 </div>
-                <p>这场长期志愿实践，让所有参与者完成了一次重要的认知升级：不要轻易给孩子贴标签、下定义。孩子的沉默、逃避、调皮、叛逆，都是内心情绪的无声表达。我作为组织者，把孩子说不出口的委屈与困惑，翻译给成年人听，让更多人学会看见孩子、理解孩子、善待孩子。</p>
+                <div class="activity-text">
+                    <p>本次我组织志愿者常态化驻守微澜图书馆广州21馆，每两周定点值班，长期开展图书修补、借还登记、阅读引导等志愿服务。志愿者团队涵盖青年学生、职场新人、未婚青年、家长群体等不同身份，大家在长期陪伴中，对孩子的认知发生了彻底改变。</p>
+                    <p>很多志愿者最初会觉得，部分孩子活泼好动、难以管教，是典型的"熊孩子"。但在长期、耐心、持续的陪伴中，大家慢慢读懂：没有无缘无故的调皮，也没有天生难管的孩子。孩子的每一种异常行为背后，都藏着未被看见的困境与委屈。</p>
+                    <div class="highlight-box">
+                        <h4>💡 一个孩子的故事</h4>
+                        <p>其中令所有参与者印象深刻的一例：有孩子长期滞留图书馆、迟迟不愿离开，甚至刻意躲避同学。经耐心沟通后得知，孩子因遭遇校园霸凌，将安静的图书馆当作唯一安全的避风港。我征得孩子同意后，协助对接老师沟通处理，尽力为孩子营造安全的校园环境。</p>
+                    </div>
+                    <p>这场长期志愿实践，让所有参与者完成了一次重要的认知升级：不要轻易给孩子贴标签、下定义。孩子的沉默、逃避、调皮、叛逆，都是内心情绪的无声表达。我作为组织者，把孩子说不出口的委屈与困惑，翻译给成年人听，让更多人学会看见孩子、理解孩子、善待孩子。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动2：2017年11月 -->
+        <div id="event2" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2017年11月 · 郁南镇小学</div>
+                <div class="activity-images">
+                    <img src="照片素材/Library项目2017年11月图书捐赠到郁南镇小学.jpeg" alt="图书捐赠2017">
+                </div>
+                <div class="activity-text">
+                    <p>志愿者团队驱车数小时奔赴郁南镇小学，完成图书分拣、贴标、分类、上架全流程，为当地乡村孩子搭建起崭新的小型公益图书馆。参与志愿者来自各行各业，大家放下工作与生活的忙碌，真诚奔赴乡村，为乡村孩子拓宽阅读视野。</p>
+                    <p>现场相处中我们能清晰感受到，当地多数留守儿童不缺物质帮扶，最缺的是陪伴与对外界的向往。孩子们对志愿者充满好奇，主动沟通、主动提问，渴望了解大城市的生活与更广的世界。很多志愿者深受触动，以往大家对留守儿童的认知，只停留在"需要帮助"，真正相处后才读懂，他们更需要的是被看见、被陪伴、被肯定。</p>
+                    <blockquote>这场捐赠不止是送书，更是送希望、送陪伴、送理解。对乡村孩子而言，书籍打开了认知世界的窗口；对志愿者而言，这场实践打破了刻板认知，学会读懂弱势孩子的内心渴望，更懂得珍惜生活、温柔待人。同时我也引导远方家长读懂：孩子的成长，从来不止是物质供给，更需要精神陪伴与情感关注。</blockquote>
+                </div>
             </div>
         </div>
 
@@ -343,6 +390,16 @@
                 document.documentElement.setAttribute('data-theme', 'light');
                 if (btn) btn.textContent = '☀️';
             }
+        }
+
+        function switchTab(tabId) {
+            // 移除所有active类
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 添加active类到当前选中的tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         }
 
         initTheme();

@@ -194,8 +194,6 @@
         .page-desc { color: var(--text-muted); font-size: 0.95em; max-width: 500px; margin: 0 auto; line-height: 1.7; }
         .activity-section { margin-bottom: 35px; text-align: center; }
         .activity-date { font-size: 1.1em; color: var(--accent); margin-bottom: 15px; }
-        .activity-images { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
-        .activity-images img { max-width: 100%; border-radius: 10px; }
         .activity-text { background: var(--card); border-radius: 12px; padding: 20px; text-align: left; }
         .activity-text p { margin-bottom: 12px; line-height: 2; color: var(--text); }
         .activity-text p:last-child { margin-bottom: 0; }
@@ -205,9 +203,76 @@
         .insight-title { color: var(--accent); font-size: 1em; margin-bottom: 15px; }
         .insight-content { color: var(--text-muted); font-size: 0.9em; line-height: 1.7; }
         .insight-content p { margin-bottom: 10px; }
+
+        /* 步骤样式 */
+        .step-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .step-number {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .step-title {
+            color: var(--primary-light);
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        .step-goal {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--primary);
+        }
+        .step-items p {
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
         .footer-nav { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--card); }
         .footer-nav a { color: var(--primary-light); font-size: 0.9em; text-decoration: none; }
         .footer-nav a:hover { text-decoration: underline; }
+
+        /* Tab切换样式 */
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -217,7 +282,7 @@
             <a href="index.html" style="text-decoration:none;">
                 <div class="nav-brand">有钳任性横着走的Mel</div>
             </a>
-            <a href="index.html#contact" class="nav-cta">约个时间</a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
@@ -246,31 +311,206 @@
 
         <div class="page-header">
             <h1 class="page-title">💼 职场减压沙龙</h1>
-            <p class="page-desc">为职场人士提供减压、放松的空间，帮助他们找到工作与生活的平衡。</p>
+            <p class="page-desc">结构化减压工作坊，帮助职场人士快速稳定心身、获得支持。</p>
         </div>
 
-        <!-- 2024年7月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2024年7月 · 广州市天河区</div>
-            <div class="activity-images">
-                <img src="照片素材/职场减压沙龙2024年7月广州市天河区.jpeg" alt="职场减压沙龙2024" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次沙龙聚焦上班族的压力内耗、人际信任、团队协作与情绪调节，是从青少年成长延伸至成人自我成长的重要公益板块。很多亲子矛盾、家庭矛盾的根源，不在于教育理念差异，而在于成年人长期积累的职场压力、情绪内耗与人际疲惫，最终变相转嫁到家庭与孩子身上。</p>
-                <p>我作为组织者，把复杂的职场心理、人际相处逻辑、压力疏导方法，翻译成普通人能听懂、能落地的生活方法。大家在轻松的交流氛围中梳理压力、倾诉困惑、互相赋能，学会建立健康的职场信任、良性的合作模式，掌握自我情绪疏导的方式。</p>
-                <p>很多参与者反馈，活动让自己慢慢放下职场内耗，心态更加松弛稳定，而<strong>稳定的自我情绪，也让自己在生活中、亲子相处中更包容、更温和。</strong></p>
-                <blockquote>一个懂得照顾自己情绪的人，才能在职场中走得更远，也能在家庭中给家人更多的温暖。</blockquote>
+        <!-- Tab切换 -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('event1')">2025年1月 · 越秀区</button>
+                <button class="tab-btn" onclick="switchTab('event2')">2024年7月 · 天河区</button>
             </div>
         </div>
 
-        <!-- Mel的翻译 -->
-        <div class="insight-section">
-            <div class="insight-title">💡 Mel的翻译</div>
-            <div class="insight-content">
-                <p>职场减压沙龙中，我扮演的"翻译家"角色：</p>
-                <p>• 把职场压力翻译成可以理解的情绪：不是你不够好，而是需要学会调节</p>
-                <p>• 把工作与生活的关系翻译成新的视角：工作是为了生活，而不是相反</p>
-                <p>• 把情绪翻译成行动：通过具体的减压技巧，帮助职场人士找到平衡</p>
+        <!-- 活动1：2025年1月 -->
+        <div id="event1" class="tab-content active">
+            <div class="activity-section">
+                <div class="activity-date">📍 2025年1月18日 · 广州市越秀区 · 近30人参与</div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第一步</div>
+                    <div class="step-title">问题呈现</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">引导参与者识别并表达具体的职场情绪困扰，认识到情绪调节困难的普遍性，减轻自我孤立感。</p>
+                    <div class="step-items">
+                        <p>• <strong>情绪困扰梳理</strong>：分享职场中遇到的情绪难题——焦虑、愤怒、沮丧、疲惫等</p>
+                        <p>• <strong>共性发现</strong>：通过小组分享，认识到情绪波动是职场中的普遍现象</p>
+                        <p>• <strong>情绪命名</strong>：为模糊的感受找到具体名称——工作焦虑、人际摩擦、职业倦怠等</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第二步</div>
+                    <div class="step-title">信息传递</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">讲解正性情绪与负性情绪的作用，帮助参与者理解负性情绪也有积极功能，消除"负面情绪=不好"的误解。</p>
+                    <div class="step-items">
+                        <p>• <strong>正性情绪的作用</strong>：拓展思维、增强创造力、促进社交联结</p>
+                        <p>• <strong>负性情绪的积极功能</strong>：焦虑提示风险、愤怒激发行动、悲伤促进反思</p>
+                        <p>• <strong>情绪没有好坏</strong>：关键在于如何理解和使用情绪信号</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第三步</div>
+                    <div class="step-title">应对探讨</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">倡导自助、互助与他助相结合，引导参与者分享应对负性情绪的方法，现场体验冥想练习。</p>
+                    <div class="step-items">
+                        <p>• <strong>自助分享</strong>：参与者分享自己应对负性情绪的经验与方法</p>
+                        <p>• <strong>互助学习</strong>：小组讨论，从他人经验中获得启发</p>
+                        <p>• <strong>冥想练习</strong>：现场带领参与者进行冥想，体验情绪调节技巧</p>
+                        <p>• <strong>行动清单</strong>：每人制定"本周可执行的情绪调节小改变"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第四步</div>
+                    <div class="step-title">总结提升</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">引导参与者提炼收获与感悟，增强信心、点燃希望，促使其积极付诸行动。</p>
+                    <div class="step-items">
+                        <p>• <strong>核心收获回顾</strong>：用一句话总结今天的收获</p>
+                        <p>• <strong>资源清单确认</strong>：确认自己拥有的情绪调节工具和支持网络</p>
+                        <p>• <strong>行动承诺</strong>：明确接下来一周想要尝试的一个小改变</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">前后测</div>
+                    <div class="step-title">情绪调节量表</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">活动开始前进行前测，活动结束后进行后测，量化评估参与者的情绪调节能力变化。</p>
+                    <div class="step-items">
+                        <p>• <strong>前测</strong>：活动开始时，参与者完成情绪调节量表自评</p>
+                        <p>• <strong>后测</strong>：活动结束时，再次完成同一量表，对比干预效果</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="activity-text">
+                    <p>本次沙龙聚焦职场人士的情绪调节，将近30人参与。很多亲子矛盾、家庭矛盾的根源，不在于教育理念差异，而在于成年人长期积累的职场压力与情绪内耗，最终变相转嫁到家庭与孩子身上。学会理解和调节自己的情绪，才能在亲子相处中更包容、更温和。</p>
+                    <blockquote>情绪没有好坏，关键在于如何理解和使用它。一个懂得调节情绪的人，才能在职场中走得更远，也能在家庭中给家人更多的温暖。</blockquote>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-title">💬 参与者反馈</div>
+                <div class="insight-content">
+                    <p>冥想练习让自己第一次真正体验到"停下来"的感觉。原来负性情绪也可以成为我的资源，而不是敌人。<strong>学会调节情绪，和家人相处时也更从容了。</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动2：2024年7月 -->
+        <div id="event2" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2024年7月 · 广州市天河区</div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第一步</div>
+                    <div class="step-title">问题呈现</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">引导参与者识别并表达具体的职场压力源，认识到压力的普遍性，减轻"只有我这样"的自我孤立感。</p>
+                    <div class="step-items">
+                        <p>• <strong>压力图谱绘制</strong>：梳理工作中的压力来源（工作任务、人际关系、职业发展等）</p>
+                        <p>• <strong>共性发现</strong>：通过小组分享，认识到压力是职场中的普遍现象</p>
+                        <p>• <strong>情绪命名</strong>：为模糊的焦虑感找到具体名称——职业倦怠、角色冲突、人际消耗等</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第二步</div>
+                    <div class="step-title">信息传递</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">提供科学的压力与情绪知识，帮助参与者理解当前状态是压力情境下的正常反应，消除误解、稳定情绪。</p>
+                    <div class="step-items">
+                        <p>• <strong>压力的生理机制</strong>：战斗-逃跑反应、慢性压力对身心的影响</p>
+                        <p>• <strong>情绪的功能</strong>：焦虑是预警信号，而非"能力不足"的表现</p>
+                        <p>• <strong>区分可控与不可控</strong>：哪些事情值得投入精力，哪些需要学会放下</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第三步</div>
+                    <div class="step-title">应对探讨</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">倡导自助、互助与他助相结合，引导参与者发掘自身及身边的资源，探索可行的应对策略。</p>
+                    <div class="step-items">
+                        <p>• <strong>自助</strong>：情绪调节技巧（呼吸放松、正念练习、认知重构等）</p>
+                        <p>• <strong>互助</strong>：小组讨论，分享各自的经验与方法</p>
+                        <p>• <strong>他助</strong>：识别可用的外部支持资源（EAP服务、心理咨询等）</p>
+                        <p>• <strong>行动清单</strong>：每人制定"本周可执行的小改变"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">第四步</div>
+                    <div class="step-title">总结提升</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">引导参与者提炼收获与感悟，增强信心、点燃希望，促使其积极付诸行动。</p>
+                    <div class="step-items">
+                        <p>• <strong>核心收获回顾</strong>：用一句话总结今天的收获</p>
+                        <p>• <strong>资源清单确认</strong>：确认自己拥有的支持网络</p>
+                        <p>• <strong>行动承诺</strong>：明确接下来一周想要尝试的一个小改变</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="step-box">
+                    <div class="step-number">前后测</div>
+                    <div class="step-title">压力知觉量表</div>
+                </div>
+                <div class="activity-text">
+                    <p class="step-goal">活动开始前进行前测，活动结束后进行后测，量化评估参与者的压力水平变化。</p>
+                    <div class="step-items">
+                        <p>• <strong>前测</strong>：活动开始时，参与者完成压力知觉量表自评</p>
+                        <p>• <strong>后测</strong>：活动结束时，再次完成同一量表，对比干预效果</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <div class="activity-text">
+                    <p>本次沙龙聚焦上班族的压力内耗、人际信任、团队协作与情绪调节。很多亲子矛盾、家庭矛盾的根源，不在于教育理念差异，而在于成年人长期积累的职场压力与情绪内耗，最终变相转嫁到家庭与孩子身上。学会照顾自己的情绪，才能在亲子相处中更包容、更温和。</p>
+                    <blockquote>一个懂得照顾自己情绪的人，才能在职场中走得更远，也能在家庭中给家人更多的温暖。</blockquote>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-title">💬 参与者反馈</div>
+                <div class="insight-content">
+                    <p>活动让自己慢慢放下职场内耗，心态更加松弛稳定。<strong>稳定的自我情绪，也让自己在生活中、亲子相处中更包容、更温和。</strong></p>
+                </div>
             </div>
         </div>
 
@@ -317,6 +557,16 @@
                 document.documentElement.setAttribute('data-theme', 'light');
                 if (btn) btn.textContent = '☀️';
             }
+        }
+
+        function switchTab(tabId) {
+            // 移除所有active类
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 添加active类到当前选中的tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         }
 
         initTheme();

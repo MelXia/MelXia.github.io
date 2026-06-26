@@ -213,6 +213,41 @@
         .footer-nav { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--card); }
         .footer-nav a { color: var(--primary-light); font-size: 0.9em; text-decoration: none; }
         .footer-nav a:hover { text-decoration: underline; }
+
+        /* Tab切换样式 */
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -222,7 +257,7 @@
             <a href="index.html" style="text-decoration:none;">
                 <div class="nav-brand">有钳任性横着走的Mel</div>
             </a>
-            <a href="index.html#contact" class="nav-cta">约个时间</a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
@@ -262,55 +297,70 @@
             </div>
         </div>
 
-        <!-- 2024年10月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2024年10月 · 心静瑜伽馆（都市隶人减压营）</div>
-            <div class="activity-images">
-                <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营2024" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次减压活动选址静谧松弛的瑜伽馆，为家长打造安全、私密、无评判的倾诉空间。当代家长长期背负育儿压力、家庭琐事、职场焦虑，常年处于情绪紧绷、自我缺失的状态，却很少有专属时间释放情绪、梳理内心。</p>
-                <p>本次参与的十位妈妈互不相识，但在松弛安全的氛围里，大家大胆倾诉育儿委屈、生活疲惫、情绪内耗，释放平日无法言说的压力。没有评判、没有说教、没有攀比，只有真诚的共情与接纳，每一位参与者都实现了深度的情绪宣泄。</p>
-                <p>同时我通过心理学小游戏、认知体验实验，带领大家拆解日常的育儿执念。很多家长终于读懂：多数亲子矛盾，都源于自己的主观臆断。很多时候"孩子不懂事、孩子偷懒、孩子叛逆"，只是家长的片面认知，孩子实则有自己的难处、压力与成长节奏。这场活动让家长放下执念、放下焦虑，学会共情孩子、接纳自己。</p>
-                <blockquote>为了让治愈与赋能常态化，我带动在场家长自发成立「老母亲的微笑」微信群，搭建长期线上陪伴、情感支撑、经验共享的平台。从此家长不再孤军奋战，日常可以互相倾诉困惑、分享经验、彼此鼓励，形成持续的正向赋能氛围。</blockquote>
+        <!-- Tab切换 -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('event1')">2026年5月 · 心理剧主题</button>
+                <button class="tab-btn" onclick="switchTab('event2')">2025年3月 · 心理剧主题</button>
+                <button class="tab-btn" onclick="switchTab('event3')">2024年10月 · 都市隶人减压营</button>
             </div>
         </div>
 
-        <!-- 2025年3月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2025年3月 · 心静瑜伽馆（心理剧主题）</div>
-            <div class="activity-images">
-                <img src="照片素材/老母亲疯会2025年3月广州市海珠区心静瑜伽.jpeg" alt="老母亲疯会2025" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次活动以心理剧为核心形式开展，结合专业心理剧疗法帮助家长梳理内心情绪。生活里，很多复杂的感受、纠结的情绪难以用语言精准描述，藏在心底慢慢堆积，既影响自身状态，也容易引发家庭摩擦。而心理剧借助舞台演绎、角色扮演的形式，让参与者把平日里说不清、道不明的情绪、心结与生活场景具象化呈现出来。</p>
-                <p>我作为组织者，引导大家分组编排、登台表演，将育儿日常、内心挣扎、亲子相处中的矛盾场景一一还原。在表演、观看、互动复盘的过程中，大家跳出当局者的视角，以旁观者的身份看清自身情绪来源与相处模式。不少家长表示，当情绪通过表演被表达出来的那一刻，积压许久的压抑感也随之消散。</p>
-                <p>借助心理剧的表达与疗愈作用，参与者不仅释放了负面情绪，也学会换位思考，读懂自己行为背后的心理动因。大家不再一味压抑感受，也能更平和地看待亲子间的分歧，学会用更柔软、理性的方式面对生活与育儿难题。</p>
-            </div>
-        </div>
-
-        <!-- 2026年5月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2026年5月 · 广州市海珠区</div>
-            <div class="activity-images">
-                <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会2026" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次活动参与家长覆盖全学段育儿群体，孩子年龄跨度从小学、初中、高考备考到大学毕业，每位家长都有不同的育儿困惑、实战经验与成长感悟。大家拥有极强的反思能力与学习能力，能快速在他人的故事中看见自己的问题、更新自我认知。</p>
-                <p>很多家长反馈，这场活动最大的收获不是学到育儿技巧，而是终于有人懂自己的疲惫与焦虑。一个人的困惑，是一群人的共鸣；一个人的坚持，有一群人的支撑。大家在抱团成长中，告别了育儿孤独，实现了心态松弛与成长升级。</p>
-                <div class="contact-invite">
-                    <p>如果你想加入我们的"老母亲的微笑"群聊</p>
-                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-                        <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" style="background: linear-gradient(135deg, #FF2442, #FE2C55); color: white; padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <span>📱</span>
-                            <span>小红书私信</span>
-                        </a>
-                        <a href="mailto:19469728@qq.com?subject=%E7%94%B3%E8%AF%B7%E5%8A%A0%E5%85%A5%E8%80%81%E6%AF%8D%E4%BA%B2%E7%BE%A4%E8%81%8A" style="background: var(--bg); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; border: 2px solid var(--primary); display: inline-flex; align-items: center; gap: 6px;">
-                            <span>✉️</span>
-                            <span>邮件联系</span>
-                        </a>
+        <!-- 活动1：2026年5月 -->
+        <div id="event1" class="tab-content active">
+            <div class="activity-section">
+                <div class="activity-date">📍 2026年5月 · 广州市海珠区</div>
+                <div class="activity-images">
+                    <img src="照片素材/老母亲疯会2026年5月广州市海珠区.jpg" alt="老母亲疯会2026" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次活动参与家长覆盖全学段育儿群体，孩子年龄跨度从小学、初中、高考备考到大学毕业，每位家长都有不同的育儿困惑、实战经验与成长感悟。大家拥有极强的反思能力与学习能力，能快速在他人的故事中看见自己的问题、更新自我认知。</p>
+                    <p>很多家长反馈，这场活动最大的收获不是学到育儿技巧，而是终于有人懂自己的疲惫与焦虑。一个人的困惑，是一群人的共鸣；一个人的坚持，有一群人的支撑。大家在抱团成长中，告别了育儿孤独，实现了心态松弛与成长升级。</p>
+                    <div class="contact-invite">
+                        <p>如果你想加入我们的"老母亲的微笑"群聊</p>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                            <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" style="background: linear-gradient(135deg, #FF2442, #FE2C55); color: white; padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                <span>📱</span>
+                                <span>小红书私信</span>
+                            </a>
+                            <a href="mailto:19469728@qq.com" style="background: var(--bg); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 0.9em; font-weight: 600; text-decoration: none; border: 2px solid var(--primary); display: inline-flex; align-items: center; gap: 6px;">
+                                <span>✉️</span>
+                                <span>邮件联系</span>
+                            </a>
+                        </div>
+                        <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px;">通常1天内回复</p>
                     </div>
-                    <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 12px;">通常1天内回复</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动2：2025年3月 -->
+        <div id="event2" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2025年3月 · 心静瑜伽馆（心理剧主题）</div>
+                <div class="activity-images">
+                    <img src="照片素材/老母亲疯会2025年3月广州市海珠区心静瑜伽.jpeg" alt="老母亲疯会2025" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次活动以心理剧为核心形式开展，结合专业心理剧疗法帮助家长梳理内心情绪。生活里，很多复杂的感受、纠结的情绪难以用语言精准描述，藏在心底慢慢堆积，既影响自身状态，也容易引发家庭摩擦。而心理剧借助舞台演绎、角色扮演的形式，让参与者把平日里说不清、道不明的情绪、心结与生活场景具象化呈现出来。</p>
+                    <p>我作为组织者，引导大家分组编排、登台表演，将育儿日常、内心挣扎、亲子相处中的矛盾场景一一还原。在表演、观看、互动复盘的过程中，大家跳出当局者的视角，以旁观者的身份看清自身情绪来源与相处模式。不少家长表示，当情绪通过表演被表达出来的那一刻，积压许久的压抑感也随之消散。</p>
+                    <p>借助心理剧的表达与疗愈作用，参与者不仅释放了负面情绪，也学会换位思考，读懂自己行为背后的心理动因。大家不再一味压抑感受，也能更平和地看待亲子间的分歧，学会用更柔软、理性的方式面对生活与育儿难题。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动3：2024年10月 -->
+        <div id="event3" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2024年10月 · 心静瑜伽馆（都市隶人减压营）</div>
+                <div class="activity-images">
+                    <img src="照片素材/老母亲疯会2025年3月29日心静瑜伽馆都市隶人减压营.jpg" alt="老母亲减压营2024" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次减压活动选址静谧松弛的瑜伽馆，为家长打造安全、私密、无评判的倾诉空间。当代家长长期背负育儿压力、家庭琐事、职场焦虑，常年处于情绪紧绷、自我缺失的状态，却很少有专属时间释放情绪、梳理内心。</p>
+                    <p>本次参与的十位妈妈互不相识，但在松弛安全的氛围里，大家大胆倾诉育儿委屈、生活疲惫、情绪内耗，释放平日无法言说的压力。没有评判、没有说教、没有攀比，只有真诚的共情与接纳，每一位参与者都实现了深度的情绪宣泄。</p>
+                    <p>同时我通过心理学小游戏、认知体验实验，带领大家拆解日常的育儿执念。很多家长终于读懂：多数亲子矛盾，都源于自己的主观臆断。很多时候"孩子不懂事、孩子偷懒、孩子叛逆"，只是家长的片面认知，孩子实则有自己的难处、压力与成长节奏。这场活动让家长放下执念、放下焦虑，学会共情孩子、接纳自己。</p>
+                    <blockquote>为了让治愈与赋能常态化，我带动在场家长自发成立「老母亲的微笑」微信群，搭建长期线上陪伴、情感支撑、经验共享的平台。从此家长不再孤军奋战，日常可以互相倾诉困惑、分享经验、彼此鼓励，形成持续的正向赋能氛围。</blockquote>
                 </div>
             </div>
         </div>
@@ -369,6 +419,16 @@
                 document.documentElement.setAttribute('data-theme', 'light');
                 if (btn) btn.textContent = '☀️';
             }
+        }
+
+        function switchTab(tabId) {
+            // 移除所有active类
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 添加active类到当前选中的tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         }
 
         initTheme();

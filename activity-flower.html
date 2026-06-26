@@ -212,6 +212,41 @@
         .footer-nav { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--card); }
         .footer-nav a { color: var(--primary-light); font-size: 0.9em; text-decoration: none; }
         .footer-nav a:hover { text-decoration: underline; }
+
+        /* Tab切换样式 */
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -221,7 +256,7 @@
             <a href="index.html" style="text-decoration:none;">
                 <div class="nav-brand">有钳任性横着走的Mel</div>
             </a>
-            <a href="index.html#contact" class="nav-cta">约个时间</a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
         </div>
         <div class="nav-links">
             <a href="index.html">首页</a>
@@ -261,52 +296,70 @@
             </div>
         </div>
 
-        <!-- 2021年8月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2021年8月 · 广州市海珠区</div>
-            <div class="activity-images">
-                <img src="照片素材/花艺减压沙龙2021年8月广州市海珠区.jpeg" alt="花艺减压沙龙2021年8月" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次是花艺减压沙龙的初步探索，落地海珠区社区场景，面向社区女性与家长群体开展美育疗愈活动。区别于传统娱乐活动，我全程以情绪疏导、自我松弛为核心，让长期奔波于家庭与工作中的女性慢下来、静下来，在花艺创作中与自我对话、释放压力，开启「艺术疗愈+自我成长」的全新公益模式。</p>
-            </div>
-        </div>
-
-        <!-- 2022年9月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2022年9月 · 珠江新城</div>
-            <div class="activity-images">
-                <img src="照片素材/花艺减压沙龙2022年9月广州市天河区珠江新城.jpeg" alt="花艺减压沙龙2022年9月" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次活动聚焦都市白领群体，针对职场人高压、紧绷、情绪内耗的状态设计专属流程。我在活动开篇设置5分钟沉浸式冥想环节，帮助参与者快速脱离忙碌的工作状态、沉淀心绪。针对部分参与者难以静心、情绪浮躁、无法快速切换状态的问题，我一对一沟通疏导，帮助大家梳理压力来源、缓解内心焦虑。</p>
-                <p>我希望所有参与者读懂：花艺从来不是简单的手工创作，而是自我情绪的梳理与治愈。成年人稳定的情绪，是家庭最好的氛围、孩子最好的榜样。很多白领参与者反馈，这场沉浸式体验让自己学会了自我松弛、情绪和解，不再把职场压力、负面情绪带入家庭，让亲子相处、家庭氛围变得更加温暖和谐。</p>
+        <!-- Tab切换 -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('event1')">2024年5月 · 金碧花园</button>
+                <button class="tab-btn" onclick="switchTab('event2')">2023年3月 · 珠江新城</button>
+                <button class="tab-btn" onclick="switchTab('event3')">2022年9月 · 珠江新城</button>
+                <button class="tab-btn" onclick="switchTab('event4')">2021年8月 · 海珠区</button>
             </div>
         </div>
 
-        <!-- 2023年3月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2023年3月 · 珠江新城</div>
-            <div class="activity-images">
-                <img src="照片素材/花艺减压沙龙2023年3月广州市天河区珠江新城.JPG" alt="花艺减压沙龙2023年3月" style="max-width: 450px;">
-            </div>
-            <div class="activity-text">
-                <p>本次活动恰逢妇女节，我跳出表层的节日仪式感，聚焦女性自我身份认知与角色平衡的深层课题。当代女性常年被困在女儿、妻子、员工、母亲的多重角色中，习惯性优先照顾他人、忽略自我需求，陷入过度付出与自我内耗。</p>
-                <p>本次我特意选用低饱和度曼塔玫瑰为核心花材，花朵沉静温柔、生命力饱满，隐喻当代女性：看似温和内敛，实则在多重角色中坚韧生长、全面赋能，是家庭与生活中默默发力的"六边形战士"。</p>
-                <blockquote>活动让所有女性参与者深受共鸣：没有人能成为完美的妈妈、完美的家人、完美的员工，不必强求面面俱到。成长的核心，是先做好自己、接纳不完美，再从容扮演好社会与家庭角色。这份认知，让很多参与者放下完美主义焦虑，松弛面对生活与育儿。</blockquote>
+        <!-- 活动1：2024年5月 -->
+        <div id="event1" class="tab-content active">
+            <div class="activity-section">
+                <div class="activity-date">📍 2024年5月 · 金碧花园</div>
+                <div class="activity-images">
+                    <img src="照片素材/花艺减压沙龙2024年5月广州市海珠区金碧花园.JPG" alt="花艺减压沙龙2024年5月" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次活动落地社区，面向家长与孩子开放亲子美育体验。我刻意弱化"制作完美花束"的结果导向，重点引导参与者在剪叶、拔刺、修瓣、整理花材的过程中，静心思考、自我对话、温柔陪伴。</p>
+                    <p>我将花艺劳作的过程，温柔翻译成育儿的底层智慧：每一朵花都有独特的形态与生长节奏，没有完全相同的两朵花；每一个孩子也都有独特的性格、天赋与成长速度，不存在标准化的完美孩子。</p>
+                    <p>很多家长在沉浸式体验中彻底释怀：育儿不是修剪、塑造、强求完美，而是耐心陪伴、温柔修正、接纳差异、静待成长。不必逼迫孩子成为别人眼中的优秀模样，陪伴孩子慢慢解决问题、慢慢长成自己的样子，就是最好的教育。参与者纷纷表示，这场安静的花艺体验，治愈了自己的育儿焦虑，也让自己学会温柔松弛地与孩子相处。</p>
+                </div>
             </div>
         </div>
 
-        <!-- 2024年5月 -->
-        <div class="activity-section">
-            <div class="activity-date">📍 2024年5月 · 金碧花园</div>
-            <div class="activity-images">
-                <img src="照片素材/花艺减压沙龙2024年5月广州市海珠区金碧花园.JPG" alt="花艺减压沙龙2024年5月" style="max-width: 450px;">
+        <!-- 活动2：2023年3月 -->
+        <div id="event2" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2023年3月 · 珠江新城</div>
+                <div class="activity-images">
+                    <img src="照片素材/花艺减压沙龙2023年3月广州市天河区珠江新城.JPG" alt="花艺减压沙龙2023年3月" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次活动恰逢妇女节，我跳出表层的节日仪式感，聚焦女性自我身份认知与角色平衡的深层课题。当代女性常年被困在女儿、妻子、员工、母亲的多重角色中，习惯性优先照顾他人、忽略自我需求，陷入过度付出与自我内耗。</p>
+                    <p>本次我特意选用低饱和度曼塔玫瑰为核心花材，花朵沉静温柔、生命力饱满，隐喻当代女性：看似温和内敛，实则在多重角色中坚韧生长、全面赋能，是家庭与生活中默默发力的"六边形战士"。</p>
+                    <blockquote>活动让所有女性参与者深受共鸣：没有人能成为完美的妈妈、完美的家人、完美的员工，不必强求面面俱到。成长的核心，是先做好自己、接纳不完美，再从容扮演好社会与家庭角色。这份认知，让很多参与者放下完美主义焦虑，松弛面对生活与育儿。</blockquote>
+                </div>
             </div>
-            <div class="activity-text">
-                <p>本次活动落地社区，面向家长与孩子开放亲子美育体验。我刻意弱化"制作完美花束"的结果导向，重点引导参与者在剪叶、拔刺、修瓣、整理花材的过程中，静心思考、自我对话、温柔陪伴。</p>
-                <p>我将花艺劳作的过程，温柔翻译成育儿的底层智慧：每一朵花都有独特的形态与生长节奏，没有完全相同的两朵花；每一个孩子也都有独特的性格、天赋与成长速度，不存在标准化的完美孩子。</p>
-                <p>很多家长在沉浸式体验中彻底释怀：育儿不是修剪、塑造、强求完美，而是耐心陪伴、温柔修正、接纳差异、静待成长。不必逼迫孩子成为别人眼中的优秀模样，陪伴孩子慢慢解决问题、慢慢长成自己的样子，就是最好的教育。参与者纷纷表示，这场安静的花艺体验，治愈了自己的育儿焦虑，也让自己学会温柔松弛地与孩子相处。</p>
+        </div>
+
+        <!-- 活动3：2022年9月 -->
+        <div id="event3" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2022年9月 · 珠江新城</div>
+                <div class="activity-images">
+                    <img src="照片素材/花艺减压沙龙2022年9月广州市天河区珠江新城.jpeg" alt="花艺减压沙龙2022年9月" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次活动聚焦都市白领群体，针对职场人高压、紧绷、情绪内耗的状态设计专属流程。我在活动开篇设置5分钟沉浸式冥想环节，帮助参与者快速脱离忙碌的工作状态、沉淀心绪。针对部分参与者难以静心、情绪浮躁、无法快速切换状态的问题，我一对一沟通疏导，帮助大家梳理压力来源、缓解内心焦虑。</p>
+                    <p>我希望所有参与者读懂：花艺从来不是简单的手工创作，而是自我情绪的梳理与治愈。成年人稳定的情绪，是家庭最好的氛围、孩子最好的榜样。很多白领参与者反馈，这场沉浸式体验让自己学会了自我松弛、情绪和解，不再把职场压力、负面情绪带入家庭，让亲子相处、家庭氛围变得更加温暖和谐。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动4：2021年8月 -->
+        <div id="event4" class="tab-content">
+            <div class="activity-section">
+                <div class="activity-date">📍 2021年8月 · 广州市海珠区</div>
+                <div class="activity-images">
+                    <img src="照片素材/花艺减压沙龙2021年8月广州市海珠区.jpeg" alt="花艺减压沙龙2021年8月" style="max-width: 450px;">
+                </div>
+                <div class="activity-text">
+                    <p>本次是花艺减压沙龙的初步探索，落地海珠区社区场景，面向社区女性与家长群体开展美育疗愈活动。区别于传统娱乐活动，我全程以情绪疏导、自我松弛为核心，让长期奔波于家庭与工作中的女性慢下来、静下来，在花艺创作中与自我对话、释放压力，开启「艺术疗愈+自我成长」的全新公益模式。</p>
+                </div>
             </div>
         </div>
 
@@ -364,6 +417,16 @@
                 document.documentElement.setAttribute('data-theme', 'light');
                 if (btn) btn.textContent = '☀️';
             }
+        }
+
+        function switchTab(tabId) {
+            // 移除所有active类
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 添加active类到当前选中的tab
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         }
 
         initTheme();

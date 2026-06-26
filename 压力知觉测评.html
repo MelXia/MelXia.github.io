@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>父母情感支持测评 - 心理测验</title>
+    <title>压力知觉测评 - 心理测验</title>
     <style>
         :root {
             --primary: #6B5CE7;
@@ -222,6 +222,13 @@
             color: var(--text);
         }
 
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
         .intro-icon {
             font-size: 48px;
             margin-bottom: 12px;
@@ -391,8 +398,8 @@
 
         .scale-btn {
             flex: 1;
-            min-width: 55px;
-            padding: 12px 6px;
+            min-width: 60px;
+            padding: 12px 8px;
             font-size: 0.75em;
             font-weight: 600;
             border: 2px solid var(--primary);
@@ -423,44 +430,6 @@
             opacity: 0.8;
         }
 
-        /* 维度结果 */
-        .dimension-result {
-            background: var(--bg);
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dimension-info {
-            flex: 1;
-        }
-
-        .dimension-name {
-            font-size: 0.9em;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .dimension-desc {
-            font-size: 0.75em;
-            color: var(--text-muted);
-        }
-
-        .dimension-score {
-            text-align: right;
-        }
-
-        .dimension-score-value {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: var(--primary-light);
-        }
-
         /* 总分结果 */
         .total-score-box {
             background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
@@ -489,8 +458,8 @@
             margin-top: 5px;
         }
 
-        /* 支持等级 */
-        .support-level {
+        /* 控制等级 */
+        .control-level {
             display: inline-block;
             padding: 8px 20px;
             border-radius: 20px;
@@ -499,19 +468,19 @@
             margin: 10px 0;
         }
 
-        .support-level.low {
-            background: rgba(255, 107, 107, 0.2);
-            color: var(--accent);
+        .control-level.low {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
         }
 
-        .support-level.medium {
+        .control-level.medium {
             background: rgba(255, 230, 109, 0.2);
             color: var(--warning);
         }
 
-        .support-level.high {
-            background: rgba(78, 205, 196, 0.2);
-            color: var(--success);
+        .control-level.high {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
         }
 
         /* 洞察 */
@@ -583,61 +552,6 @@
             color: var(--primary-light);
         }
 
-        /* 图表 */
-        .chart-container {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-        }
-
-        .chart-title {
-            color: var(--primary-light);
-            font-size: 0.9em;
-            margin-bottom: 12px;
-        }
-
-        .chart-wrapper {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 160px;
-            padding: 15px 10px;
-        }
-
-        .chart-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .chart-bar {
-            width: 40px;
-            border-radius: 6px 6px 0 0;
-            transition: height 1s ease;
-        }
-
-        .chart-bar.bond { background: linear-gradient(180deg, #FF6B6B, #E85555); }
-        .chart-bar.aware { background: linear-gradient(180deg, #6B5CE7, #5B4CD7); }
-        .chart-bar.resonance { background: linear-gradient(180deg, #FFE66D, #E8D85D); }
-        .chart-bar.comm { background: linear-gradient(180deg, #4ECDC4, #3DBDB4); }
-
-        .chart-bar-value {
-            font-size: 0.75em;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .chart-label {
-            font-size: 0.6em;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 4px;
-            max-width: 50px;
-        }
-
         /* 响应式 */
         @media (max-width: 500px) {
             .card {
@@ -660,23 +574,6 @@
 
             .nav-links { display: none; }
             .menu-toggle { display: flex; }
-
-            .chart-bar {
-                width: 35px;
-            }
-
-            .chart-wrapper {
-                height: 140px;
-            }
-
-            .dimension-result {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .dimension-score {
-                margin-top: 10px;
-            }
         }
     </style>
 </head>
@@ -716,8 +613,8 @@
         <!-- 欢迎页面 -->
         <div class="screen active" id="screen-welcome">
             <div class="card">
-                <div class="intro-icon">❤️</div>
-                <h1>青少年父母情感支持量表（父母版）</h1>
+                <div class="intro-icon">🧘</div>
+                <h1>压力知觉测评</h1>
 
                 <div class="privacy-notice">
                     <div class="privacy-notice-title">🔒 隐私保护</div>
@@ -729,18 +626,20 @@
                 <div class="rule-box">
                     <div class="rule-title">📋 测评说明</div>
                     <div class="rule-content">
-                        <strong>适用人群：</strong>中学生父母（评估自己对子女的情感支持程度）。<br><br>
-                        <strong>题目数量：</strong>13题，约需3-5分钟。<br><br>
-                        请根据你平时与孩子互动的真实情况作答。没有对错之分，请诚实作答。
+                        <strong>适用人群：</strong>成年人。<br><br>
+                        <strong>题目数量：</strong>10题，约需3-5分钟。<br><br>
+                        请根据你<strong>最近一个月</strong>的感受，选择最符合的选项。没有对错之分，请诚实作答。
                     </div>
                 </div>
 
                 <div class="citation-box">
                     <div class="citation-title">📚 来源与信度</div>
                     <div class="citation-text">
-                        <p>唐雅君, 黄守桢, 许世梅, 龚楚依, 孟迎芳. (2026). 青少年父母情感支持量表的编制及效度和信度检验. <em>中国心理卫生杂志, 40</em>(3), 249-256.</p>
+                        <p style="margin-bottom:8px;">压力知觉量表（PSS-10）由 Cohen 等（1983）编制，本研究验证了其在癌症生存者群体中的信效度。</p>
+                        <p style="margin-bottom:8px;">Cohen, S., Kamarck, T., & Mermelstein, R. (1983). A global measure of perceived stress. <em>Journal of Health and Social Behavior, 24</em>(4), 385-396.</p>
+                        <p>赵鑫, 杨小欢, 丁文娟, 陈睿, 蒋鑫, 张艳艳. (2017). 压力知觉量表中文版在癌症患者群体中的信效度检验. <em>中国心理卫生杂志, 31</em>(10), 762-768.</p>
                     </div>
-                    <div class="reliability-badge">Cronbach's α = 0.96</div>
+                    <div class="reliability-badge">Cronbach's α = 0.86</div>
                 </div>
 
                 <button class="btn btn-primary" onclick="startTest()">开始测评</button>
@@ -750,9 +649,9 @@
         <!-- 测评页面 -->
         <div class="screen" id="screen-test">
             <div class="card">
-                <div class="progress-text" id="progressText">第 1 题 / 共 13 题</div>
+                <div class="progress-text" id="progressText">第 1 题 / 共 10 题</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 7.7%"></div>
+                    <div class="progress-fill" id="progressFill" style="width: 10%"></div>
                 </div>
 
                 <div class="question-card" id="questionCard">
@@ -769,30 +668,19 @@
         <div class="screen" id="screen-result">
             <div class="card">
                 <h2>测评完成！</h2>
+                <p class="subtitle">看看你最近一个月的压力知觉水平</p>
 
                 <div class="total-score-box">
                     <div class="total-score-label">你的总分</div>
                     <div class="total-score-value" id="totalScore">0</div>
-                    <div class="total-score-range">满分 65 分</div>
+                    <div class="total-score-range">满分 40 分</div>
                 </div>
 
-                <div class="support-level" id="supportLevel">计算中...</div>
-
-                <div class="chart-container">
-                    <div class="chart-title">📊 四维度得分对比</div>
-                    <div class="chart-wrapper" id="chartWrapper">
-                        <!-- 动态填充 -->
-                    </div>
-                </div>
+                <div class="control-level" id="controlLevel">计算中...</div>
 
                 <div class="insight-box">
                     <div class="insight-title">💡 你的结果解读</div>
                     <div class="insight-text" id="insightText"></div>
-                </div>
-
-                <!-- 四维度详情 -->
-                <div id="dimensionDetails">
-                    <!-- 动态填充 -->
                 </div>
 
                 <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学原理</button>
@@ -802,50 +690,53 @@
         <!-- 科普页面 -->
         <div class="screen" id="screen-theory">
             <div class="card">
-                <h2>什么是父母情感支持？</h2>
+                <h2>什么是压力知觉？</h2>
+                <p class="subtitle">科学理解，理性应对</p>
 
                 <div class="theory-section">
-                    <h3>🧠 父母情感支持的定义</h3>
-                    <p><strong>父母情感支持</strong>是指父母给予的、能够被子女感知到的、有助于满足孩子情感需求、促进孩子健康成长的心理及行为。</p>
-                    <p>它包括四个核心维度：情感联结、情感觉察、情感共鸣和情感沟通。</p>
+                    <h3>🧠 压力知觉的定义</h3>
+                    <p><strong>压力知觉（Perceived Stress）</strong>是指个体对生活中不可预测、不可控制以及超负荷事件的认知评价。它反映的是个体感知到的压力程度，而非客观存在的压力事件数量。</p>
+                    <p>简单来说，同样的事情发生在不同人身上，每个人的压力感受可能完全不同。压力知觉量表测量的正是这种<strong>主观感受到的压力水平</strong>。</p>
                 </div>
 
                 <div class="theory-section">
-                    <h3>📈 四个维度详解</h3>
-                    <p><strong>❤️ 情感联结：</strong>基于陪伴、关系等日常亲子互动，与子女建立良好的情感依恋。比如：悉心照顾孩子、经常陪伴孩子、保持良好的亲子关系。</p>
-                    <p><strong>👀 情感觉察：</strong>敏感回应孩子的情绪需求，尤其是孩子遇到困难时的情绪支持。比如：察觉孩子的情绪变化、安慰情绪不好的孩子、引导合理宣泄负面情绪。</p>
-                    <p><strong>🤝 情感共鸣：</strong>在立场、态度和看法上与子女换位思考，尊重孩子的想法和感受。比如：站在孩子立场考虑问题、无条件支持孩子、以身作则。</p>
-                    <p><strong>💬 情感沟通：</strong>愿意努力为子女解决问题，支持行为具体化、真实化。比如：引导积极看待问题、主动过问孩子情况、沟通态度不敷衍。</p>
+                    <h3>📈 压力知觉的两个核心维度</h3>
+                    <p><strong>🔴 不可预测性：</strong>生活中发生的事情是否让你感到意外、无法预料？比如："你无法预测生活中会发生什么事情。"</p>
+                    <p><strong>🔴 不可控制性：</strong>你是否感觉无法掌控重要的事情？比如："你感到无法控制自己生活中的重要事情。"</p>
+                    <p><strong>🔴 超负荷感：</strong>事情是否太多，让你感到无法应对？比如："你发现你要做的事情太多，无法全部完成。"</p>
                 </div>
 
                 <div class="theory-section">
                     <h3>🎯 分数解读标准</h3>
-                    <p>本量表采用<strong>5点评分</strong>，总分范围13-65分：</p>
-                    <p><span style="color:var(--accent)">● 低水平（13-32分）：</span>情感支持较低，建议多关注孩子的情感需求。</p>
-                    <p><span style="color:var(--warning)">● 中等水平（33-48分）：</span>情感支持处于中等程度，仍有提升空间。</p>
-                    <p><span style="color:var(--success)">● 高水平（49-65分）：</span>情感支持较高，孩子能感受到父母的关爱和理解。</p>
+                    <p>本量表采用<strong>5点评分</strong>（0-4分），总分范围0-40分：</p>
+                    <p><span style="color:var(--success)">● 低压力知觉（0-13分）：</span>你最近一个月感受到的压力较低，生活相对可控和可预测。</p>
+                    <p><span style="color:var(--warning)">● 中等压力知觉（14-26分）：</span>你感受到的压力处于中等水平，生活中存在一定的压力源，但尚未达到困扰的程度。</p>
+                    <p><span style="color:var(--accent)">● 高压力知觉（27-40分）：</span>你感受到的压力较高，可能正经历超负荷、不可控或不可预测的生活状态，需要关注心理健康。</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);">划分依据：按前27%（低分组）、后27%（高分组）及中间46%划分。</p>
                 </div>
 
                 <div class="theory-section">
-                    <h3>👨‍👩‍👧 给家长：如何提升情感支持？</h3>
+                    <h3>🧘 如何降低压力知觉？</h3>
                     <ul class="tips-list">
-                        <li><strong>增加陪伴时间：</strong>每天抽出15-30分钟专注陪伴孩子，放下手机，倾听孩子想说的话。</li>
-                        <li><strong>觉察孩子的情绪：</strong>注意孩子的表情、语气变化，主动询问"今天怎么样"，而不是只问"作业做完了吗"。</li>
-                        <li><strong>换位思考：</strong>遇到冲突时，先问自己"如果我是孩子，我会怎么想"，避免用成人标准要求孩子。</li>
-                        <li><strong>有效沟通：</strong>孩子找你说话时，停下手中的事，认真倾听，不急于评判或给建议。</li>
-                        <li><strong>表达无条件支持：</strong>让孩子知道，无论成绩好坏，你都爱TA、支持TA。</li>
+                        <li><strong>增强掌控感：</strong>将大任务拆分成小步骤，每完成一步都能增加"我能做到"的信心。</li>
+                        <li><strong>建立日常规律：</strong>固定的作息和习惯能增加生活的可预测性，减少"意外"带来的压力。</li>
+                        <li><strong>学会说"不"：</strong>超负荷感往往来自承担了太多。设定边界，优先处理真正重要的事情。</li>
+                        <li><strong>正念练习：</strong>专注于当下，减少对未来的担忧和对过去的纠结。</li>
+                        <li><strong>寻求社会支持：</strong>与信任的人分享感受，倾诉本身就是一种减压方式。</li>
+                        <li><strong>规律运动：</strong>运动能释放压力荷尔蒙，改善情绪状态。</li>
                     </ul>
                 </div>
 
                 <div class="theory-section" style="border-left: 4px solid var(--primary); background: linear-gradient(135deg, rgba(107, 92, 231, 0.1), rgba(255, 107, 107, 0.1));">
                     <h3 style="color: var(--primary-light);">🤔 思考一下</h3>
-                    <p>你能想到，父母情感支持水平较低，会对孩子产生哪些不良影响吗？</p>
+                    <p>你能想到，长期处于高压力知觉状态，会对身心健康产生哪些影响吗？</p>
                 </div>
 
                 <div class="theory-section">
                     <h3>📚 测评来源</h3>
-                    <p>本测评基于唐雅君等人（2026）编制的父母情感支持量表（PESS），该量表在中学生父母样本中验证了良好的信效度。</p>
-                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">唐雅君, 黄守桢, 许世梅, 龚楚依, 孟迎芳. (2026). 青少年父母情感支持量表的编制及效度和信度检验. <em>中国心理卫生杂志, 40</em>(3), 249-256.</p>
+                    <p>本测评基于<strong>Cohen 等（1983）</strong>编制的压力知觉量表（PSS-10），本研究验证了其在癌症生存者群体中的信效度。</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">Cohen, S., Kamarck, T., & Mermelstein, R. (1983). A global measure of perceived stress. Journal of Health and Social Behavior, 24(4), 385-396.</p>
+                    <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">赵鑫, 杨小欢, 丁文娟, 陈睿, 蒋鑫, 张艳艳. (2017). 压力知觉量表中文版在癌症患者群体中的信效度检验. 中国心理卫生杂志, 31(10), 762-768.</p>
                 </div>
 
                 <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
@@ -855,34 +746,28 @@
     </div>
 
     <script>
-        // 父母版量表条目（PESS）
+        // 量表条目（PSS-10 中文版）
+        // 反向计分题：4、5、7、8（原题号）
         const questions = [
-            // 情感联结（3条）
-            { id: 1, dimension: 'bond', text: '我悉心照顾孩子的日常生活。' },
-            { id: 2, dimension: 'bond', text: '我经常陪伴孩子。' },
-            { id: 3, dimension: 'bond', text: '我和孩子的关系很好。' },
-            // 情感觉察（3条）
-            { id: 4, dimension: 'aware', text: '我经常鼓励孩子。' },
-            { id: 5, dimension: 'aware', text: '孩子情绪不好时，我会安慰孩子。' },
-            { id: 6, dimension: 'aware', text: '我会引导孩子合理宣泄负面情绪。' },
-            // 情感共鸣（3条）
-            { id: 7, dimension: 'resonance', text: '我经常向孩子表示明确坚定且无条件地支持。' },
-            { id: 8, dimension: 'resonance', text: '教育孩子时，我能够做到言传身教。' },
-            { id: 9, dimension: 'resonance', text: '我能够站在孩子的立场上考虑问题。' },
-            // 情感沟通（4条）
-            { id: 10, dimension: 'comm', text: '当孩子出现原则性问题（如价值观偏差等），我会坚持立场并引导孩子。' },
-            { id: 11, dimension: 'comm', text: '我会引导孩子积极正面地看待问题。' },
-            { id: 12, dimension: 'comm', text: '我经常主动过问孩子的情况。' },
-            { id: 13, dimension: 'comm', text: '孩子和我沟通时，我的态度不敷衍。' }
+            { id: 1, reverse: false, text: '最近一个月，你有多少次因为发生了一些意想不到的事情而感到不安？' },
+            { id: 2, reverse: false, text: '最近一个月，你有多少次感到无法控制自己生活中的重要事情？' },
+            { id: 3, reverse: false, text: '最近一个月，你有多少次感到紧张和压力？' },
+            { id: 4, reverse: true, text: '最近一个月，你有多少次对自己处理个人问题能力有信心？' },
+            { id: 5, reverse: true, text: '最近一个月，你有多少次感到事情正在按你的意愿发展？' },
+            { id: 6, reverse: false, text: '最近一个月，你有多少次发现自己无法应对所有你必须做的事情？' },
+            { id: 7, reverse: true, text: '最近一个月，你有多少次能够控制生活中对你的困扰？' },
+            { id: 8, reverse: true, text: '最近一个月，你有多少次感到一切都在你的掌控之中？' },
+            { id: 9, reverse: false, text: '最近一个月，你有多少次因为事情超出了你的控制能力而感到愤怒？' },
+            { id: 10, reverse: false, text: '最近一个月，你有多少次感到困难堆积如山，以至于无法克服？' }
         ];
 
-        // 评分选项（5点评分）
+        // 评分选项（5点评分：0-4）
         const scaleOptions = [
-            { value: 1, label: '完全不符合' },
-            { value: 2, label: '不太符合' },
-            { value: 3, label: '一般' },
-            { value: 4, label: '比较符合' },
-            { value: 5, label: '完全符合' }
+            { value: 0, label: '从不' },
+            { value: 1, label: '偶尔' },
+            { value: 2, label: '有时' },
+            { value: 3, label: '经常' },
+            { value: 4, label: '总是' }
         ];
 
         // 测评状态
@@ -926,9 +811,10 @@
             });
             document.getElementById('scaleButtons').innerHTML = buttonsHTML;
 
+            // 如果已回答，显示选中状态
             if (answers[currentQuestion] !== undefined) {
                 const btns = document.querySelectorAll('.scale-btn');
-                btns[answers[currentQuestion] - 1].classList.add('selected');
+                btns[answers[currentQuestion]].classList.add('selected');
             }
         }
 
@@ -936,14 +822,16 @@
         function selectAnswer(value) {
             answers[currentQuestion] = value;
 
+            // 更新按钮状态
             const btns = document.querySelectorAll('.scale-btn');
             btns.forEach((btn, index) => {
                 btn.classList.remove('selected');
-                if (index === value - 1) {
+                if (index === value) {
                     btn.classList.add('selected');
                 }
             });
 
+            // 延迟后进入下一题
             setTimeout(() => {
                 if (currentQuestion < questions.length - 1) {
                     currentQuestion++;
@@ -958,137 +846,69 @@
         function showResults() {
             showScreen('screen-result');
 
-            const validAnswers = answers.filter(a => a !== undefined);
-            const totalScore = validAnswers.reduce((sum, val) => sum + val, 0);
-            document.getElementById('totalScore').textContent = totalScore;
-
-            const dimensions = {
-                bond: { name: '情感联结', max: 3 * 5, scores: [], color: 'bond' },
-                aware: { name: '情感觉察', max: 3 * 5, scores: [], color: 'aware' },
-                resonance: { name: '情感共鸣', max: 3 * 5, scores: [], color: 'resonance' },
-                comm: { name: '情感沟通', max: 4 * 5, scores: [], color: 'comm' }
-            };
-
+            // 计算总分（反向计分处理）
+            // 反向题：原分数 0→4, 1→3, 2→2, 3→1, 4→0
+            let totalScore = 0;
             questions.forEach((q, index) => {
                 if (answers[index] !== undefined) {
-                    dimensions[q.dimension].scores.push(answers[index]);
+                    if (q.reverse) {
+                        // 反向计分：4 - score
+                        totalScore += (4 - answers[index]);
+                    } else {
+                        totalScore += answers[index];
+                    }
                 }
             });
 
-            const dimensionScores = {};
-            for (const key in dimensions) {
-                dimensionScores[key] = dimensions[key].scores.reduce((sum, val) => sum + val, 0);
-            }
+            document.getElementById('totalScore').textContent = totalScore;
 
-            // 渲染图表
-            const chartWrapper = document.getElementById('chartWrapper');
-            const maxBarHeight = 130;
-            chartWrapper.innerHTML = '';
-
-            for (const key in dimensions) {
-                const dim = dimensions[key];
-                const score = dimensionScores[key];
-                const percentage = score / dim.max;
-                const barHeight = percentage * maxBarHeight;
-
-                chartWrapper.innerHTML += `
-                    <div class="chart-group">
-                        <div class="chart-bar-value">${score}/${dim.max}</div>
-                        <div class="chart-bar ${dim.color}" style="height: ${barHeight}px;"></div>
-                        <div class="chart-label">${dim.name}</div>
-                    </div>
-                `;
-            }
-
-            // 渲染维度详情
-            const detailContainer = document.getElementById('dimensionDetails');
-            detailContainer.innerHTML = '';
-
-            const dimensionDescriptions = {
-                bond: '与孩子建立情感联结的程度',
-                aware: '敏感回应孩子情绪需求的程度',
-                resonance: '换位思考、尊重孩子的程度',
-                comm: '有效沟通、解决问题的程度'
-            };
-
-            for (const key in dimensions) {
-                const dim = dimensions[key];
-                const score = dimensionScores[key];
-
-                detailContainer.innerHTML += `
-                    <div class="dimension-result">
-                        <div class="dimension-info">
-                            <div class="dimension-name">${dim.name}</div>
-                            <div class="dimension-desc">${dimensionDescriptions[key]}</div>
-                        </div>
-                        <div class="dimension-score">
-                            <div class="dimension-score-value">${score}/${dim.max}</div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // 确定支持等级（按分数分布划分）
+            // 确定压力等级（按分数分布划分）
             let levelText, levelClass;
-            if (totalScore <= 32) {
-                levelText = '💔 情感支持较低';
+            if (totalScore <= 13) {
+                levelText = '🌱 低压力知觉水平';
                 levelClass = 'low';
-            } else if (totalScore <= 48) {
-                levelText = '💛 情感支持中等';
+            } else if (totalScore <= 26) {
+                levelText = '🌿 中等压力知觉水平';
                 levelClass = 'medium';
             } else {
-                levelText = '💚 情感支持较高';
+                levelText = '🔥 高压力知觉水平';
                 levelClass = 'high';
             }
 
-            const levelEl = document.getElementById('supportLevel');
+            const levelEl = document.getElementById('controlLevel');
             levelEl.textContent = levelText;
-            levelEl.className = 'support-level ' + levelClass;
+            levelEl.className = 'control-level ' + levelClass;
 
-            generateInsight(totalScore, dimensionScores, dimensions);
+            // 生成洞察
+            generateInsight(totalScore);
         }
 
         // 生成洞察
-        function generateInsight(totalScore, dimensionScores, dimensions) {
+        function generateInsight(totalScore) {
             let insight = '';
 
-            if (totalScore <= 32) {
-                insight += '📊 你对孩子的情感支持水平较低。这可能让孩子感到被忽视或不被理解，建议多关注孩子的情感需求。\n\n';
-            } else if (totalScore <= 48) {
-                insight += '📊 你对孩子的情感支持处于中等水平。孩子能感受到一定程度的关爱，但仍有提升空间。\n\n';
+            if (totalScore <= 13) {
+                insight += '📊 你最近一个月的压力知觉水平较低。\n\n';
+                insight += '这表明你感受到的生活相对可控和可预测，应对日常事务的能力感较强。继续保持规律的生活习惯和积极的心态，有助于维持这种良好的状态。\n\n';
+                insight += '✨ 低压力知觉有助于身心健康，但也要留意生活中可能出现的新压力源，及时调整应对策略。';
+            } else if (totalScore <= 26) {
+                insight += '📊 你最近一个月的压力知觉处于中等水平。\n\n';
+                insight += '这是较为常见的状态。生活中存在一定的压力源，但你仍然能够应对。适度压力有时能激发动力，但如果压力持续累积，可能需要关注。\n\n';
+                insight += '💡 建议：留意哪些事情让你感到不可控或超负荷，尝试建立应对策略。规律作息、适度运动、寻求支持都是有效的减压方式。';
             } else {
-                insight += '📊 你对孩子的情感支持水平较高。孩子能感受到你的关爱和理解，这有助于孩子健康成长。\n\n';
+                insight += '📊 你最近一个月的压力知觉水平较高。\n\n';
+                insight += '这表明你可能正在经历超负荷、不可控或不可预测的生活状态。长期高压力知觉可能影响身心健康，需要引起重视。\n\n';
+                insight += '💡 建议：\n';
+                insight += '• 将大任务拆分成小步骤，逐步完成\n';
+                insight += '• 与信任的人倾诉，寻求支持\n';
+                insight += '• 规律运动，释放压力荷尔蒙\n';
+                insight += '• 如果持续感到压力过大，建议寻求专业心理帮助';
             }
-
-            // 找出最高和最低维度
-            let maxDim = '', minDim = '';
-            let maxPercentage = 0, minPercentage = 1;
-
-            for (const key in dimensionScores) {
-                const percentage = dimensionScores[key] / dimensions[key].max;
-                if (percentage > maxPercentage) {
-                    maxPercentage = percentage;
-                    maxDim = key;
-                }
-                if (percentage < minPercentage) {
-                    minPercentage = percentage;
-                    minDim = key;
-                }
-            }
-
-            const dimNames = {
-                bond: '情感联结',
-                aware: '情感觉察',
-                resonance: '情感共鸣',
-                comm: '情感沟通'
-            };
-
-            insight += `🔍 你最擅长的是"${dimNames[maxDim]}"，这是你情感支持的优势所在。\n\n`;
-            insight += `✨ 相对而言，"${dimNames[minDim]}"是你做得相对较少的维度，需要多加关注。`;
 
             document.getElementById('insightText').textContent = insight;
         }
 
+        // 跳转到科普页面
         function goToTheory() {
             showScreen('screen-theory');
             setTimeout(() => {
@@ -1096,12 +916,14 @@
             }, 50);
         }
 
+        // 重置测评
         function resetTest() {
             currentQuestion = 0;
             answers = [];
             showScreen('screen-welcome');
         }
 
+        // 主题切换
         function toggleTheme() {
             const html = document.documentElement;
             const btn = document.querySelector('.theme-toggle');
