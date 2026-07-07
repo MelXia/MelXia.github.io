@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩越好的孩子，越怕考试前家庭发生这件事 - 青春翻译间</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.9;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .story-tag {
+            font-size: 0.85em;
+            color: var(--success);
+            background: rgba(78, 205, 196, 0.2);
+            padding: 6px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .story-title {
+            font-size: 1.5em;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .story-summary {
+            color: var(--text-muted);
+            font-size: 0.95em;
+        }
+
+        .story-content {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .story-content p {
+            font-size: 1em;
+            color: var(--text);
+            margin-bottom: 18px;
+            line-height: 2;
+        }
+
+        .story-content p:last-child { margin-bottom: 0; }
+
+        .story-content strong { color: var(--primary-light); }
+
+        .story-content blockquote {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            border-left: 3px solid var(--accent);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .insight-box {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .insight-title {
+            color: var(--accent);
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        .insight-content {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+
+        .insight-content p { margin-bottom: 8px; }
+        .insight-content p:last-child { margin-bottom: 0; }
+
+        .footer-nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--card);
+        }
+
+        .footer-nav a {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .footer-nav a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <a href="casebook.html" class="footer-nav" style="display:inline-block;margin-top:20px;">← 返回助人自助</a>
+
+        <div class="story-header">
+            <div class="story-tag">期末考试 · 家庭节奏</div>
+            <h1 class="story-title">成绩越好的孩子，越怕考试前家庭发生这件事</h1>
+            <p class="story-summary">真正影响考试发挥的，有时候不是多做一套试卷，而是考试前家庭节奏是否足够稳定。</p>
+        </div>
+
+        <div class="story-content">
+            <p>期末成绩出来后，又有家长来找我咨询：</p>
+
+            <p>孩子平时一直稳在年级前三，怎么一到期末考试，成绩就突然"滑铁卢"了？</p>
+
+            <p>家长心疼又无力，孩子自己也很懵：</p>
+
+            <blockquote>"我明明和平时一样在学，为什么关键时刻总发挥不好？"</blockquote>
+
+            <p>我曾经接触过一个类似的案例。</p>
+
+            <p>孩子从初一到初二上学期，成绩一直稳定在年级前三，家长终于觉得可以松一口气了。没想到初二期末考试，排名一下掉到前十边缘，几门学科的成绩甚至低到老师都没有公开展示。</p>
+
+            <p>后来，我们没有急着分析学习方法，而是把几次重要考试放在一起复盘。</p>
+
+            <p>结果发现了一个有意思的共同点：</p>
+
+            <p><strong>六年级两次期末、初二期末，这三次发挥失常，外婆都刚好住在家里。</strong></p>
+
+            <p>这里想强调的是，问题并不在外婆，而在于家庭节奏发生了变化。</p>
+
+            <p>外婆来了以后，手机管理变得宽松了；生活上饭来张口、衣来伸手；家长也不像平时那样规律，经常刷视频、玩游戏，整个家庭的自律氛围都松了下来。</p>
+
+            <p>孩子不是没有努力。</p>
+
+            <p>而是那个原本稳定的学习节奏，被环境悄悄打乱了。</p>
+
+            <p>心理学里有一个经典规律：</p>
+
+            <p>人的表现，并不是压力越大越好。</p>
+
+            <p>压力太小，容易缺乏动力；压力适中，表现最好；压力过大，反而容易发挥失常。</p>
+
+            <p><strong>这就是著名的耶克斯-多德森定律。</strong></p>
+
+            <p>期末考试本身就是一个高压事件。如果这个时候，家庭环境又发生了明显变化，孩子需要不断适应新的生活节奏，压力就会进一步叠加。</p>
+
+            <p>很多时候，不是孩子能力下降了，而是承载压力的那个"容器"变得不稳定了。</p>
+
+            <p>当然，考试发挥受到很多因素影响，比如知识掌握程度、身体状态、睡眠质量、考试策略以及情绪状态等。家庭环境未必是唯一原因，但它往往是最容易被忽略、也最容易改善的一环。</p>
+
+            <p>所以，当孩子关键考试发挥失常时，我通常建议家长先做三件事：</p>
+
+            <p><strong>① 不急着批评孩子，而是一起复盘。</strong></p>
+
+            <p>除了学习本身，也看看考试前那段时间，家庭有没有发生变化：作息、电子产品使用、亲友来访、家庭矛盾、旅行安排……这些都可能影响孩子的状态。</p>
+
+            <p><strong>② 家长先稳住自己的情绪。</strong></p>
+
+            <p>焦虑会传递，稳定也会传递。孩子已经承受了考试压力，如果再叠加父母的焦虑，往往只会雪上加霜。</p>
+
+            <p><strong>③ 关键考试前，尽量保持家庭节奏稳定。</strong></p>
+
+            <p>规律作息、减少突发安排、减少对孩子注意力的干扰，让家成为一个能够托住压力的环境，而不是新的压力来源。</p>
+
+            <p>很多家长花了很多时间研究学习方法，却忽略了一件更重要的事情：</p>
+
+            <blockquote>真正影响孩子关键考试发挥的，有时候不是多做一套试卷，而是考试前那段时间，家里的节奏是否足够稳定。</blockquote>
+
+            <p>一个稳定、有边界、有规律的家庭环境，就是孩子面对压力时最好的"容器"。</p>
+
+            <p>而家长能做的，就是先把这个容器稳稳地托住。</p>
+        </div>
+
+        <div class="insight-box">
+            <div class="insight-title">💡 Mel的翻译</div>
+            <div class="insight-content">
+                <p>• 把"孩子关键时刻掉链子"翻译成"家庭节奏变化叠加考试压力"</p>
+                <p>• 把"多做一套试卷"翻译成"稳住家庭这个压力容器"</p>
+                <p>• 把"批评孩子"翻译成"一起复盘、共同面对"</p>
+            </div>
+        </div>
+
+        <div class="footer-nav">
+            <a href="casebook.html">← 返回助人自助</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
