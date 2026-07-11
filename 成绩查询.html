@@ -388,12 +388,11 @@
         <section class="query-section" id="query">
             <div class="query-card">
                 <form onsubmit="handleQuery(event)">
-                    <label for="candidateNo">10 位考生号</label>
+                    <label for="candidateNo">请输入10位数的考生编号</label>
                     <div class="input-row">
                         <input type="text" id="candidateNo" placeholder="例如：0103XXXXXX" maxlength="10" inputmode="numeric" required>
                         <button type="submit">查询成绩</button>
                     </div>
-                    <p class="field-help">只查询当前考生的一条记录，不提供完整名单浏览或下载。</p>
                     <p class="error" id="errorMsg"></p>
                 </form>
             </div>
@@ -420,8 +419,9 @@
                 <div class="unlock-area" id="unlockArea" style="display:none;">
                     <div class="unlock-copy">
                         <h3>查看排名信息</h3>
-                        <p>支付 ¥1 后查看排名、上一档分差及同分人数。</p>
+                        <p>你可以通过官网公告，统计比该生成绩更高的人数以获得初步排名；或<span style="color:var(--accent);font-weight:700;">支付1元，立即快速查看排名</span>。</p>
                     </div>
+                    <img src="照片素材/payment-qr.jpg" alt="收款码" style="width:120px;border-radius:10px;margin:10px auto;display:block;">
                     <button class="secondary-button" type="button" onclick="showPayment()">付费查看排名</button>
                 </div>
             </div>
@@ -447,7 +447,6 @@
 
     <footer class="footer">
         <p>数据整理日期：2026 年 7 月 · 仅供查询参考</p>
-        <p>请勿使用自动化程序批量查询、复制或传播数据。</p>
     </footer>
     <button class="back-top" id="back-top" type="button" aria-label="返回顶部">↑</button>
 
