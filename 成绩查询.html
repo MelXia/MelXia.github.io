@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>自主招生成绩查询</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+            --line: rgba(139,124,247,.42);
+        }
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+            --line: rgba(91,76,215,.28);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 15px; font-size: 0.9em; }
+        .nav-links a:hover { color: var(--accent); }
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+        .theme-toggle:hover { background: var(--primary); color: white; }
+        .container { max-width: 600px; margin: 0 auto; padding: 30px 20px; }
+        .query-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--line);
+            margin-bottom: 20px;
+        }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .input-row { display: flex; gap: 12px; }
+        input {
+            flex: 1;
+            padding: 14px 15px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1em;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary-light); }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        button:hover { background: var(--primary-light); }
+        .field-help { margin-top: 10px; color: var(--text-muted); font-size: 0.85em; }
+        .error { color: #FF6B6B; margin-top: 10px; font-size: 0.9em; }
+        .result-card { display: none; }
+        .result-card.show { display: block; }
+        .result-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--success); }
+        .result-heading h2 { font-size: 1.1em; }
+        .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .score-grid div { background: var(--bg); padding: 15px; border-radius: 12px; }
+        dt { color: var(--text-muted); font-size: 0.8em; }
+        dd { margin-top: 5px; font-size: 1.3em; font-weight: 700; }
+        .rank-info { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+        .rank-info h3 { font-size: 0.95em; margin-bottom: 10px; }
+        .rank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .rank-grid div { background: var(--bg); padding: 12px; border-radius: 10px; }
+        .method-note { margin-top: 15px; color: var(--text-muted); font-size: 0.8em; }
+        .payment-section { margin-top: 20px; padding: 20px; background: var(--bg); border-radius: 12px; text-align: center; }
+        .payment-section h3 { margin-bottom: 10px; }
+        .payment-section p { color: var(--text-muted); font-size: 0.85em; margin-bottom: 15px; }
+        .payment-qr { width: 180px; border-radius: 10px; margin-bottom: 15px; }
+        .btn-pay {
+            background: var(--accent);
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,107,107,0.3); }
+        .privacy-section { margin-top: 30px; }
+        .privacy-section h3 { font-size: 1em; margin-bottom: 15px; color: var(--text-muted); }
+        .privacy-grid { display: grid; gap: 12px; }
+        .privacy-item { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--line); }
+        .privacy-item h4 { font-size: 0.9em; margin-bottom: 5px; }
+        .privacy-item p { color: var(--text-muted); font-size: 0.8em; }
+        @media (max-width: 500px) {
+            .input-row { flex-direction: column; }
+            .score-grid, .rank-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-brand">成绩排名查询</div>
+        <div class="nav-links">
+            <a href="index.html">返回主页</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="query-card">
+            <form onsubmit="handleQuery(event)">
+                <label for="candidateNo">10 位考生号</label>
+                <div class="input-row">
+                    <input type="text" id="candidateNo" placeholder="例如：0103XXXXXX" maxlength="10" inputmode="numeric" required>
+                    <button type="submit">查询成绩</button>
+                </div>
+                <p class="field-help">只查询当前考生的一条记录，不提供完整名单浏览。</p>
+                <p class="error" id="errorMsg"></p>
+            </form>
+        </div>
+
+        <div class="query-card result-card" id="resultCard">
+            <div class="result-heading">
+                <span class="status-dot"></span>
+                <h2>查询结果</h2>
+            </div>
+            <dl class="score-grid">
+                <div><dt>自主招生学校</dt><dd id="resultSchool">-</dd></div>
+                <div><dt>考生号</dt><dd id="resultCandidate">-</dd></div>
+                <div><dt>考核成绩</dt><dd id="resultScore">-</dd></div>
+            </dl>
+            <div class="rank-info" id="rankInfo" style="display:none;">
+                <h3>排名信息</h3>
+                <dl class="rank-grid">
+                    <div><dt>本次排名</dt><dd id="resultRank">-</dd></div>
+                    <div><dt>距上一档分差</dt><dd id="resultGap">-</dd></div>
+                    <div><dt>同分考生人数</dt><dd id="resultTie">-</dd></div>
+                </dl>
+                <p class="method-note">"上一档成绩"指高于当前成绩的最近一个不同分数。并列考生排名相同，后续名次按人数顺延。</p>
+            </div>
+            <div class="payment-section" id="paymentSection" style="display:none;">
+                <h3>查看排名信息</h3>
+                <p>支付 ¥1 后查看排名、上一档分差及同分人数。</p>
+                <img src="照片素材/payment-qr.jpeg" alt="收款码" class="payment-qr" onerror="this.style.display='none'">
+                <p>本工具采用自助诚信支付。<br>完成微信支付后，请点击下方按钮。</p>
+                <button class="btn-pay" onclick="showRank()">我已完成支付，查看排名</button>
+            </div>
+        </div>
+
+        <div class="privacy-section">
+            <h3>数据来源与信息安全</h3>
+            <div class="privacy-grid">
+                <div class="privacy-item">
+                    <h4>公开数据整理</h4>
+                    <p>考生号和考核成绩均取自学校公开网页公告。</p>
+                </div>
+                <div class="privacy-item">
+                    <h4>仅增加排名计算</h4>
+                    <p>在同一份公开成绩数据基础上，仅增加排名计算结果。</p>
+                </div>
+                <div class="privacy-item">
+                    <h4>不公开完整数据</h4>
+                    <p>网页不展示完整考生名单，每次只返回一条结果。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 成绩数据（嵌入页面）
+        const RECORDS = [{"candidateNo":"0102010473","status":"present","score":70.2,"rank":154,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010001","status":"absent","school":"一中"},{"candidateNo":"0103010003","status":"absent","school":"一中"},{"candidateNo":"0103010011","status":"present","score":85.7,"rank":6,"tieCount":1,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103010012","status":"present","score":53.5,"rank":210,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010013","status":"absent","school":"一中"},{"candidateNo":"0103010014","status":"present","score":76.3,"rank":86,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010015","status":"present","score":76.1,"rank":89,"tieCount":5,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010021","status":"present","score":83.7,"rank":12,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103010022","status":"present","score":76.1,"rank":89,"tieCount":5,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010028","status":"present","score":80.0,"rank":44,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010029","status":"present","score":77.3,"rank":68,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010030","status":"present","score":78.5,"rank":56,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010031","status":"present","score":75.1,"rank":109,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010033","status":"present","score":77.3,"rank":68,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010046","status":"present","score":79.0,"rank":48,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103010051","status":"absent","school":"一中"},{"candidateNo":"0103010052","status":"present","score":80.9,"rank":34,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010054","status":"present","score":68.9,"rank":162,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010056","status":"present","score":77.7,"rank":61,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010061","status":"present","score":81.1,"rank":33,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010066","status":"present","score":82.4,"rank":25,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010069","status":"present","score":73.6,"rank":128,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010073","status":"absent","school":"一中"},{"candidateNo":"0103010074","status":"present","score":76.8,"rank":80,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010079","status":"present","score":82.8,"rank":19,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010080","status":"present","score":63.9,"rank":181,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010083","status":"present","score":77.8,"rank":60,"tieCount":1,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103010086","status":"absent","school":"一中"},{"candidateNo":"0103010087","status":"absent","school":"一中"},{"candidateNo":"0103010093","status":"present","score":77.0,"rank":74,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010095","status":"present","score":60.2,"rank":196,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010099","status":"present","score":84.2,"rank":11,"tieCount":1,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103010103","status":"present","score":79.5,"rank":47,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010104","status":"present","score":82.7,"rank":21,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010105","status":"present","score":78.9,"rank":49,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010106","status":"present","score":76.5,"rank":83,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010109","status":"present","score":82.7,"rank":21,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010111","status":"present","score":70.8,"rank":143,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010113","status":"absent","school":"一中"},{"candidateNo":"0103010114","status":"present","score":80.7,"rank":36,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010130","status":"present","score":77.0,"rank":74,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010138","status":"absent","school":"一中"},{"candidateNo":"0103010143","status":"present","score":77.6,"rank":62,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010171","status":"present","score":69.3,"rank":159,"tieCount":2,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010177","status":"present","score":67.5,"rank":168,"tieCount":2,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103010180","status":"present","score":64.8,"rank":179,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010183","status":"present","score":69.3,"rank":159,"tieCount":2,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010184","status":"absent","school":"一中"},{"candidateNo":"0103010185","status":"present","score":70.3,"rank":149,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010191","status":"present","score":75.7,"rank":97,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010198","status":"present","score":74.8,"rank":112,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010208","status":"present","score":77.3,"rank":68,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010210","status":"present","score":73.7,"rank":127,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010214","status":"present","score":70.7,"rank":144,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010215","status":"present","score":83.5,"rank":13,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010232","status":"present","score":75.7,"rank":97,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010234","status":"present","score":83.5,"rank":13,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010246","status":"present","score":76.3,"rank":86,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010277","status":"present","score":77.4,"rank":66,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010295","status":"present","score":75.4,"rank":103,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010312","status":"present","score":76.5,"rank":83,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010321","status":"present","score":80.2,"rank":41,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010327","status":"present","score":78.9,"rank":49,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010336","status":"present","score":74.1,"rank":120,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010337","status":"present","score":70.3,"rank":149,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010355","status":"present","score":74.2,"rank":119,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010365","status":"present","score":59.5,"rank":198,"tieCount":3,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103010366","status":"present","score":89.8,"rank":1,"tieCount":1,"gapToPrevious":null,"school":"一中"},{"candidateNo":"0103010367","status":"absent","school":"一中"},{"candidateNo":"0103010377","status":"present","score":76.1,"rank":89,"tieCount":5,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010378","status":"present","score":67.4,"rank":170,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010384","status":"present","score":74.0,"rank":123,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010399","status":"present","score":69.6,"rank":158,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010401","status":"present","score":78.4,"rank":59,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010403","status":"present","score":81.7,"rank":29,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010405","status":"present","score":83.1,"rank":17,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010407","status":"present","score":81.4,"rank":31,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010408","status":"present","score":67.5,"rank":168,"tieCount":2,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103010418","status":"present","score":76.4,"rank":85,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010422","status":"present","score":78.9,"rank":49,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010445","status":"present","score":59.9,"rank":197,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010459","status":"present","score":53.0,"rank":211,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103010464","status":"present","score":76.1,"rank":89,"tieCount":5,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010485","status":"present","score":81.2,"rank":32,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010539","status":"present","score":54.9,"rank":206,"tieCount":1,"gapToPrevious":1.0,"school":"一中"},{"candidateNo":"0103010540","status":"present","score":80.5,"rank":38,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010544","status":"present","score":77.0,"rank":74,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010545","status":"present","score":78.8,"rank":53,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010546","status":"present","score":83.2,"rank":16,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010547","status":"present","score":57.5,"rank":203,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010550","status":"present","score":82.4,"rank":25,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010553","status":"present","score":81.8,"rank":27,"tieCount":2,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103010556","status":"present","score":60.4,"rank":195,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010561","status":"present","score":77.2,"rank":71,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010565","status":"present","score":78.5,"rank":56,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010573","status":"present","score":78.6,"rank":55,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010575","status":"present","score":78.9,"rank":49,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010576","status":"present","score":76.8,"rank":80,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010578","status":"present","score":75.7,"rank":97,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010584","status":"present","score":83.5,"rank":13,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010590","status":"present","score":70.3,"rank":149,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010591","status":"present","score":82.7,"rank":21,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010596","status":"present","score":82.9,"rank":18,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010597","status":"present","score":71.4,"rank":140,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010599","status":"present","score":84.6,"rank":10,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103010604","status":"present","score":85.6,"rank":7,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010609","status":"present","score":86.1,"rank":5,"tieCount":1,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103010613","status":"present","score":75.0,"rank":111,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010624","status":"present","score":75.7,"rank":97,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010627","status":"present","score":77.6,"rank":62,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010628","status":"present","score":70.5,"rank":146,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103010629","status":"present","score":76.0,"rank":94,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010633","status":"present","score":75.3,"rank":104,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010636","status":"present","score":80.8,"rank":35,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010638","status":"present","score":73.4,"rank":130,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010639","status":"present","score":76.9,"rank":78,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103010641","status":"absent","school":"一中"},{"candidateNo":"0103010663","status":"absent","school":"一中"},{"candidateNo":"0103010673","status":"present","score":66.4,"rank":172,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103020068","status":"present","score":76.0,"rank":94,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103020116","status":"absent","school":"一中"},{"candidateNo":"0103020291","status":"present","score":65.9,"rank":173,"tieCount":3,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103030013","status":"present","score":79.6,"rank":45,"tieCount":2,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103030117","status":"present","score":77.0,"rank":74,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103040429","status":"present","score":71.9,"rank":137,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103040688","status":"present","score":80.1,"rank":43,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103050065","status":"present","score":77.1,"rank":72,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103050068","status":"present","score":82.6,"rank":24,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103070193","status":"present","score":75.5,"rank":102,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103070195","status":"present","score":61.1,"rank":191,"tieCount":1,"gapToPrevious":0.7,"school":"一中"},{"candidateNo":"0103080031","status":"absent","school":"一中"},{"candidateNo":"0103120030","status":"present","score":61.8,"rank":190,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103120056","status":"present","score":80.2,"rank":41,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103120061","status":"present","score":77.4,"rank":66,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103120068","status":"present","score":66.9,"rank":171,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103120083","status":"present","score":70.0,"rank":156,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103120099","status":"present","score":74.5,"rank":117,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103180006","status":"present","score":71.6,"rank":139,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103190108","status":"absent","school":"一中"},{"candidateNo":"0103200015","status":"absent","school":"一中"},{"candidateNo":"0103200026","status":"present","score":70.7,"rank":144,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103200037","status":"present","score":77.6,"rank":62,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103200042","status":"absent","school":"一中"},{"candidateNo":"0103200231","status":"present","score":80.3,"rank":40,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103210010","status":"present","score":70.4,"rank":147,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103210011","status":"present","score":75.1,"rank":109,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103210025","status":"absent","school":"一中"},{"candidateNo":"0103210126","status":"present","score":55.9,"rank":205,"tieCount":1,"gapToPrevious":1.1,"school":"一中"},{"candidateNo":"0103210132","status":"present","score":80.4,"rank":39,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103210215","status":"present","score":67.9,"rank":167,"tieCount":1,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103350068","status":"present","score":73.8,"rank":125,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103350076","status":"present","score":59.5,"rank":198,"tieCount":3,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103350176","status":"present","score":59.5,"rank":198,"tieCount":3,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103350184","status":"present","score":65.5,"rank":176,"tieCount":1,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103350187","status":"present","score":74.1,"rank":120,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430007","status":"present","score":74.5,"rank":117,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430011","status":"present","score":74.6,"rank":116,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430018","status":"absent","school":"一中"},{"candidateNo":"0103430024","status":"present","score":74.7,"rank":115,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430033","status":"present","score":78.8,"rank":53,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430052","status":"present","score":44.5,"rank":215,"tieCount":1,"gapToPrevious":6.2,"school":"一中"},{"candidateNo":"0103430058","status":"present","score":76.3,"rank":86,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430149","status":"present","score":84.9,"rank":8,"tieCount":2,"gapToPrevious":0.7,"school":"一中"},{"candidateNo":"0103430234","status":"present","score":63.3,"rank":182,"tieCount":2,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103430252","status":"absent","school":"一中"},{"candidateNo":"0103430255","status":"absent","school":"一中"},{"candidateNo":"0103430281","status":"absent","school":"一中"},{"candidateNo":"0103430319","status":"present","score":71.3,"rank":141,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430337","status":"present","score":75.3,"rank":104,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430368","status":"present","score":81.7,"rank":29,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430375","status":"absent","school":"一中"},{"candidateNo":"0103430388","status":"present","score":81.8,"rank":27,"tieCount":2,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103430404","status":"present","score":54.0,"rank":208,"tieCount":1,"gapToPrevious":0.8,"school":"一中"},{"candidateNo":"0103430427","status":"present","score":70.3,"rank":149,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430431","status":"present","score":51.5,"rank":212,"tieCount":2,"gapToPrevious":1.5,"school":"一中"},{"candidateNo":"0103430446","status":"present","score":73.2,"rank":131,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103430474","status":"present","score":51.5,"rank":212,"tieCount":2,"gapToPrevious":1.5,"school":"一中"},{"candidateNo":"0103430486","status":"absent","school":"一中"},{"candidateNo":"0103430496","status":"present","score":65.9,"rank":173,"tieCount":3,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103430499","status":"present","score":69.7,"rank":157,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103430613","status":"present","score":63.3,"rank":182,"tieCount":2,"gapToPrevious":0.6,"school":"一中"},{"candidateNo":"0103430629","status":"absent","school":"一中"},{"candidateNo":"0103430654","status":"present","score":73.8,"rank":125,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430746","status":"present","score":73.1,"rank":132,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430758","status":"present","score":76.7,"rank":82,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430774","status":"present","score":71.0,"rank":142,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103430776","status":"present","score":62.8,"rank":186,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103430788","status":"present","score":73.5,"rank":129,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430790","status":"present","score":63.1,"rank":184,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103430904","status":"absent","school":"一中"},{"candidateNo":"0103430912","status":"present","score":54.8,"rank":207,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430963","status":"present","score":76.9,"rank":78,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103430994","status":"present","score":60.5,"rank":193,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103430995","status":"present","score":75.3,"rank":104,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103431006","status":"present","score":74.1,"rank":120,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103431009","status":"present","score":53.7,"rank":209,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103431013","status":"present","score":80.6,"rank":37,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103431019","status":"present","score":65.9,"rank":173,"tieCount":3,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103431025","status":"present","score":60.5,"rank":193,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103431027","status":"absent","school":"一中"},{"candidateNo":"0103431048","status":"present","score":68.6,"rank":164,"tieCount":2,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103431052","status":"present","score":60.7,"rank":192,"tieCount":1,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103431057","status":"present","score":74.8,"rank":112,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103431060","status":"absent","school":"一中"},{"candidateNo":"0103431068","status":"present","score":72.9,"rank":134,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103431069","status":"present","score":75.8,"rank":96,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103431070","status":"present","score":70.4,"rank":147,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103431085","status":"present","score":64.0,"rank":180,"tieCount":1,"gapToPrevious":0.8,"school":"一中"},{"candidateNo":"0103431094","status":"present","score":65.0,"rank":178,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103431100","status":"absent","school":"一中"},{"candidateNo":"0103431109","status":"present","score":75.2,"rank":108,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103431140","status":"present","score":65.3,"rank":177,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103431142","status":"absent","school":"一中"},{"candidateNo":"0103431143","status":"present","score":84.9,"rank":8,"tieCount":2,"gapToPrevious":0.7,"school":"一中"},{"candidateNo":"0103440014","status":"absent","school":"一中"},{"candidateNo":"0103440075","status":"present","score":71.7,"rank":138,"tieCount":1,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103440115","status":"present","score":78.5,"rank":56,"tieCount":3,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103440138","status":"present","score":50.7,"rank":214,"tieCount":1,"gapToPrevious":0.8,"school":"一中"},{"candidateNo":"0103440153","status":"present","score":68.6,"rank":164,"tieCount":2,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103440159","status":"present","score":75.3,"rank":104,"tieCount":4,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103440166","status":"present","score":69.0,"rank":161,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103440182","status":"present","score":76.1,"rank":89,"tieCount":5,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103440202","status":"absent","school":"一中"},{"candidateNo":"0103440221","status":"present","score":68.9,"rank":162,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103440230","status":"present","score":73.9,"rank":124,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103450056","status":"present","score":68.5,"rank":166,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103450398","status":"absent","school":"一中"},{"candidateNo":"0103450455","status":"present","score":75.7,"rank":97,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103470046","status":"absent","school":"一中"},{"candidateNo":"0103470061","status":"present","score":62.6,"rank":188,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103470067","status":"absent","school":"一中"},{"candidateNo":"0103470078","status":"present","score":88.9,"rank":2,"tieCount":1,"gapToPrevious":0.9,"school":"一中"},{"candidateNo":"0103470101","status":"absent","school":"一中"},{"candidateNo":"0103470110","status":"present","score":72.0,"rank":136,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0103470138","status":"absent","school":"一中"},{"candidateNo":"0103470144","status":"present","score":59.2,"rank":201,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103470161","status":"present","score":79.6,"rank":45,"tieCount":2,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103470356","status":"present","score":74.8,"rank":112,"tieCount":3,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0103480008","status":"absent","school":"一中"},{"candidateNo":"0103480054","status":"present","score":57.7,"rank":202,"tieCount":1,"gapToPrevious":1.5,"school":"一中"},{"candidateNo":"0103480188","status":"absent","school":"一中"},{"candidateNo":"0103480277","status":"present","score":73.1,"rank":132,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103480304","status":"present","score":62.3,"rank":189,"tieCount":1,"gapToPrevious":0.3,"school":"一中"},{"candidateNo":"0103480305","status":"present","score":87.4,"rank":3,"tieCount":1,"gapToPrevious":1.5,"school":"一中"},{"candidateNo":"0103480339","status":"present","score":70.3,"rank":149,"tieCount":5,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0103480453","status":"present","score":72.5,"rank":135,"tieCount":1,"gapToPrevious":0.4,"school":"一中"},{"candidateNo":"0103480506","status":"present","score":86.7,"rank":4,"tieCount":1,"gapToPrevious":0.7,"school":"一中"},{"candidateNo":"0106110059","status":"absent","school":"一中"},{"candidateNo":"0106320120","status":"present","score":82.8,"rank":19,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0108010121","status":"present","score":77.5,"rank":65,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0111560307","status":"present","score":57.0,"rank":204,"tieCount":1,"gapToPrevious":0.5,"school":"一中"},{"candidateNo":"0111640322","status":"present","score":63.1,"rank":184,"tieCount":2,"gapToPrevious":0.2,"school":"一中"},{"candidateNo":"0111660513","status":"present","score":62.7,"rank":187,"tieCount":1,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0112220153","status":"absent","school":"一中"},{"candidateNo":"0114960368","status":"absent","school":"一中"},{"candidateNo":"0118460296","status":"present","score":77.1,"rank":72,"tieCount":2,"gapToPrevious":0.1,"school":"一中"},{"candidateNo":"0118910294","status":"present","score":70.1,"rank":155,"tieCount":1,"gapToPrevious":0.1,"school":"一中"}];
+
+        const INDEX = new Map(RECORDS.map(r => [r.candidateNo, r]));
+        let currentRecord = null;
+
+        function handleQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('candidateNo');
+            const errorMsg = document.getElementById('errorMsg');
+            const resultCard = document.getElementById('resultCard');
+            const rankInfo = document.getElementById('rankInfo');
+            const paymentSection = document.getElementById('paymentSection');
+
+            errorMsg.textContent = '';
+            rankInfo.style.display = 'none';
+            paymentSection.style.display = 'none';
+
+            const candidateNo = input.value.trim();
+            if (!/^0\d{9}$/.test(candidateNo)) {
+                errorMsg.textContent = '请输入正确的10位考生号（以0开头）。';
+                return;
+            }
+
+            const record = INDEX.get(candidateNo);
+            if (!record) {
+                errorMsg.textContent = '未查询到该考生号，请核对后重试。';
+                return;
+            }
+
+            currentRecord = record;
+            resultCard.classList.add('show');
+
+            document.getElementById('resultSchool').textContent = record.school;
+            document.getElementById('resultCandidate').textContent = maskNo(candidateNo);
+
+            if (record.status === 'absent') {
+                document.getElementById('resultScore').textContent = '缺考';
+            } else {
+                document.getElementById('resultScore').textContent = record.score.toFixed(1).replace(/\.0$/, '') + ' 分';
+                paymentSection.style.display = 'block';
+            }
+
+            resultCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function maskNo(no) {
+            return no.slice(0, 4) + '***' + no.slice(-3);
+        }
+
+        function showRank() {
+            if (!currentRecord) return;
+            const rankInfo = document.getElementById('rankInfo');
+            const paymentSection = document.getElementById('paymentSection');
+
+            document.getElementById('resultRank').textContent = '第 ' + currentRecord.rank + ' 名';
+            document.getElementById('resultGap').textContent = currentRecord.gapToPrevious == null ? '已是最高分' : currentRecord.gapToPrevious.toFixed(1).replace(/\.0$/, '') + ' 分';
+            document.getElementById('resultTie').textContent = '共 ' + currentRecord.tieCount + ' 人';
+
+            rankInfo.style.display = 'block';
+            paymentSection.style.display = 'none';
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            const current = html.getAttribute('data-theme');
+            if (current === 'light') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (saved === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+
+        // 只允许输入数字
+        document.getElementById('candidateNo').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+    </script>
+</body>
+</html>
