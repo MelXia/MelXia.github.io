@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家长对普娃的学习支持策略自测</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        /* 隐私提示 */
+        .privacy-notice {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(107, 92, 231, 0.15));
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .privacy-notice-title {
+            color: var(--success);
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .privacy-notice-text {
+            color: var(--text);
+            font-size: 0.8em;
+            line-height: 1.5;
+        }
+
+        /* 规则说明 */
+        .rule-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .rule-title {
+            color: var(--warning-text);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-content {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.85em;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        /* 模块标题 */
+        .module-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        /* 问题卡片 */
+        .question-card {
+            background: var(--bg);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .question-number {
+            color: var(--primary-light);
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            color: var(--text);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* 导航按钮区域 */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            padding: 10px 20px;
+            font-size: 0.85em;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* 评分按钮 */
+        .scale-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .scale-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .scale-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .scale-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-light);
+        }
+
+        .scale-btn-label {
+            display: block;
+            font-size: 0.85em;
+            margin-top: 3px;
+            opacity: 0.8;
+        }
+
+        /* 雷达图容器 */
+        .radar-container {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .radar-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .radar-chart {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .radar-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 雷达图标签（HTML定位） */
+        .radar-label {
+            position: absolute;
+            font-size: 11px;
+            color: var(--text);
+            white-space: nowrap;
+            transform: translate(-50%, -50%);
+        }
+
+        .radar-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 0.75em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* 维度结果 */
+        .dimension-result {
+            background: var(--bg);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dimension-info {
+            flex: 1;
+        }
+
+        .dimension-name {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .dimension-desc {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        .dimension-score {
+            text-align: right;
+        }
+
+        .dimension-score-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .dimension-score-label {
+            font-size: 0.7em;
+            color: var(--text-muted);
+        }
+
+        /* 洞察 */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .insight-title {
+            color: var(--primary-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+            font-size: 0.85em;
+        }
+
+        /* 建议卡片 */
+        .suggestion-card {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+            border-left: 3px solid var(--accent);
+        }
+
+        .suggestion-title {
+            color: var(--accent);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .suggestion-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestion-list li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 0.85em;
+        }
+
+        .suggestion-list li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--primary-light);
+        }
+
+        /* 分数等级 */
+        .score-level {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .score-level.low {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .score-level.medium {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--warning);
+        }
+
+        .score-level.high {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        /* 总分结果 */
+        .total-score-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .total-score-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .total-score-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .total-score-range {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            .scale-btn {
+                min-width: 70px;
+                padding: 10px 6px;
+                font-size: 0.7em;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+
+            .radar-chart {
+                width: 240px;
+                height: 240px;
+            }
+
+            .dimension-result {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dimension-score {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 欢迎页面 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">📋</div>
+                <h1>家长对普娃的学习支持策略自测表</h1>
+                <p class="subtitle">10 分钟看清孩子现在最需要哪一种支持</p>
+
+                <div class="privacy-notice">
+                    <div class="privacy-notice-title">🔒 隐私保护</div>
+                    <div class="privacy-notice-text">
+                        这是一个静态网页，你的测试结果<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器或数据库。刷新页面后数据将清除，请放心作答。
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <div class="rule-title">📋 测评说明</div>
+                    <div class="rule-content">
+                        <strong>适合对象：</strong>孩子成绩普通、成绩波动、学习状态不稳，家长不知道下一步怎么支持的家庭。<br><br>
+                        <strong>题目数量：</strong>共5个模块，每个模块5题，共25题，约需10分钟。<br><br>
+                        请根据最近2-4周的真实情况作答，没有对错之分，诚实作答即可。
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <div class="rule-title">📊 评分方式</div>
+                    <div class="rule-content">
+                        所有题目都按同一个方向计分：<br>
+                        <strong>0 分：基本不符合</strong><br>
+                        <strong>1 分：有一点符合，偶尔出现</strong><br>
+                        <strong>2 分：非常符合，经常出现</strong><br><br>
+                        分数越高，代表这个模块越需要优先关注。
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startTest()">开始测评</button>
+            </div>
+        </div>
+
+        <!-- 测评页面 -->
+        <div class="screen" id="screen-test">
+            <div class="card">
+                <div class="progress-text" id="progressText">第 1 题 / 共 25 题</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 4%"></div>
+                </div>
+
+                <div class="module-title" id="moduleTitle">第一部分：学习卡点自测</div>
+
+                <div class="question-card" id="questionCard">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div class="scale-buttons" id="scaleButtons">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>测评完成！</h2>
+                <p class="subtitle">看看你的家庭支持策略诊断结果</p>
+
+                <div class="radar-container">
+                    <div class="radar-title">📊 五维度雷达图</div>
+                    <div class="radar-chart" id="radarChartArea">
+                        <svg class="radar-svg" viewBox="0 0 200 200" id="radarSvg">
+                            <!-- 动态生成 -->
+                        </svg>
+                        <!-- HTML标签将动态添加到这里 -->
+                    </div>
+                    <div class="radar-legend" id="radarLegend">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+
+                <div id="dimensionResults">
+                    <!-- 动态填充 -->
+                </div>
+
+                <div class="insight-box" id="insightBox">
+                    <div class="insight-title">💡 你的结果解读</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <div id="suggestionsContainer">
+                    <!-- 动态填充：最高分两个模块的建议 -->
+                </div>
+
+                <div class="rule-box" style="margin-top: 20px;">
+                    <div class="rule-title">📌 最后提醒</div>
+                    <div class="rule-content">
+                        这份表的重点不是给孩子贴标签，也不是替家长做决定。它只是帮你找出：现在最该先处理哪一层问题。<br><br>
+                        今晚只做一件事：<strong>写下孩子当前最需要优先处理的一个问题，以及家长接下来4周可以做的一个最小调整。</strong>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+                <button class="btn btn-primary" onclick="resetTest()">重新测评</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模块定义
+        const modules = [
+            {
+                id: 'learning',
+                name: '学习卡点',
+                fullName: '第一部分：学习卡点自测',
+                description: '判断孩子的学习困难是否已经暴露出明确卡点',
+                questions: [
+                    '孩子经常说"我听懂了"，但一做题就错。',
+                    '孩子的错题反复出现在同一类知识点或题型上。',
+                    '孩子会做简单题，但一到综合题就不知道从哪里下手。',
+                    '孩子学习很花时间，但成绩变化不明显。',
+                    '家长说不清孩子到底是基础弱、方法错，还是不会迁移。'
+                ],
+                interpretation: [
+                    { range: [0, 3], text: '学习卡点暂时不突出，可以继续观察。' },
+                    { range: [4, 7], text: '已经出现具体学习卡点，需要进一步定位。' },
+                    { range: [8, 10], text: '学习卡点明显，优先做学科诊断和问题拆解。' }
+                ],
+                reminder: '"成绩普通"不是问题本身。真正需要看的是：孩子到底卡在基础、方法、迁移，还是执行。',
+                suggestions: [
+                    '选一科，不要同时抓全科。',
+                    '整理最近2-3次试卷，只看重复错的题。',
+                    '把错因分成三类：不会、会但粗心、会但做不完。',
+                    '先定一个4周小目标，例如"减少同类错题"。',
+                    '每周只复盘一次，避免天天追问。'
+                ]
+            },
+            {
+                id: 'motivation',
+                name: '内驱力与厌学风险',
+                fullName: '第二部分：内驱力与厌学风险自测',
+                description: '判断孩子是否还保有基本学习动力和心理能量',
+                questions: [
+                    '孩子一提学习、作业或考试，就明显烦躁、沉默或逃避。',
+                    '孩子经常说"学了也没用""我就是不行"。',
+                    '孩子对原本愿意做的事情，也开始失去兴趣。',
+                    '孩子完成学习任务，主要靠催促、盯着或威胁。',
+                    '孩子很少体验到"我能做到一点"的成就感。'
+                ],
+                interpretation: [
+                    { range: [0, 3], text: '动力状态相对稳定。' },
+                    { range: [4, 7], text: '动力正在下降，需要降低对抗、恢复一点掌控感。' },
+                    { range: [8, 10], text: '厌学风险较高，优先处理情绪和关系通道。' }
+                ],
+                reminder: '孩子不是只有"不努力"这一种解释。有些孩子是长期挫败后，已经不相信自己还能改变。',
+                suggestions: [
+                    '先停掉连续追问和反复讲道理。',
+                    '找一件孩子还愿意做的小事，从那里恢复掌控感。',
+                    '学习任务先缩小到"能完成"，不要一开始追求"做得好"。',
+                    '每天只确认一个最小动作，例如订正2题或读10分钟。',
+                    '如果持续回避、失眠、情绪低落，建议寻求专业支持。'
+                ]
+            },
+            {
+                id: 'relationship',
+                name: '亲子关系与沟通',
+                fullName: '第三部分：亲子关系与沟通自测',
+                description: '判断家庭沟通是否正在影响孩子面对学习问题的能力',
+                questions: [
+                    '家里一谈学习，就容易变成催促、批评或争吵。',
+                    '孩子越来越少主动告诉家长学校里的事情。',
+                    '家长更常追问结果，很少和孩子复盘过程。',
+                    '孩子遇到困难时，更倾向于隐瞒，而不是求助。',
+                    '家长嘴上说"不只看成绩"，但日常最常问的还是分数、排名、作业。'
+                ],
+                interpretation: [
+                    { range: [0, 3], text: '亲子沟通相对稳定。' },
+                    { range: [4, 7], text: '沟通压力已经影响学习支持，需要调整互动方式。' },
+                    { range: [8, 10], text: '关系通道紧张，优先恢复孩子愿意说真话的空间。' }
+                ],
+                reminder: '孩子愿意说真话，家长才有机会知道问题在哪里。如果孩子只想躲，很多支持都会落空。',
+                suggestions: [
+                    '连续3天减少"作业、成绩、排名"的追问。',
+                    '每天留10分钟，只聊学校见闻或孩子感受。',
+                    '孩子说话时，先复述，不立刻评价。',
+                    '先问"你今天累不累"，再问"要不要一起想办法"。',
+                    '家长先做到少说一句，关系通道才有机会恢复。'
+                ]
+            },
+            {
+                id: 'anxiety',
+                name: '家长焦虑',
+                fullName: '第四部分：家长焦虑自测',
+                description: '判断家长的焦虑是否正在影响判断和行动',
+                questions: [
+                    '孩子成绩一波动，我会马上联想到升学、分流和未来出路。',
+                    '我经常觉得"现在不抓，以后就来不及"。',
+                    '我很难区分已经发生的事实，和自己脑子里的最坏想象。',
+                    '我会把孩子的成绩和自己的责任感、失败感绑在一起。',
+                    '收入不稳定、裁员降薪等消息，会放大我对教育投入的焦虑。'
+                ],
+                interpretation: [
+                    { range: [0, 3], text: '家长焦虑相对可控。' },
+                    { range: [4, 7], text: '焦虑正在影响判断，需要先把事实和担心分开。' },
+                    { range: [8, 10], text: '焦虑水平较高，不适合在情绪峰值时做重大决定。' }
+                ],
+                reminder: '焦虑本身不是错。但如果所有行动都由焦虑推动，家长很容易越做越累，孩子也越躲越远。',
+                suggestions: [
+                    '写两列：已经发生的事实；我脑中的最坏想象。',
+                    '任何加课、加钱、加要求的决定，延迟24小时。',
+                    '先问自己：我担心的是成绩，还是孩子未来兜不住自己？',
+                    '把焦虑转成一个小行动，例如陪孩子复盘一次错题。',
+                    '不在情绪峰值时做长期承诺。'
+                ]
+            },
+            {
+                id: 'resource',
+                name: '家庭资源与支持能力',
+                fullName: '第五部分：家庭资源与支持能力自测',
+                description: '判断家庭是否具备稳定支持孩子的现实条件',
+                questions: [
+                    '教育支出已经让家庭现金流或生活安全感明显变紧。',
+                    '家长时间和精力有限，很难稳定陪孩子复盘或执行计划。',
+                    '家庭成员之间对孩子学习支持方式意见不一致。',
+                    '家里经常一边花钱支持学习，一边因为钱和效果产生压力。',
+                    '家长不知道哪些支持该保留，哪些该调整，哪些该暂停。'
+                ],
+                interpretation: [
+                    { range: [0, 3], text: '家庭资源压力暂时不高。' },
+                    { range: [4, 7], text: '资源配置开始吃紧，需要做取舍和排序。' },
+                    { range: [8, 10], text: '家庭资源压力明显，优先做支持策略重排。' }
+                ],
+                reminder: '资源有限时，重点不是简单减少投入。而是把有限资源放到最能解决问题的位置。',
+                suggestions: [
+                    '列出所有教育投入：金钱、时间、接送、陪伴精力。',
+                    '每一项写清楚目标：解决什么问题。',
+                    '分成三类：必须保留、可以调整、先暂停观察。',
+                    '优先保留目标明确、孩子接得住、家庭可承受的支持。',
+                    '不用"多花钱"替代"做判断"。'
+                ]
+            }
+        ];
+
+        // 维度颜色
+        const dimensionColors = {
+            learning: '#FF6B6B',
+            motivation: '#6B5CE7',
+            relationship: '#FFE66D',
+            anxiety: '#4ECDC4',
+            resource: '#FF9F43'
+        };
+
+        // 雷达图简短标签（四个字以内）
+        const dimensionShortNames = {
+            learning: '学习卡点',
+            motivation: '内驱力',
+            relationship: '亲子关系',
+            anxiety: '家长焦虑',
+            resource: '家庭资源'
+        };
+
+        // 测评状态
+        let currentModule = 0;
+        let currentQuestion = 0;
+        let answers = {}; // { moduleId: [score1, score2, ...] }
+
+        // 计算标准差
+        function calculateStdDev(arr) {
+            if (arr.length === 0) return 0;
+            const mean = arr.reduce((sum, val) => sum + val, 0) / arr.length;
+            const squaredDiffs = arr.map(val => Math.pow(val - mean, 2));
+            return Math.sqrt(squaredDiffs.reduce((sum, val) => sum + val, 0) / arr.length);
+        }
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 开始测评
+        function startTest() {
+            currentModule = 0;
+            currentQuestion = 0;
+            answers = {};
+            modules.forEach(m => answers[m.id] = []);
+            renderQuestion();
+            showScreen('screen-test');
+        }
+
+        // 渲染当前问题（一题一题显示）
+        function renderQuestion() {
+            const module = modules[currentModule];
+            const totalQuestions = modules.reduce((sum, m) => sum + m.questions.length, 0);
+            const currentIndex = modules.slice(0, currentModule).reduce((sum, m) => sum + m.questions.length, 0) + currentQuestion + 1;
+
+            document.getElementById('progressText').textContent = `第 ${currentIndex} 题 / 共 ${totalQuestions} 题`;
+            document.getElementById('progressFill').style.width = (currentIndex / totalQuestions * 100) + '%';
+            document.getElementById('moduleTitle').textContent = module.fullName;
+
+            const question = module.questions[currentQuestion];
+            const savedAnswer = answers[module.id][currentQuestion];
+
+            document.getElementById('questionCard').innerHTML = `
+                <div class="question-number">问题 ${currentQuestion + 1}</div>
+                <div class="question-text">${question}</div>
+            `;
+
+            document.getElementById('scaleButtons').innerHTML = `
+                <button class="scale-btn ${savedAnswer === 0 ? 'selected' : ''}" onclick="selectAnswer(0)">
+                    0
+                    <span class="scale-btn-label">基本不符合</span>
+                </button>
+                <button class="scale-btn ${savedAnswer === 1 ? 'selected' : ''}" onclick="selectAnswer(1)">
+                    1
+                    <span class="scale-btn-label">有一点符合</span>
+                </button>
+                <button class="scale-btn ${savedAnswer === 2 ? 'selected' : ''}" onclick="selectAnswer(2)">
+                    2
+                    <span class="scale-btn-label">非常符合</span>
+                </button>
+            `;
+
+            // 更新上一题按钮状态
+            const prevBtn = document.getElementById('prevBtn');
+            if (currentModule === 0 && currentQuestion === 0) {
+                prevBtn.disabled = true;
+            } else {
+                prevBtn.disabled = false;
+            }
+        }
+
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            } else if (currentModule > 0) {
+                currentModule--;
+                currentQuestion = modules[currentModule].questions.length - 1;
+                renderQuestion();
+            }
+        }
+
+        // 选择答案（选择后自动跳转下一题）
+        function selectAnswer(value) {
+            const module = modules[currentModule];
+            answers[module.id][currentQuestion] = value;
+
+            // 更新按钮状态
+            const btns = document.querySelectorAll('.scale-btn');
+            btns.forEach((btn, index) => {
+                btn.classList.remove('selected');
+                if (index === value) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            // 延迟后跳转下一题
+            setTimeout(() => {
+                if (currentQuestion < module.questions.length - 1) {
+                    // 当前模块还有下一题
+                    currentQuestion++;
+                    renderQuestion();
+                } else if (currentModule < modules.length - 1) {
+                    // 进入下一模块
+                    currentModule++;
+                    currentQuestion = 0;
+                    renderQuestion();
+                } else {
+                    // 完成所有题目
+                    showResults();
+                }
+            }, 300);
+        }
+
+        // 显示结果
+        function showResults() {
+            showScreen('screen-result');
+
+            // 计算各模块得分
+            const scores = {};
+            modules.forEach(m => {
+                scores[m.id] = answers[m.id].reduce((sum, val) => sum + val, 0);
+            });
+
+            // 渲染雷达图
+            renderRadarChart(scores);
+
+            // 渲染维度结果
+            const resultsContainer = document.getElementById('dimensionResults');
+            resultsContainer.innerHTML = '';
+
+            modules.forEach(m => {
+                const score = scores[m.id];
+                let levelClass = 'low';
+                if (score >= 8) levelClass = 'high';
+                else if (score >= 4) levelClass = 'medium';
+
+                resultsContainer.innerHTML += `
+                    <div class="dimension-result">
+                        <div class="dimension-info">
+                            <div class="dimension-name">${m.name}</div>
+                            <div class="dimension-desc">${m.description}</div>
+                        </div>
+                        <div class="dimension-score">
+                            <div class="dimension-score-value">${score}/10</div>
+                            <span class="score-level ${levelClass}">${score >= 8 ? '需关注' : score >= 4 ? '中等' : '稳定'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 找出得分最高的两个模块（同分时用标准差排序）
+            const modulesWithScores = modules.map(m => ({
+                module: m,
+                score: scores[m.id],
+                stdDev: calculateStdDev(answers[m.id])
+            }));
+
+            // 排序：先按分数降序，同分时按标准差降序
+            modulesWithScores.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return b.stdDev - a.stdDev;
+            });
+
+            const topTwo = modulesWithScores.slice(0, 2);
+
+            // 生成洞察
+            let insightText = `根据你的作答，得分最高的两个维度是：${topTwo.map(item => item.module.name).join('、')}。\n\n`;
+
+            topTwo.forEach(item => {
+                const m = item.module;
+                const score = scores[m.id];
+                const interp = m.interpretation.find(i => score >= i.range[0] && score <= i.range[1]);
+                insightText += `【${m.name}】${interp.text}\n${m.reminder}\n\n`;
+            });
+
+            document.getElementById('insightText').textContent = insightText;
+
+            // 渲染建议
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            suggestionsContainer.innerHTML = '';
+
+            topTwo.forEach(item => {
+                const m = item.module;
+                let suggestionsHTML = '<ul class="suggestion-list">';
+                m.suggestions.forEach(s => {
+                    suggestionsHTML += `<li>${s}</li>`;
+                });
+                suggestionsHTML += '</ul>';
+
+                suggestionsContainer.innerHTML += `
+                    <div class="suggestion-card">
+                        <div class="suggestion-title">📌 ${m.name} - 下一步建议</div>
+                        ${suggestionsHTML}
+                    </div>
+                `;
+            });
+        }
+
+        // 渲染雷达图
+        function renderRadarChart(scores) {
+            const svg = document.getElementById('radarSvg');
+            const chartArea = document.getElementById('radarChartArea');
+            const legend = document.getElementById('radarLegend');
+
+            const centerX = 100;
+            const centerY = 100;
+            const radius = 70;
+
+            // 绘制背景网格（五边形）
+            let gridHTML = '';
+            const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
+
+            levels.forEach(level => {
+                const points = modules.map((m, i) => {
+                    const angle = (i * 72 - 90) * Math.PI / 180;
+                    const x = centerX + radius * level * Math.cos(angle);
+                    const y = centerY + radius * level * Math.sin(angle);
+                    return `${x},${y}`;
+                }).join(' ');
+                gridHTML += `<polygon points="${points}" fill="none" stroke="var(--text-muted)" stroke-opacity="0.2" stroke-width="1"/>`;
+            });
+
+            // 绘制轴线
+            modules.forEach((m, i) => {
+                const angle = (i * 72 - 90) * Math.PI / 180;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                gridHTML += `<line x1="${centerX}" y1="${centerY}" x2="${x}" y2="${y}" stroke="var(--text-muted)" stroke-opacity="0.3"/>`;
+            });
+
+            // 绘制数据区域
+            const dataPoints = modules.map((m, i) => {
+                const angle = (i * 72 - 90) * Math.PI / 180;
+                const value = scores[m.id] / 10; // 归一化到0-1
+                const x = centerX + radius * value * Math.cos(angle);
+                const y = centerY + radius * value * Math.sin(angle);
+                return `${x},${y}`;
+            }).join(' ');
+
+            gridHTML += `<polygon points="${dataPoints}" fill="rgba(107, 92, 231, 0.3)" stroke="var(--primary)" stroke-width="2"/>`;
+
+            // 绘制数据点
+            modules.forEach((m, i) => {
+                const angle = (i * 72 - 90) * Math.PI / 180;
+                const value = scores[m.id] / 10;
+                const x = centerX + radius * value * Math.cos(angle);
+                const y = centerY + radius * value * Math.sin(angle);
+                gridHTML += `<circle cx="${x}" cy="${y}" r="5" fill="${dimensionColors[m.id]}" stroke="white" stroke-width="2"/>`;
+            });
+
+            svg.innerHTML = gridHTML;
+
+            // 清除旧标签
+            chartArea.querySelectorAll('.radar-label').forEach(el => el.remove());
+
+            // 添加HTML标签
+            const chartWidth = chartArea.offsetWidth;
+            const chartHeight = chartArea.offsetHeight;
+            const scale = chartWidth / 200;
+
+            modules.forEach((m, i) => {
+                const angle = (i * 72 - 90) * Math.PI / 180;
+                const labelRadius = (radius + 25) * scale;
+                const labelX = chartWidth / 2 + labelRadius * Math.cos(angle);
+                const labelY = chartHeight / 2 + labelRadius * Math.sin(angle);
+
+                const label = document.createElement('div');
+                label.className = 'radar-label';
+                label.textContent = dimensionShortNames[m.id];
+                label.style.left = labelX + 'px';
+                label.style.top = labelY + 'px';
+                chartArea.appendChild(label);
+            });
+
+            // 渲染图例
+            legend.innerHTML = modules.map(m => `
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: ${dimensionColors[m.id]}"></div>
+                    <span>${m.name}: ${scores[m.id]}/10</span>
+                </div>
+            `).join('');
+        }
+
+        // 重置测评
+        function resetTest() {
+            currentModule = 0;
+            currentQuestion = 0;
+            answers = {};
+            showScreen('screen-welcome');
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
