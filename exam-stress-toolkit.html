@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中高考家长稳压工具台</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --danger: #E85555;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --danger: #D84545;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 导航 */
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-menu.show {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 750px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .intro-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 入口分流卡片 */
+        .split-cards {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .split-card {
+            flex: 1;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .split-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .split-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+        }
+
+        .split-card-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .split-card-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .split-card-desc {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 阶段选择 */
+        .phase-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.95em;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .phase-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .phase-btn-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .phase-btn-desc {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        /* 工具导航 */
+        .tool-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .tool-nav-btn {
+            padding: 10px 18px;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tool-nav-btn:hover, .tool-nav-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 工具卡片 */
+        .tool-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .tool-icon {
+            font-size: 28px;
+        }
+
+        .tool-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .tool-desc {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* 勾选项 */
+        .check-section {
+            margin: 15px 0;
+        }
+
+        .check-section-title {
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .check-item:hover {
+            background: rgba(107, 92, 231, 0.15);
+        }
+
+        .check-item.checked {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(78, 205, 196, 0.1));
+            border-left: 3px solid var(--primary);
+        }
+
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            color: transparent;
+            transition: all 0.2s;
+        }
+
+        .check-item.checked .check-box {
+            background: var(--primary);
+            color: white;
+        }
+
+        .check-text {
+            flex: 1;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        /* 压力类型结果 */
+        .stress-result {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .stress-result.show {
+            display: block;
+        }
+
+        .stress-result-title {
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+
+        .stress-type {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        .stress-type.unpredictable {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        .stress-type.uncontrollable {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--warning);
+        }
+
+        .stress-type.overload {
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--primary-light);
+        }
+
+        .stress-tip {
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* 情景卡片按钮 */
+        .scenario-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .scenario-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 15px;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.85em;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .scenario-btn:hover, .scenario-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .scenario-content {
+            display: none;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .scenario-content.show {
+            display: block;
+        }
+
+        .say-box {
+            margin: 12px 0;
+        }
+
+        .say-label {
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+
+        .say-label.can {
+            color: var(--success);
+        }
+
+        .say-label.cannot {
+            color: var(--accent);
+        }
+
+        .say-text {
+            background: var(--card);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .reason-box {
+            background: rgba(107, 92, 231, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* 左右对照清单 */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .compare-column {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .compare-column.dont {
+            border-top: 3px solid var(--accent);
+        }
+
+        .compare-column.do {
+            border-top: 3px solid var(--success);
+        }
+
+        .compare-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+
+        .compare-title.dont {
+            color: var(--accent);
+        }
+
+        .compare-title.do {
+            color: var(--success);
+        }
+
+        .compare-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .compare-item:last-child {
+            border-bottom: none;
+        }
+
+        .compare-icon {
+            flex-shrink: 0;
+        }
+
+        /* 三栏练习 */
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .exercise-column {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .exercise-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .exercise-title.fact {
+            color: var(--primary-light);
+        }
+
+        .exercise-title.worry {
+            color: var(--accent);
+        }
+
+        .exercise-title.action {
+            color: var(--success);
+        }
+
+        .exercise-input {
+            width: 100%;
+            min-height: 100px;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text);
+            font-size: 0.9em;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .exercise-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .exercise-example {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* 复制按钮 */
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 200;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+        }
+
+        /* 提醒框 */
+        .reminder-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.1), rgba(255, 107, 107, 0.1));
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            font-size: 0.85em;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        /* 隐私提示 */
+        .privacy-notice {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(107, 92, 231, 0.15));
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .privacy-notice-title {
+            color: var(--success);
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .privacy-notice-text {
+            color: var(--text);
+            font-size: 0.8em;
+            line-height: 1.5;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            .split-cards {
+                flex-direction: column;
+            }
+
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-btn {
+                min-width: 100%;
+            }
+
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 欢迎页面 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🧘</div>
+                <h1>中高考家长稳压工具台</h1>
+                <p class="subtitle">出分前后，家长先稳住自己，才能成为孩子的后盾，一起面对无论好坏的结果</p>
+
+                <div class="privacy-notice">
+                    <div class="privacy-notice-title">🔒 隐私保护</div>
+                    <div class="privacy-notice-text">
+                        这是一个静态网页，你的填写内容<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器。刷新页面后数据将清除，请放心使用。
+                    </div>
+                </div>
+
+                <!-- 核心角色强调 -->
+                <div style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.3), rgba(255, 107, 107, 0.3)); border-radius: 12px; padding: 20px; margin: 15px 0; text-align: center;">
+                    <div style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 8px;">出分和录取等待期，家长最重要的角色</div>
+                    <div style="font-size: 1.8em; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">是「稳定器」</div>
+                    <div style="font-size: 0.85em; color: var(--text-muted); margin-top: 8px;">不是裁判，不是招生顾问</div>
+                </div>
+
+                <div class="split-cards">
+                    <div class="split-card" onclick="selectParentType('zhongkao-gz')">
+                        <div class="split-card-icon">🎓</div>
+                        <div class="split-card-title">广州中考家长</div>
+                        <div class="split-card-desc">还不知道分数，正在等出分和录取结果</div>
+                    </div>
+                    <div class="split-card" onclick="selectParentType('waiting-admission')">
+                        <div class="split-card-icon">📋</div>
+                        <div class="split-card-title">其他地区中考或高考家长</div>
+                        <div class="split-card-desc">已经知道分数，正在等待最终录取确认</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 广州中考阶段选择 -->
+        <div class="screen" id="screen-zhongkao-phase">
+            <div class="card">
+                <div class="intro-icon">🎓</div>
+                <h1>广州中考家长稳压工具台</h1>
+                <p class="subtitle">你现在在哪个阶段？</p>
+
+                <button class="phase-btn" onclick="selectPhase('before-score')">
+                    <div class="phase-btn-title">📅 分数还没出</div>
+                    <div class="phase-btn-desc">正在等出分，有点紧张</div>
+                </button>
+
+                <button class="phase-btn" onclick="selectPhase('score-out')">
+                    <div class="phase-btn-title">📊 分数出来了</div>
+                    <div class="phase-btn-desc">刚查到分数，需要知道说什么</div>
+                </button>
+
+                <button class="phase-btn" onclick="selectPhase('waiting-admission')">
+                    <div class="phase-btn-title">⏳ 等待录取</div>
+                    <div class="phase-btn-desc">分数已知，在等录取结果</div>
+                </button>
+
+                <button class="btn btn-secondary" onclick="goToWelcome()" style="margin-top: 20px;">← 返回上一页</button>
+            </div>
+        </div>
+
+        <!-- 工具台主页面 -->
+        <div class="screen" id="screen-toolkit">
+            <div class="card">
+                <h2 id="toolkitTitle">稳压工具台</h2>
+                <p class="subtitle" id="toolkitSubtitle">按需使用，一步一步来</p>
+
+                <div class="tool-nav" id="toolNav">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <div id="toolContent">
+                <!-- 动态生成工具内容 -->
+            </div>
+
+            <!-- 上岸符 -->
+            <div class="tool-card" style="margin-top: 15px; text-align: center; padding: 18px 20px;">
+                <div style="font-size: 2.2em; margin-bottom: 6px;">🧧</div>
+                <div style="font-size: 1.4em; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;">上岸符</div>
+                <p style="font-size: 0.95em; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.5;">
+                    先把人稳住，再把事看清楚。
+                </p>
+                <p style="font-size: 0.85em; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;">
+                    出分和录取这几天，家长不用假装不焦虑。<br>
+                    但每一次开口前，可以先停一下：<br>
+                    <strong style="color: var(--primary-light);">我现在这句话，是在帮孩子稳住，还是在把我的慌丢给他？</strong>
+                </p>
+                <p style="font-size: 0.9em; color: var(--success); font-weight: 600; line-height: 1.5;">
+                    能停住这一秒，很多伤人的话就不会说出口。
+                </p>
+            </div>
+
+            <!-- 底部工具切换 + 返回按钮 -->
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; align-items: center;">
+                <button class="btn btn-secondary" onclick="goBackFromToolkit()">← 返回上一页</button>
+                <div class="tool-nav" id="toolNavBottom" style="margin: 0;">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 复制成功提示 -->
+    <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板</div>
+
+    <script>
+        // 状态管理
+        let state = {
+            parentType: '', // 'zhongkao-gz' | 'waiting-admission'
+            phase: '',      // 'before-score' | 'score-out' | 'waiting-admission'
+            currentTool: '',
+            checkItems: {
+                unpredictable: [],
+                uncontrollable: [],
+                overload: []
+            },
+            doList: []
+        };
+
+        // 工具定义
+        const tools = {
+            'zhongkao-gz': {
+                'before-score': ['tool1', 'tool3', 'tool5'],
+                'score-out': ['tool1', 'tool2', 'tool3', 'tool5'],
+                'waiting-admission': ['tool1', 'tool4', 'tool3', 'tool5']
+            },
+            'waiting-admission': {
+                'default': ['tool1', 'tool3', 'tool4', 'tool5']
+            }
+        };
+
+        const toolInfo = {
+            'tool1': { icon: '📋', name: '压力自检表', desc: '看看你现在压力来自哪里' },
+            'tool2': { icon: '💬', name: '第一句话脚本', desc: '孩子查完成绩，该说什么' },
+            'tool3': { icon: '📝', name: '48小时清单', desc: '先不要做什么，可以先做什么' },
+            'tool4': { icon: '🗣️', name: '家庭沟通卡', desc: '录取期怎么说、怎么说' },
+            'tool5': { icon: '🌙', name: '夜间稳压练习', desc: '今晚睡不着就做这个' }
+        };
+
+        // 显示屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 选择家长类型
+        function selectParentType(type) {
+            state.parentType = type;
+
+            // 更新卡片选中状态
+            document.querySelectorAll('.split-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            if (type === 'zhongkao-gz') {
+                // 广州中考家长，需要选择阶段
+                showScreen('screen-zhongkao-phase');
+            } else {
+                // 其他地区中考或高考家长，已知分数，直接进入录取等待期工具
+                state.phase = 'default';
+                showToolkit();
+            }
+        }
+
+        // 选择阶段
+        function selectPhase(phase) {
+            state.phase = phase;
+            showToolkit();
+        }
+
+        // 返回欢迎页
+        function goToWelcome() {
+            state.parentType = '';
+            state.phase = '';
+            state.currentTool = '';
+            showScreen('screen-welcome');
+        }
+
+        // 从阶段选择页返回
+        function goBack() {
+            goToWelcome();
+        }
+
+        // 显示工具台
+        function showToolkit() {
+            const availableTools = tools[state.parentType][state.phase];
+
+            // 设置标题
+            const titles = {
+                'before-score': '分数还没出，先稳住自己',
+                'score-out': '分数出来了，该说什么',
+                'waiting-admission': '等待录取，继续稳住',
+                'default': '录取等待期稳压工具'
+            };
+
+            document.getElementById('toolkitTitle').textContent = titles[state.phase] || '稳压工具台';
+            document.getElementById('toolkitSubtitle').textContent = '按需使用，一步一步来，不用一次看完';
+
+            // 渲染工具导航（顶部和底部）
+            const navHtml = availableTools.map(toolId => `
+                <button class="tool-nav-btn ${toolId === availableTools[0] ? 'active' : ''}"
+                        onclick="showTool('${toolId}')" data-tool="${toolId}">
+                    ${toolInfo[toolId].icon} ${toolInfo[toolId].name}
+                </button>
+            `).join('');
+
+            document.getElementById('toolNav').innerHTML = navHtml;
+            document.getElementById('toolNavBottom').innerHTML = navHtml;
+
+            // 显示第一个工具
+            showTool(availableTools[0]);
+            showScreen('screen-toolkit');
+        }
+
+        // 从工具台返回
+        function goBackFromToolkit() {
+            state.currentTool = '';
+            if (state.parentType === 'zhongkao-gz') {
+                // 广州中考家长，返回阶段选择
+                showScreen('screen-zhongkao-phase');
+            } else {
+                // 其他家长，返回欢迎页
+                goToWelcome();
+            }
+        }
+
+        // 显示工具
+        function showTool(toolId) {
+            state.currentTool = toolId;
+
+            // 更新导航按钮
+            document.querySelectorAll('.tool-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tool === toolId) btn.classList.add('active');
+            });
+
+            // 渲染工具内容
+            const content = getToolContent(toolId);
+            document.getElementById('toolContent').innerHTML = content;
+
+            // 滚动到页面顶部，让用户看到功能入口
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 获取工具内容
+        function getToolContent(toolId) {
+            switch(toolId) {
+                case 'tool1':
+                    return getTool1Content();
+                case 'tool2':
+                    return getTool2Content();
+                case 'tool3':
+                    return getTool3Content();
+                case 'tool4':
+                    return getTool4Content();
+                case 'tool5':
+                    return getTool5Content();
+                default:
+                    return '<div class="tool-card">工具加载中...</div>';
+            }
+        }
+
+        // 工具一：压力自检表
+        function getTool1Content() {
+            // 根据家长类型决定标题和描述
+            const isZhongkao = state.parentType === 'zhongkao-gz';
+            const title = isZhongkao ? '出分前压力自检表' : '录取等待期压力自检表';
+            const desc = isZhongkao
+                ? '请按最近24小时的真实状态打勾，可以多选。勾完后我会告诉你压力主要来自哪里。'
+                : '你已经知道分数，正在等录取结果。请按最近24小时的真实状态打勾，可以多选。';
+
+            return `
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">📋</div>
+                        <div class="tool-title">${title}</div>
+                    </div>
+                    <p class="tool-desc">${desc}</p>
+
+                    <div class="check-section">
+                        <div class="check-section-title">A. 不可预测感</div>
+                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 0)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我反复想象${isZhongkao ? '出分后的各种结果' : '录取结果出来后的各种情况'}，停不下来。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 1)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我总觉得现在还缺一条关键消息，必须继续刷群、刷小红书。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 2)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我很难接受"${isZhongkao ? '分数还没出来' : '录取结果还没出来'}，现在无法确定"这件事。</div>
+                        </div>
+                    </div>
+
+                    <div class="check-section">
+                        <div class="check-section-title">B. 不可控制感</div>
+                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 0)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我觉得自己现在什么也帮不上孩子。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 1)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我明知道急也没用，但就是停不下来。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 2)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我很想反复打听${isZhongkao ? '往年分数线、录取可能性、补录消息' : '录取进度、补录消息、调剂可能性'}，好像多问一点就能安心一点。</div>
+                        </div>
+                    </div>
+
+                    <div class="check-section">
+                        <div class="check-section-title">C. 超负荷感</div>
+                        <div class="check-item" onclick="toggleCheck(this, 'overload', 0)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">${isZhongkao ? '分数、学校、录取、补录、民办、职高、亲友意见' : '录取结果、专业调剂、补录、复读、亲友意见'}，全都压在一起。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'overload', 1)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我已经分不清哪些信息是真的重要，哪些只是让我更焦虑。</div>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this, 'overload', 2)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">我很累，但脑子停不下来。</div>
+                        </div>
+                    </div>
+
+                    <div class="stress-result" id="stressResult">
+                        <div class="stress-result-title">📊 你的压力主要来自：</div>
+                        <div id="stressTypes"></div>
+                        <div class="stress-tip" id="stressTip"></div>
+                    </div>
+
+                    <div class="reminder-box">
+                        <strong>💡 关键提醒：</strong><br>
+                        你现在感受到的压力，不一定来自事情本身。很多时候，是因为${isZhongkao ? '出分和录取' : '录取等待'}这几天同时带来三种感觉：不可预测、不可控制、超负荷。知道是哪一种，就能更有针对性地稳住。
+                    </div>
+                </div>
+            `;
+        }
+
+        // 工具二：第一句话脚本
+        function getTool2Content() {
+            return `
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">💬</div>
+                        <div class="tool-title">出分当天第一句话脚本</div>
+                    </div>
+                    <p class="tool-desc">孩子查完成绩后，先别急着问排名、分数线、学校。先看孩子的反应，选择最接近的情况：</p>
+
+                    <div class="scenario-buttons">
+                        <button class="scenario-btn" onclick="showScenario('better')">比预期好</button>
+                        <button class="scenario-btn" onclick="showScenario('similar')">差不多</button>
+                        <button class="scenario-btn" onclick="showScenario('worse')">明显低于预期</button>
+                    </div>
+
+                    <div class="scenario-content" id="scenario-better">
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">"你这段时间真的撑住了。先缓一缓，我们晚点再一起看后面的安排。"</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 不要马上说：</div>
+                            <div class="say-text">"那你可以冲更好的学校了。"</div>
+                        </div>
+                        <div class="reason-box">
+                            <strong>原因：</strong>孩子刚松一口气时，家长立刻加码，会把轻松重新变成压力。
+                        </div>
+                    </div>
+
+                    <div class="scenario-content" id="scenario-similar">
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">"这个结果和我们预估差不多。今天先不用急着下结论，录取结果还要再等几天，我们一项一项看。"</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 不要马上说：</div>
+                            <div class="say-text">"那现在很尴尬啊，上不上得了还不知道。"</div>
+                        </div>
+                        <div class="reason-box">
+                            <strong>原因：</strong>孩子已经在不确定里，家长不要再把不确定放大。出分当天只是知道分数，不是马上知道录取结果。越是等待期，家长越要把节奏放慢一点。
+                        </div>
+                    </div>
+
+                    <div class="scenario-content" id="scenario-worse">
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">"我知道你现在可能也不好受。我们先不急着分析，先吃饭、休息一下，晚点再看下一步。"</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以做：</div>
+                            <div class="say-text">
+                                如果对分数有疑问，马上联系班主任，按学校要求提交成绩复核申请。复核有严格时间窗口，不能拖。<br><br>
+                                复核成功更改成绩的概率通常不高，但它给家庭留下一个正式、合规的确认动作。人在最失落的时候，只要还有一个可以做的小动作，情绪就不容易一下子掉到底。
+                            </div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 不要相信：</div>
+                            <div class="say-text">"内部改分""低分录取""花钱改录取结果""有关系可以操作"这类说法。中考录取有官方流程，这些说法大概率是骗局。</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 不要马上说：</div>
+                            <div class="say-text">"你看，我早就说过你这样不行。"</div>
+                        </div>
+                        <div class="reason-box">
+                            <strong>原因：</strong>出分当天不是复盘日。孩子最先需要的不是原因分析，而是确认：分数不理想，家里也不会马上崩掉。
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 工具三：48小时清单
+        function getTool3Content() {
+            const isZhongkao = state.parentType === 'zhongkao-gz';
+            const desc = isZhongkao
+                ? '出分后48小时，家长最容易被焦虑推着走。这里的"决定"，主要指择校、复读、补录、民办学校、中职路径、是否马上找机构介入等家庭重大选择。'
+                : '录取等待期，家长最容易被焦虑推着走。这里的"决定"，主要指是否复读、是否接受调剂、是否补录、是否换路径等家庭重大选择。';
+
+            return `
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">📝</div>
+                        <div class="tool-title">48小时不做决定清单</div>
+                    </div>
+                    <p class="tool-desc">${desc}</p>
+
+                    <div class="compare-grid">
+                        <div class="compare-column dont">
+                            <div class="compare-title dont">❌ 先不要做</div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不在情绪峰值马上决定${isZhongkao ? '复读、转轨、补录或高额教育投入' : '复读、接受调剂、补录或换路径'}。</span>
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不当着孩子反复比较"别人家${isZhongkao ? '考了多少' : '录取到哪了'}"。</span>
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不用"早知道""都怪你""你当初要是"开头。</span>
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不把一次${isZhongkao ? '分数' : '录取结果'}说成孩子一生的定局。</span>
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不在全家都疲惫、信息又不完整的时候拍板重大选择。</span>
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">🚫</span>
+                                <span>不相信"${isZhongkao ? '内部改分"低分录取"' : '内部操作""花钱保录"'}这类说法${isZhongkao ? '' : '，大概率是骗局'}。</span>
+                            </div>
+                        </div>
+
+                        <div class="compare-column do">
+                            <div class="compare-title do">✅ 可以先做</div>
+                            ${isZhongkao ? `
+                            <div class="compare-item" onclick="toggleDoItem(this, 0)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>如果对成绩有疑问，马上联系班主任，按学校要求提交成绩复核申请。</span>
+                            </div>
+                            <div class="compare-item" onclick="toggleDoItem(this, 1)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>记录录取时间线，提醒自己：出分不等于录取结果，后面还有等待期。</span>
+                            </div>
+                            ` : `
+                            <div class="compare-item" onclick="toggleDoItem(this, 0)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>关注官方录取查询渠道，记下关键时间节点。</span>
+                            </div>
+                            <div class="compare-item" onclick="toggleDoItem(this, 1)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>把可能的路径（接受录取、调剂、补录、复读）写在纸上，不只在脑子里想。</span>
+                            </div>
+                            `}
+                            <div class="compare-item" onclick="toggleDoItem(this, 2)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>${isZhongkao ? '把可选路径写在纸上，不只放在脑子里。' : '只看官方通知，不在十几个群里来回刷消息。'}</span>
+                            </div>
+                            <div class="compare-item" onclick="toggleDoItem(this, 3)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>只看官方通知和学校老师发布的信息，不在十几个群里来回刷。</span>
+                            </div>
+                            <div class="compare-item" onclick="toggleDoItem(this, 4)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>和孩子约一个具体讨论时间，不追着问。</span>
+                            </div>
+                            <div class="compare-item" onclick="toggleDoItem(this, 5)" style="cursor: pointer;">
+                                <span class="compare-icon">☐</span>
+                                <span>先照顾吃饭、睡觉、情绪，再谈方案。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reminder-box">
+                        <strong>💡 关键提醒：</strong><br>
+                        ${isZhongkao ? '出分后' : '录取等待期'}最容易出错的，不是"还不知道怎么办"。而是在信息还不完整、情绪又很高的时候，急着把后路定死。
+                    </div>
+                </div>
+            `;
+        }
+
+        // 工具四：家庭沟通卡
+        function getTool4Content() {
+            // 根据家长类型决定措辞
+            const isZhongkao = state.parentType === 'zhongkao-gz';
+            const nextLevel = isZhongkao ? '高中' : '以后';
+            const nextLevelStart = isZhongkao ? '高中怎么开始' : '接下来的路怎么走';
+
+            return `
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🗣️</div>
+                        <div class="tool-title">录取期家庭沟通卡</div>
+                    </div>
+                    <p class="tool-desc">录取结果出来前后，选择最接近你家情况的结果：</p>
+
+                    <div class="scenario-buttons">
+                        <button class="scenario-btn" onclick="showResultScenario('ideal')">结果理想</button>
+                        <button class="scenario-btn" onclick="showResultScenario('uncertain')">结果不确定</button>
+                        <button class="scenario-btn" onclick="showResultScenario('not-ideal')">结果不理想</button>
+                    </div>
+
+                    <div class="scenario-content" id="result-ideal">
+                        <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--success);">接住</strong>，而不是立刻加码。</p>
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">"这几天辛苦了。今天先好好高兴一下，后面的事我们明天再慢慢安排。"</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">⚠️ 可以晚一点再说：</div>
+                            <div class="say-text">"${nextLevel}才是真正开始，你不能放松。"</div>
+                        </div>
+                        <div class="reason-box">
+                            这句话不是完全不能讲。只是不要在孩子刚刚松一口气的时候马上讲。可以等庆祝过后，再用更平稳的方式说："这个结果来之不易，先休息一下。等状态回来，我们再一起想${nextLevelStart}。"
+                        </div>
+                    </div>
+
+                    <div class="scenario-content" id="result-uncertain">
+                        <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--warning);">整理路径</strong>，而不是制造恐慌。</p>
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">"现在还不是最后结论。我们把能确认的、还要等的、可以准备的分开写。"</div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 少说：</div>
+                            <div class="say-text">"完了，这下麻烦了。"</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-content" id="result-not-ideal">
+                        <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--accent);">先接住孩子</strong>，再谈下一步。</p>
+                        <p style="font-size: 0.85em; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                            这个时候孩子可能会羞愧、沉默、暴躁，也可能假装无所谓。家长先不要急着判断他"态度不好"。很多孩子在重大失利后，最怕的不是分数低，而是觉得自己让全家失望。
+                        </p>
+                        <div class="say-box">
+                            <div class="say-label can">✅ 可以说：</div>
+                            <div class="say-text">
+                                "这个结果确实不好受。你不用马上表现得没事，我们也不会因为这个分数就否定你。"<br><br>
+                                "今天先不追问原因。我们先把人稳住，明天再一起看还有哪些选择。"
+                            </div>
+                        </div>
+                        <div class="say-box">
+                            <div class="say-label cannot">❌ 不要说：</div>
+                            <div class="say-text">
+                                "你自己看着办吧。"<br><br>
+                                "我对你太失望了。"
+                            </div>
+                        </div>
+                        <div class="reason-box">
+                            <strong>⚠️ 如果孩子出现持续哭泣、极端自责、说"不想活了""没意思了"、把自己关起来不回应等情况</strong>，家长不要只当成"闹情绪"。先陪在旁边，减少刺激，必要时及时联系学校老师、可信任亲友或专业心理支持。
+                        </div>
+                    </div>
+
+                    <div class="reminder-box">
+                        <strong>💡 关键提醒：</strong><br>
+                        录取期真正考验的，不只是孩子的分数。也是一个家庭在压力下还能不能好好说话。
+                    </div>
+                </div>
+            `;
+        }
+
+        // 工具五：夜间稳压练习
+        function getTool5Content() {
+            return `
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🌙</div>
+                        <div class="tool-title">家长夜间5分钟稳压练习</div>
+                    </div>
+                    <p class="tool-desc">如果你今晚睡不着，先不要继续刷信息。拿一张纸（或者就在下面），写三栏：</p>
+
+                    <div class="exercise-grid">
+                        <div class="exercise-column">
+                            <div class="exercise-title fact">📌 第一栏：已经发生的事实</div>
+                            <textarea class="exercise-input" id="exercise-fact" placeholder="只写事实，不写想象..." oninput="updateCopyText()"></textarea>
+                            <div class="exercise-example">
+                                <strong>例如：</strong><br>
+                                • 孩子的中考分数是：____。<br>
+                                • 这个分数和孩子平时水平相比：偏高 / 差不多 / 偏低。<br>
+                                • 现在还没有出来的结果是：录取学校。<br>
+                                • 如果对分数有疑问，马上要做的正式动作是：联系班主任问成绩复核流程。
+                            </div>
+                        </div>
+
+                        <div class="exercise-column">
+                            <div class="exercise-title worry">💭 第二栏：我脑子里的最坏想象</div>
+                            <textarea class="exercise-input" id="exercise-worry" placeholder="允许自己写出来，但要提醒自己：这是想象，不是事实..." oninput="updateCopyText()"></textarea>
+                            <div class="exercise-example">
+                                <strong>例如：</strong><br>
+                                • 我怕孩子上不了理想学校。<br>
+                                • 我怕亲戚问起来没面子。<br>
+                                • 我怕这一步影响孩子以后。<br><br>
+                                <em style="color: var(--accent);">很多时候，焦虑会把"可能发生"直接写成"一定会发生"。这就是灾难化思维。写出来的目的，不是证明它是真的，而是把它和第一栏的事实分开。</em>
+                            </div>
+                        </div>
+
+                        <div class="exercise-column">
+                            <div class="exercise-title action">🎯 第三栏：明天我只做一件事</div>
+                            <textarea class="exercise-input" id="exercise-action" placeholder="只写一个动作..." oninput="updateCopyText()"></textarea>
+                            <div class="exercise-example">
+                                <strong>例如：</strong><br>
+                                • 整理3个可选路径，不急着拍板。<br>
+                                • 和孩子约定明晚8点再聊。<br>
+                                • 今晚30分钟不刷群，先睡觉。
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="copy-btn" onclick="copyExercise()">
+                        📋 复制我的稳压清单
+                    </button>
+
+                    <div class="reminder-box">
+                        <strong>💡 关键提醒：</strong><br>
+                        焦虑最喜欢把所有问题压到同一个晚上。但家长今晚真正要做的，可能只有一件事：让自己先睡一觉。
+                    </div>
+                </div>
+            `;
+        }
+
+        // 勾选切换
+        function toggleCheck(el, category, index) {
+            el.classList.toggle('checked');
+
+            if (el.classList.contains('checked')) {
+                if (!state.checkItems[category].includes(index)) {
+                    state.checkItems[category].push(index);
+                }
+            } else {
+                state.checkItems[category] = state.checkItems[category].filter(i => i !== index);
+            }
+
+            updateStressResult();
+        }
+
+        // 更新压力结果
+        function updateStressResult() {
+            const result = document.getElementById('stressResult');
+            const types = document.getElementById('stressTypes');
+            const tip = document.getElementById('stressTip');
+
+            const total = Object.values(state.checkItems).flat().length;
+            const hasUnpredictable = state.checkItems.unpredictable.length > 0;
+            const hasUncontrollable = state.checkItems.uncontrollable.length > 0;
+            const hasOverload = state.checkItems.overload.length > 0;
+
+            if (total === 0) {
+                result.classList.remove('show');
+                return;
+            }
+
+            result.classList.add('show');
+
+            let typesHtml = '';
+            if (hasUnpredictable) {
+                typesHtml += '<span class="stress-type unpredictable">不可预测感</span>';
+            }
+            if (hasUncontrollable) {
+                typesHtml += '<span class="stress-type uncontrollable">不可控制感</span>';
+            }
+            if (hasOverload) {
+                typesHtml += '<span class="stress-type overload">超负荷感</span>';
+            }
+            types.innerHTML = typesHtml;
+
+            let tipText = '';
+            if (total <= 2) {
+                tipText = '✅ 压力暂时可控，保持日常节奏。';
+            } else if (total <= 5) {
+                tipText = '⚠️ 压力已经影响判断，出分前先减少信息摄入。';
+            } else {
+                tipText = '🔴 不建议在情绪峰值做决定，建议完成"夜间稳压练习"。';
+            }
+            tip.innerHTML = tipText;
+        }
+
+        // 显示情景
+        function showScenario(scenario) {
+            document.querySelectorAll('.scenario-content').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('scenario-' + scenario).classList.add('show');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 显示录取情景
+        function showResultScenario(scenario) {
+            document.querySelectorAll('.scenario-content').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('result-' + scenario).classList.add('show');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 切换"可以做"项
+        function toggleDoItem(el, index) {
+            const icon = el.querySelector('.compare-icon');
+            if (icon.textContent === '☐') {
+                icon.textContent = '☑️';
+                state.doList.push(index);
+            } else {
+                icon.textContent = '☐';
+                state.doList = state.doList.filter(i => i !== index);
+            }
+        }
+
+        // 更新复制文本
+        function updateCopyText() {
+            // 实时更新，复制时使用
+        }
+
+        // 复制练习内容
+        function copyExercise() {
+            const fact = document.getElementById('exercise-fact').value || '（未填写）';
+            const worry = document.getElementById('exercise-worry').value || '（未填写）';
+            const action = document.getElementById('exercise-action').value || '（未填写）';
+
+            const text = `📌 已发生的事实：
+${fact}
+
+💭 我的灾难化想象：
+${worry}
+
+🎯 明天我只做一件事：
+${action}
+
+---
+来源：中高考家长稳压工具台`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector('.theme-toggle');
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                if (btn) btn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('show') && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-toggle')) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (btn) btn.textContent = '☀️';
+            }
+        }
+
+        initTheme();
+    </script>
+</body>
+</html>
