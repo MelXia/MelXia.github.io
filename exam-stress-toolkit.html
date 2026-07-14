@@ -775,6 +775,135 @@
             line-height: 1.5;
         }
 
+        /* 工具类型标签 */
+        .tool-type-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tool-type-tag.checklist {
+            background: rgba(107, 92, 231, 0.2);
+            color: var(--primary-light);
+        }
+
+        .tool-type-tag.scenario {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--warning);
+        }
+
+        .tool-type-tag.fillin {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .tool-type-tag.reading {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent);
+        }
+
+        /* 下一步指引 */
+        .next-step-box {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85em;
+        }
+
+        .next-step-icon {
+            font-size: 1.2em;
+        }
+
+        .next-step-text {
+            flex: 1;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 雷达图容器 */
+        .radar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .radar-chart {
+            width: 220px;
+            height: 220px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .radar-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .radar-labels {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+
+        .radar-label {
+            text-align: center;
+            font-size: 0.8em;
+        }
+
+        .radar-label-value {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-bottom: 4px;
+        }
+
+        .radar-label-name {
+            color: var(--text-muted);
+            font-size: 0.75em;
+        }
+
+        /* 结果解读卡片 */
+        .result-card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .result-card-title {
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-card-content {
+            font-size: 0.85em;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .result-card-content strong {
+            color: var(--text);
+        }
+
+
+        .next-step-text strong {
+            color: var(--primary-light);
+        }
+
         /* 响应式 */
         @media (max-width: 600px) {
             .card {
@@ -857,12 +986,12 @@
                 </div>
 
                 <div class="split-cards">
-                    <div class="split-card" onclick="selectParentType('zhongkao-gz')">
+                    <div class="split-card" onclick="selectParentType('zhongkao-gz', this)">
                         <div class="split-card-icon">🎓</div>
                         <div class="split-card-title">广州中考家长</div>
                         <div class="split-card-desc">还不知道分数，正在等出分和录取结果</div>
                     </div>
-                    <div class="split-card" onclick="selectParentType('waiting-admission')">
+                    <div class="split-card" onclick="selectParentType('waiting-admission', this)">
                         <div class="split-card-icon">📋</div>
                         <div class="split-card-title">其他地区中考或高考家长</div>
                         <div class="split-card-desc">已经知道分数，正在等待最终录取确认</div>
@@ -984,14 +1113,14 @@
         }
 
         // 选择家长类型
-        function selectParentType(type) {
+        function selectParentType(type, el) {
             state.parentType = type;
 
             // 更新卡片选中状态
             document.querySelectorAll('.split-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            event.currentTarget.classList.add('selected');
+            if (el) el.classList.add('selected');
 
             if (type === 'zhongkao-gz') {
                 // 广州中考家长，需要选择阶段
@@ -1112,69 +1241,71 @@
 
             return `
                 <div class="tool-card">
+                    <div class="tool-type-tag checklist">📋 多选自测</div>
                     <div class="tool-header">
                         <div class="tool-icon">📋</div>
                         <div class="tool-title">${title}</div>
                     </div>
                     <p class="tool-desc">${desc}</p>
 
-                    <div class="check-section">
-                        <div class="check-section-title">A. 不可预测感</div>
-                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 0)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我反复想象${isZhongkao ? '出分后的各种结果' : '录取结果出来后的各种情况'}，停不下来。</div>
+                    <!-- 题目区域 -->
+                    <div id="stressQuestions">
+                        <div class="check-section">
+                            <div class="check-section-title">A. 不可预测感</div>
+                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 0)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我反复想象${isZhongkao ? '出分后的各种结果' : '录取结果出来后的各种情况'}，停不下来。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 1)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我总觉得现在还缺一条关键消息，必须继续刷群、刷小红书。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 2)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我很难接受"${isZhongkao ? '分数还没出来' : '录取结果还没出来'}，现在无法确定"这件事。</div>
+                            </div>
                         </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 1)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我总觉得现在还缺一条关键消息，必须继续刷群、刷小红书。</div>
+
+                        <div class="check-section">
+                            <div class="check-section-title">B. 不可控制感</div>
+                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 0)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我觉得自己现在什么也帮不上孩子。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 1)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我明知道急也没用，但就是停不下来。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 2)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我很想反复打听${isZhongkao ? '往年分数线、录取可能性、补录消息' : '录取进度、补录消息、调剂可能性'}，好像多问一点就能安心一点。</div>
+                            </div>
                         </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 2)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我很难接受"${isZhongkao ? '分数还没出来' : '录取结果还没出来'}，现在无法确定"这件事。</div>
+
+                        <div class="check-section">
+                            <div class="check-section-title">C. 超负荷感</div>
+                            <div class="check-item" onclick="toggleCheck(this, 'overload', 0)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">${isZhongkao ? '分数、学校、录取、补录、民办、职高、亲友意见' : '录取结果、专业调剂、补录、复读、亲友意见'}，全都压在一起。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'overload', 1)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我已经分不清哪些信息是真的重要，哪些只是让我更焦虑。</div>
+                            </div>
+                            <div class="check-item" onclick="toggleCheck(this, 'overload', 2)">
+                                <div class="check-box">✓</div>
+                                <div class="check-text">我很累，但脑子停不下来。</div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button class="btn btn-primary" onclick="submitStressTest()">提交查看结果</button>
                         </div>
                     </div>
 
-                    <div class="check-section">
-                        <div class="check-section-title">B. 不可控制感</div>
-                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 0)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我觉得自己现在什么也帮不上孩子。</div>
-                        </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 1)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我明知道急也没用，但就是停不下来。</div>
-                        </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 2)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我很想反复打听${isZhongkao ? '往年分数线、录取可能性、补录消息' : '录取进度、补录消息、调剂可能性'}，好像多问一点就能安心一点。</div>
-                        </div>
-                    </div>
-
-                    <div class="check-section">
-                        <div class="check-section-title">C. 超负荷感</div>
-                        <div class="check-item" onclick="toggleCheck(this, 'overload', 0)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">${isZhongkao ? '分数、学校、录取、补录、民办、职高、亲友意见' : '录取结果、专业调剂、补录、复读、亲友意见'}，全都压在一起。</div>
-                        </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'overload', 1)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我已经分不清哪些信息是真的重要，哪些只是让我更焦虑。</div>
-                        </div>
-                        <div class="check-item" onclick="toggleCheck(this, 'overload', 2)">
-                            <div class="check-box">✓</div>
-                            <div class="check-text">我很累，但脑子停不下来。</div>
-                        </div>
-                    </div>
-
-                    <div class="stress-result" id="stressResult">
-                        <div class="stress-result-title">📊 你的压力主要来自：</div>
-                        <div id="stressTypes"></div>
-                        <div class="stress-tip" id="stressTip"></div>
-                    </div>
-
-                    <div class="reminder-box">
-                        <strong>💡 关键提醒：</strong><br>
-                        你现在感受到的压力，不一定来自事情本身。很多时候，是因为${isZhongkao ? '出分和录取' : '录取等待'}这几天同时带来三种感觉：不可预测、不可控制、超负荷。知道是哪一种，就能更有针对性地稳住。
+                    <!-- 结果区域 -->
+                    <div id="stressResult" style="display: none;">
+                        <!-- 动态生成雷达图和结果解读 -->
                     </div>
                 </div>
             `;
@@ -1184,6 +1315,7 @@
         function getTool2Content() {
             return `
                 <div class="tool-card">
+                    <div class="tool-type-tag scenario">💬 情景卡片</div>
                     <div class="tool-header">
                         <div class="tool-icon">💬</div>
                         <div class="tool-title">出分当天第一句话脚本</div>
@@ -1248,6 +1380,11 @@
                             <strong>原因：</strong>出分当天不是复盘日。孩子最先需要的不是原因分析，而是确认：分数不理想，家里也不会马上崩掉。
                         </div>
                     </div>
+
+                    <div class="next-step-box">
+                        <span class="next-step-icon">➡️</span>
+                        <span class="next-step-text"><strong>下一步：</strong>查看"48小时清单"，知道接下来几天哪些事不要做、哪些可以做。</span>
+                    </div>
                 </div>
             `;
         }
@@ -1261,6 +1398,7 @@
 
             return `
                 <div class="tool-card">
+                    <div class="tool-type-tag checklist">📝 对照清单</div>
                     <div class="tool-header">
                         <div class="tool-icon">📝</div>
                         <div class="tool-title">48小时不做决定清单</div>
@@ -1340,6 +1478,11 @@
                         <strong>💡 关键提醒：</strong><br>
                         ${isZhongkao ? '出分后' : '录取等待期'}最容易出错的，不是"还不知道怎么办"。而是在信息还不完整、情绪又很高的时候，急着把后路定死。
                     </div>
+
+                    <div class="next-step-box">
+                        <span class="next-step-icon">➡️</span>
+                        <span class="next-step-text"><strong>下一步：</strong>今晚睡不着的话，做一下"夜间稳压练习"，把脑子里的事写下来。</span>
+                    </div>
                 </div>
             `;
         }
@@ -1353,6 +1496,7 @@
 
             return `
                 <div class="tool-card">
+                    <div class="tool-type-tag scenario">🗣️ 情景卡片</div>
                     <div class="tool-header">
                         <div class="tool-icon">🗣️</div>
                         <div class="tool-title">录取期家庭沟通卡</div>
@@ -1420,6 +1564,11 @@
                         <strong>💡 关键提醒：</strong><br>
                         录取期真正考验的，不只是孩子的分数。也是一个家庭在压力下还能不能好好说话。
                     </div>
+
+                    <div class="next-step-box">
+                        <span class="next-step-icon">➡️</span>
+                        <span class="next-step-text"><strong>下一步：</strong>今晚睡不着的话，做一下"夜间稳压练习"，把脑子里的事写下来。</span>
+                    </div>
                 </div>
             `;
         }
@@ -1428,6 +1577,7 @@
         function getTool5Content() {
             return `
                 <div class="tool-card">
+                    <div class="tool-type-tag fillin">🌙 填写练习</div>
                     <div class="tool-header">
                         <div class="tool-icon">🌙</div>
                         <div class="tool-title">家长夜间5分钟稳压练习</div>
@@ -1479,6 +1629,11 @@
                         <strong>💡 关键提醒：</strong><br>
                         焦虑最喜欢把所有问题压到同一个晚上。但家长今晚真正要做的，可能只有一件事：让自己先睡一觉。
                     </div>
+
+                    <div class="next-step-box">
+                        <span class="next-step-icon">✅</span>
+                        <span class="next-step-text"><strong>完成！</strong>点击"复制我的稳压清单"保存到备忘录，然后拉到最下方看"上岸符"。</span>
+                    </div>
                 </div>
             `;
         }
@@ -1494,49 +1649,254 @@
             } else {
                 state.checkItems[category] = state.checkItems[category].filter(i => i !== index);
             }
-
-            updateStressResult();
         }
 
-        // 更新压力结果
-        function updateStressResult() {
+        // 提交压力测试
+        function submitStressTest() {
+            const questions = document.getElementById('stressQuestions');
             const result = document.getElementById('stressResult');
-            const types = document.getElementById('stressTypes');
-            const tip = document.getElementById('stressTip');
 
             const total = Object.values(state.checkItems).flat().length;
-            const hasUnpredictable = state.checkItems.unpredictable.length > 0;
-            const hasUncontrollable = state.checkItems.uncontrollable.length > 0;
-            const hasOverload = state.checkItems.overload.length > 0;
 
             if (total === 0) {
-                result.classList.remove('show');
+                alert('请先勾选符合你状态的选项，再提交查看结果。');
                 return;
             }
 
-            result.classList.add('show');
+            // 隐藏题目，显示结果
+            questions.style.display = 'none';
+            result.style.display = 'block';
 
-            let typesHtml = '';
-            if (hasUnpredictable) {
-                typesHtml += '<span class="stress-type unpredictable">不可预测感</span>';
-            }
-            if (hasUncontrollable) {
-                typesHtml += '<span class="stress-type uncontrollable">不可控制感</span>';
-            }
-            if (hasOverload) {
-                typesHtml += '<span class="stress-type overload">超负荷感</span>';
-            }
-            types.innerHTML = typesHtml;
+            // 计算各维度分数（0-3分）
+            const scores = {
+                unpredictable: state.checkItems.unpredictable.length,
+                uncontrollable: state.checkItems.uncontrollable.length,
+                overload: state.checkItems.overload.length
+            };
 
-            let tipText = '';
+            // 生成雷达图和结果解读
+            result.innerHTML = generateRadarResult(scores);
+
+            // 滚动到结果区域
+            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 生成雷达图结果
+        function generateRadarResult(scores) {
+            const isZhongkao = state.parentType === 'zhongkao-gz';
+            const total = scores.unpredictable + scores.uncontrollable + scores.overload;
+
+            // 雷达图SVG
+            const radarSvg = generateRadarSvg(scores);
+
+            // 确定主导维度
+            let dominant = [];
+            const maxScore = Math.max(scores.unpredictable, scores.uncontrollable, scores.overload);
+            if (scores.unpredictable === maxScore && maxScore > 0) dominant.push('unpredictable');
+            if (scores.uncontrollable === maxScore && maxScore > 0) dominant.push('uncontrollable');
+            if (scores.overload === maxScore && maxScore > 0) dominant.push('overload');
+
+            // 生成维度解读
+            const interpretations = generateInterpretations(scores, isZhongkao);
+
+            // 总体建议
+            let overallAdvice = '';
             if (total <= 2) {
-                tipText = '✅ 压力暂时可控，保持日常节奏。';
+                overallAdvice = '✅ 你的压力暂时可控，继续保持日常节奏，不需要特别干预。';
             } else if (total <= 5) {
-                tipText = '⚠️ 压力已经影响判断，出分前先减少信息摄入。';
+                overallAdvice = '⚠️ 压力已经开始影响判断，建议减少信息摄入，专注完成"48小时清单"。';
             } else {
-                tipText = '🔴 不建议在情绪峰值做决定，建议完成"夜间稳压练习"。';
+                overallAdvice = '🔴 现在不建议做任何重大决定，建议今晚做一次"夜间稳压练习"，先把脑子停下来。';
             }
-            tip.innerHTML = tipText;
+
+            return `
+                <div class="radar-container">
+                    <h3 style="margin-bottom: 15px;">📊 你的压力三维图</h3>
+                    ${radarSvg}
+                    <div class="radar-labels">
+                        <div class="radar-label">
+                            <div class="radar-label-value" style="color: var(--accent);">${scores.unpredictable}</div>
+                            <div class="radar-label-name">不可预测感</div>
+                        </div>
+                        <div class="radar-label">
+                            <div class="radar-label-value" style="color: var(--warning);">${scores.uncontrollable}</div>
+                            <div class="radar-label-name">不可控制感</div>
+                        </div>
+                        <div class="radar-label">
+                            <div class="radar-label-value" style="color: var(--primary-light);">${scores.overload}</div>
+                            <div class="radar-label-name">超负荷感</div>
+                        </div>
+                    </div>
+                </div>
+
+                ${interpretations}
+
+                <div class="result-card" style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15)); border-left: 4px solid var(--primary);">
+                    <div class="result-card-title">💡 总体建议</div>
+                    <div class="result-card-content">${overallAdvice}</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-card-title">🔑 关键提醒</div>
+                    <div class="result-card-content">
+                        你现在感受到的压力，不一定来自事情本身。很多时候，是因为${isZhongkao ? '出分和录取' : '录取等待'}这几天同时带来三种感觉。<br><br>
+                        <strong>知道是哪一种，就能更有针对性地稳住。</strong>
+                    </div>
+                </div>
+
+                <div class="next-step-box">
+                    <span class="next-step-icon">➡️</span>
+                    <span class="next-step-text"><strong>下一步：</strong>点上面的标签切换到其他工具，或拉到最下方选择下一个功能。</span>
+                </div>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="btn btn-secondary" onclick="resetStressTest()">重新测试</button>
+                </div>
+            `;
+        }
+
+        // 生成雷达图SVG
+        function generateRadarSvg(scores) {
+            const centerX = 110;
+            const centerY = 110;
+            const maxRadius = 80;
+
+            // 计算三个点的坐标（等边三角形布局）
+            const angles = [-90, 30, 150]; // 上、右下、左下
+            const points = angles.map((angle, i) => {
+                const scoreKey = ['unpredictable', 'uncontrollable', 'overload'][i];
+                const radius = (scores[scoreKey] / 3) * maxRadius;
+                const rad = (angle * Math.PI) / 180;
+                return {
+                    x: centerX + radius * Math.cos(rad),
+                    y: centerY + radius * Math.sin(rad),
+                    score: scores[scoreKey]
+                };
+            });
+
+            // 背景网格
+            const gridLevels = [1, 2, 3];
+            const gridPaths = gridLevels.map(level => {
+                const r = (level / 3) * maxRadius;
+                return angles.map(angle => {
+                    const rad = (angle * Math.PI) / 180;
+                    return `${centerX + r * Math.cos(rad)},${centerY + r * Math.sin(rad)}`;
+                }).join(' ');
+            });
+
+            // 数据区域
+            const dataPath = points.map(p => `${p.x},${p.y}`).join(' ');
+
+            // 颜色
+            const colors = ['rgba(255, 107, 107, 0.3)', 'rgba(255, 230, 109, 0.3)', 'rgba(107, 92, 231, 0.3)'];
+
+            return `
+                <svg viewBox="0 0 220 220" class="radar-chart">
+                    <!-- 背景网格 -->
+                    ${gridPaths.map((path, i) => `
+                        <polygon points="${path}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                    `).join('')}
+
+                    <!-- 轴线 -->
+                    ${angles.map(angle => {
+                        const rad = (angle * Math.PI) / 180;
+                        return `<line x1="${centerX}" y1="${centerY}" x2="${centerX + maxRadius * Math.cos(rad)}" y2="${centerY + maxRadius * Math.sin(rad)}" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>`;
+                    }).join('')}
+
+                    <!-- 数据区域 -->
+                    <polygon points="${dataPath}" fill="rgba(107, 92, 231, 0.4)" stroke="var(--primary)" stroke-width="2"/>
+
+                    <!-- 数据点 -->
+                    ${points.map((p, i) => {
+                        const colors = ['var(--accent)', 'var(--warning)', 'var(--primary-light)'];
+                        return `<circle cx="${p.x}" cy="${p.y}" r="6" fill="${colors[i]}"/>`;
+                    }).join('')}
+                </svg>
+            `;
+        }
+
+        // 生成维度解读
+        function generateInterpretations(scores, isZhongkao) {
+            let html = '';
+
+            const interpretations = {
+                unpredictable: {
+                    title: '不可预测感',
+                    color: 'var(--accent)',
+                    high: '你对"结果还没出来"这件事感到很难受，一直在脑子里预演各种可能。这种不确定性让你停不下来。',
+                    medium: '你对未知结果有一定焦虑，会反复刷信息、打听消息，想找到一个"确定的答案"。',
+                    low: '你对不确定性有一定容忍度，能够接受"现在还没结果"这个事实。'
+                },
+                uncontrollable: {
+                    title: '不可控制感',
+                    color: 'var(--warning)',
+                    high: '你觉得自己现在什么也帮不上孩子，很想做点什么但又不知道能做什么，这种无力感让你很难受。',
+                    medium: '你有时会觉得"急也没用但停不下来"，会反复打听消息来获得一点控制感。',
+                    low: '你能够接受有些事情不在自己掌控范围内，不会过度焦虑。'
+                },
+                overload: {
+                    title: '超负荷感',
+                    color: 'var(--primary-light)',
+                    high: '你脑子里装了太多事情：分数、学校、录取、补录、亲友意见……所有信息混在一起，让你分不清主次，很累但停不下来。',
+                    medium: '你同时处理好几件事，有时会感到信息过载，但还能勉强分辨轻重。',
+                    low: '你能够把问题分开看，不会让所有压力堆在一起。'
+                }
+            };
+
+            // 按分数排序
+            const sorted = ['unpredictable', 'uncontrollable', 'overload']
+                .sort((a, b) => scores[b] - scores[a]);
+
+            for (const key of sorted) {
+                const score = scores[key];
+                const interp = interpretations[key];
+                let level, text;
+
+                if (score === 3) {
+                    level = '较高';
+                    text = interp.high;
+                } else if (score >= 1) {
+                    level = '中等';
+                    text = interp.medium;
+                } else {
+                    level = '较低';
+                    text = interp.low;
+                }
+
+                html += `
+                    <div class="result-card">
+                        <div class="result-card-title">
+                            <span style="color: ${interp.color};">${interp.title}</span>
+                            <span style="font-size: 0.8em; color: var(--text-muted);">（${level}）</span>
+                        </div>
+                        <div class="result-card-content">${text}</div>
+                    </div>
+                `;
+            }
+
+            return html;
+        }
+
+        // 重置压力测试
+        function resetStressTest() {
+            state.checkItems = {
+                unpredictable: [],
+                uncontrollable: [],
+                overload: []
+            };
+
+            const questions = document.getElementById('stressQuestions');
+            const result = document.getElementById('stressResult');
+
+            questions.style.display = 'block';
+            result.style.display = 'none';
+
+            // 清除所有勾选状态
+            questions.querySelectorAll('.check-item').forEach(item => {
+                item.classList.remove('checked');
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // 显示情景
