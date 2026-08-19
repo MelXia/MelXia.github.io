@@ -1,5 +1,88 @@
 # Mel 个人主页项目 - Session Handover
 
+> 记录日期：2026-08-20（更新）
+
+---
+
+## 本次更新（2026-08-20）
+
+### 第二十九阶段：新增"走读vs住宿"决策量表
+
+**新增文件**：boarding-vs-day.html - 高中走读vs住宿决策模型（评分+权重版）
+
+**量表来源**：基于 `/Users/mel/Mel Xia/02_知识库/家长问答素材/高中走读vs住宿决策模型.md` 提炼
+
+**量表结构**：
+- 25 个评估项，三个维度
+  - 从孩子的角度看（8项）：生活自理、情绪调节、人际适应、求助意愿
+  - 从学校的角度看（10项）：生活条件、作息管理、宿舍人际、调整机制
+  - 从家长的角度看（7项，反向计分）：家庭氛围、通勤安排、家庭恢复力、作息管理、家长精力消耗、经济承受力
+- 五分制评分（1=非常不符合，5=非常符合）
+- 权重按项设（1-3 分），3 分权重最多 5 项
+- 家长端反向计分（后端 actual = 6 - user_score），描述保持正向语义
+
+**结果解读**：
+- 四档结论（基于能力维度×资源维度交叉判断）
+  - 建议住宿：住宿适应能力较强 + 走读支持资源不足
+  - 可住宿也可走读：住宿适应能力较强 + 走读支持资源充足
+  - 建议走读：住宿适应能力一般 + 走读支持资源充足
+  - 建议走读：住宿适应能力不足 或 走读支持资源极度充足
+- 柱状图带白话标签（住宿适应能力较强/不足、走读支持资源充足/不足）
+- 3 分权重项按维度同类项合并展示
+- 信号检测：c4 住宿意愿低分、f1 家庭氛围高分、c8 求助意愿低分、c2 睡眠适应低分
+
+**casebook.html 更新**：
+- 心理测验区域新增入口，标记 NEW
+- 中高考稳压工具台移除 NEW 标记（已超过7天）
+
+**分享链接**：
+- Cloudflare：https://melxia-github-io.pages.dev/boarding-vs-day.html
+- GitHub：https://melxia.github.io/boarding-vs-day.html
+
+---
+
+> 记录日期：2026-08-18（更新）
+
+---
+
+## 本次更新（2026-08-18）
+
+### 第二十八阶段：中文文件名改为英文文件名
+
+**背景**：个人网页链接需分享给不同的人，中文命名的量表链接在不同客户端会出现 URL 编码乱码。将所有中文命名的 HTML 文件改为语义化英文短名，文件内容（含 `<title>`、H1 等中文标题）保持不变。
+
+**改动范围**：17 个文件重命名 + casebook.html 中 17 处链接引用同步更新
+
+**文件名映射表**：
+
+| 原文件名 | 新文件名 |
+|----------|----------|
+| 压力知觉测评.html | pss-assessment.html |
+| 初中生抑郁测评.html | adolescent-depression.html |
+| 父母情感支持测评.html | parent-emotional-support.html |
+| 子女情感支持测评.html | child-emotional-support.html |
+| 父母控制测评.html | parent-control.html |
+| AI焦虑测评.html | ai-anxiety.html |
+| AI性格透视.html | ai-personality.html |
+| 中断的记忆.html | memory-interruption.html |
+| 博弈抉择.html | game-choice.html |
+| 见微知著.html | detail-perception.html |
+| 心智突围.html | cognitive-breakthrough.html |
+| 记忆与干扰.html | memory-interference.html |
+| 找茬挑战.html | spot-difference.html |
+| 生日引力场.html | birthday-gravity.html |
+| 颜色快判.html | color-judgment.html |
+| 阿希从众实验.html | asch-conformity.html |
+| 师恩难忘挂画生成器.html | teacher-portrait-generator.html |
+
+**提交**：`6ac2adc` 已推送至 `MelXia/MelXia.github.io` 主分支，Cloudflare Pages 自动同步
+
+**新分享链接示例**：
+- 压力知觉测评：https://melxia.github.io/pss-assessment.html
+- 初中生抑郁测评：https://melxia.github.io/adolescent-depression.html
+
+---
+
 > 记录日期：2026-07-14（更新）
 
 ---
@@ -65,7 +148,7 @@
 
 **知识库同步**：
 - 新增案例：期末考试家庭节奏稳定
-- 来源：`/Users/mel/Mel Xia/知识库/心情热线/2026-07-07-成绩越好的孩子越怕考试前家庭发生这件事.md`
+- 来源：`/Users/mel/Mel Xia/02_知识库/心情热线/2026-07-07-成绩越好的孩子越怕考试前家庭发生这件事.md`
 - 创建完整文章页面：story-5.html
 - 内容概要：孩子平时稳在年级前三，期末考试却"滑铁卢"，复盘发现家庭节奏变化（亲友来访）是关键因素
 - 核心洞察：真正影响考试发挥的，不是多做一套试卷，而是考试前家庭节奏是否足够稳定
@@ -257,7 +340,7 @@
 
 ### 第二十一阶段：新增"压力知觉测评"心理测验
 
-**新增文件**：压力知觉测评.html - 压力知觉量表（PSS-10）自评工具
+**新增文件**：pss-assessment.html - 压力知觉量表（PSS-10）自评工具
 
 **量表来源**：
 - 原始量表：Cohen, Kamarck, & Mermelstein (1983) 编制
@@ -293,7 +376,7 @@
 
 ### 第二十阶段：新增"初中生抑郁测评"心理测验 + 优化量表测评规则
 
-**新增文件**：初中生抑郁测评.html - 初中生抑郁量表自评工具
+**新增文件**：adolescent-depression.html - 初中生抑郁量表自评工具
 
 **量表来源**：
 - 原始量表：王阳、王宏、张丽华、刘杨、王慧（2024）编制
@@ -324,7 +407,7 @@
 - 王阳, 王宏, 张丽华, 刘杨, 王慧. (2024). 初中生抑郁量表的编制与信效度检验. *中国心理卫生杂志, 38*(5), 393-398.
 
 **量表测评生成技能更新**：
-- 版面设计规范：严格按照`父母控制测评.html`格式生成
+- 版面设计规范：严格按照`parent-control.html`格式生成
 - 结果显示规则：等级仅显示"低/中等/高XX水平"，不显示百分比划分界限
 - NEW标记规则：仅标记7天内添加的游戏
 - 显示规则：前8个测验直接显示，其余折叠
@@ -338,8 +421,8 @@
 ### 第十九阶段：新增"父母情感支持测评"和"子女情感支持测评"心理测验
 
 **新增文件**：
-- 父母情感支持测评.html - 父母情感支持量表（PESS）自评工具
-- 子女情感支持测评.html - 感知父母情感支持量表（PPESS）自评工具
+- parent-emotional-support.html - 父母情感支持量表（PESS）自评工具
+- child-emotional-support.html - 感知父母情感支持量表（PPESS）自评工具
 
 **量表来源**：
 - 原始量表：唐雅君、黄守桢、许世梅、龚楚依、孟迎芳（2026）编制
@@ -376,7 +459,7 @@
 
 ### 第十八阶段：新增"父母心理控制测评"心理测验
 
-**新增文件**：父母控制测评.html - 父母心理控制量表（儿童版）自评工具
+**新增文件**：parent-control.html - 父母心理控制量表（儿童版）自评工具
 
 **量表来源**：
 - 原始量表：邢淑芬、俞美硕、耿晓敏（2025）基于中国文化背景编制
@@ -420,7 +503,7 @@
 
 ### 第十七阶段：新增"AI焦虑测评"心理测验
 
-**新增文件**：AI焦虑测评.html - 人工智能焦虑量表自评工具
+**新增文件**：ai-anxiety.html - 人工智能焦虑量表自评工具
 
 **量表来源**：
 - 原版：Wang & Wang (2022) Artificial Intelligence Anxiety Scale (AIAS)
@@ -485,16 +568,16 @@
 - 所有页面导航栏中"翻译案例" → "助人自助"
 
 **游戏倒计时布局优化**：
-- 心智突围.html：倒计时移到游戏区域内部右上角显示，不再挤占按钮空间
-- 见微知著.html：同样的优化处理
+- cognitive-breakthrough.html：倒计时移到游戏区域内部右上角显示，不再挤占按钮空间
+- detail-perception.html：同样的优化处理
 - 使用绝对定位，添加半透明背景，避免影响用户点击选择按钮
 
 **结果页面图表优化**：
 - 移除所有折线图，改为在柱状图下方直接显示正确率
-- 心智突围.html、见微知著.html、记忆与干扰.html 三个游戏统一优化
+- cognitive-breakthrough.html、detail-perception.html、memory-interference.html 三个游戏统一优化
 - 柱状图显示反应时，下方显示正确率/策略选择
 
-**新增游戏**：博弈抉择.html - 社会困境与损失厌恶测验
+**新增游戏**：game-choice.html - 社会困境与损失厌恶测验
 
 **游戏设计**：
 - **第一轮（3试次）**：单人模式，熟悉规则。玩家vs虚拟对手，各有一张0-10随机数字卡片，数字大者获胜，赢+10代币，输-10代币
@@ -518,7 +601,7 @@
 
 ### 第十四阶段：新增"见微知著"心理测验游戏 + 邮件链接修复
 
-**新增游戏**：见微知著.html - 整体优先效应测验
+**新增游戏**：detail-perception.html - 整体优先效应测验
 
 **游戏设计**：
 - **试次一（一致条件）**：大H由小H组成，识别局部字母
@@ -549,12 +632,12 @@
 
 **链接引用修正**：
 - casebook.html 中游戏链接修正，匹配实际文件名：
-  - `记忆干扰.html` → `记忆与干扰.html`
-  - `中断记忆.html` → `中断的记忆.html`
-  - `性格透视.html` → `AI性格透视.html`
-  - `生日引力.html` → `生日引力场.html`
-  - `从众实验.html` → `阿希从众实验.html`
-  - `挂画生成.html` → `师恩难忘挂画生成器.html`
+  - `记忆干扰.html` → `memory-interference.html`
+  - `中断记忆.html` → `memory-interruption.html`
+  - `性格透视.html` → `ai-personality.html`
+  - `生日引力.html` → `birthday-gravity.html`
+  - `从众实验.html` → `asch-conformity.html`
+  - `挂画生成.html` → `teacher-portrait-generator.html`
 
 **内容补充**：
 - casebook.html 添加 story-2.html（"不唠叨的妈妈是最好的"）
@@ -576,7 +659,7 @@
 
 ### 第十阶段：新增"心智突围"心理测验游戏
 
-**新增游戏**：心智突围.html - 执行控制训练游戏
+**新增游戏**：cognitive-breakthrough.html - 执行控制训练游戏
 
 **游戏设计**：
 - **第一轮（基础抑制）**：图形闪现0.5秒，三角形出现时点击对应侧按钮，圆形时不点击
@@ -661,7 +744,7 @@
 | story | story-1~4.html |
 | article | article-1~5.html |
 | activity | activity-career.html, activity-community.html, activity-flower.html, activity-hotline.html, activity-library.html, activity-moms.html, activity-safety.html |
-| 心理测验 | AI性格透视.html, 中断的记忆.html, 找茬挑战.html, 生日引力场.html, 阿希从众实验.html, 颜色快判.html, 师恩难忘挂画生成器.html, photo-gallery.html |
+| 心理测验 | ai-personality.html, memory-interruption.html, spot-difference.html, birthday-gravity.html, asch-conformity.html, color-judgment.html, teacher-portrait-generator.html, photo-gallery.html |
 
 **添加的功能：**
 - 浅色模式CSS变量（`[data-theme="light"]`）

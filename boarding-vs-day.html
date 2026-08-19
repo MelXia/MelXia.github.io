@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>走读 VS 住宿计分表</title>
+    <style>
+        :root {
+            --primary: #6B5CE7;
+            --primary-light: #8B7CF7;
+            --accent: #FF6B6B;
+            --success: #4ECDC4;
+            --warning: #FFE66D;
+            --warning-text: #B8A600;
+            --bg: #1A1B2E;
+            --card: #252742;
+            --text: #E8E8F0;
+            --text-muted: #9899AC;
+        }
+
+        [data-theme="light"] {
+            --primary: #5B4CD7;
+            --primary-light: #7B6CE7;
+            --accent: #E85555;
+            --success: #3DBDB4;
+            --warning: #E8D85D;
+            --warning-text: #8A7A00;
+            --bg: #F5F5FA;
+            --card: #FFFFFF;
+            --text: #2A2A3E;
+            --text-muted: #6A6A7E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 70px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .top-nav {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .nav-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.95em;
+        }
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-cta:hover { transform: scale(1.05); }
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { color: var(--text-muted); font-size: 0.85em; text-decoration: none; }
+        .nav-links a:hover { color: var(--accent); }
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text);
+        }
+        .theme-toggle:hover { background: var(--primary); color: white; }
+        .menu-toggle {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            width: 36px; height: 36px;
+            flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 18px; height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
+        }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px; left: 0; right: 0;
+            background: var(--card);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mobile-menu.show { display: flex; }
+        .mobile-menu a {
+            color: var(--text);
+            font-size: 0.9em;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: var(--bg);
+        }
+        .mobile-menu a:hover { background: var(--primary); color: white; }
+
+        .container { max-width: 700px; width: 100%; margin: 0 auto; }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        h2 { font-size: 1.2em; margin-bottom: 10px; color: var(--text); }
+
+        .intro-icon { font-size: 48px; margin-bottom: 12px; }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 6px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4); }
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .privacy-notice {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(107, 92, 231, 0.15));
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .privacy-notice-title { color: var(--success); font-size: 0.9em; margin-bottom: 6px; }
+        .privacy-notice-text { color: var(--text); font-size: 0.8em; line-height: 1.5; }
+
+        .rule-box {
+            background: var(--bg);
+            padding: 14px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: left;
+        }
+        .rule-title { color: var(--warning-text); font-size: 0.95em; margin-bottom: 8px; }
+        .rule-content { color: var(--text); line-height: 1.7; font-size: 0.85em; }
+        .rule-content strong { color: var(--primary-light); }
+
+        /* 步骤指示 */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+        .step-dot {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--bg);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
+            border: 2px solid var(--text-muted);
+            transition: all 0.25s;
+        }
+        .step-dot.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(107, 92, 231, 0.15);
+        }
+        .step-dot.done {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .step-line {
+            width: 24px; height: 2px;
+            background: var(--text-muted);
+            opacity: 0.4;
+        }
+        .step-label {
+            font-size: 0.8em;
+            color: var(--text);
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        /* 端面板 */
+        .role-panel { display: none; }
+        .role-panel.active { display: block; }
+
+        /* 端标题 */
+        .role-title-bar {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .role-title-bar h2 {
+            font-size: 1.25em;
+            color: var(--primary-light);
+            margin-bottom: 4px;
+        }
+
+        /* 维度分组 */
+        .dimension-group {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .dimension-title {
+            color: var(--primary-light);
+            font-size: 0.98em;
+            font-weight: 600;
+            margin-bottom: 4px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--primary);
+        }
+        .dimension-main {
+            color: var(--text-muted);
+            font-size: 0.78em;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        /* 评估项 */
+        .item {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 10px 0;
+            text-align: left;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .item.scored { border-color: var(--primary); }
+        .item.weighted-3 { border-color: var(--accent); border-width: 2px; }
+
+        .item-name {
+            color: var(--text);
+            font-size: 0.94em;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .item-desc {
+            color: var(--text);
+            font-size: 0.83em;
+            line-height: 1.55;
+            margin-bottom: 4px;
+        }
+        .item-example {
+            color: var(--text-muted);
+            font-size: 0.75em;
+            line-height: 1.55;
+            padding-left: 8px;
+            border-left: 2px solid var(--primary);
+            margin-top: 6px;
+        }
+
+        /* 控制行：分数一行，权重一行（手机友好） */
+        .item-controls {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .control-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            white-space: nowrap;
+            font-weight: 600;
+            min-width: 36px;
+        }
+        .seg-control {
+            display: inline-flex;
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .seg-btn {
+            min-width: 32px;
+            padding: 6px 10px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+        .seg-btn:hover:not(:disabled) {
+            color: var(--text);
+            background: var(--card);
+        }
+        .seg-btn.active { background: var(--primary); color: white; }
+        .seg-btn.active.weight-3 { background: var(--accent); }
+        .seg-label {
+            font-size: 0.68em;
+            color: var(--text-muted);
+            margin-left: 4px;
+            flex: 1;
+        }
+
+        .item-weighted-score {
+            font-size: 0.78em;
+            color: var(--primary-light);
+            font-weight: 700;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .weight-warning {
+            color: var(--accent);
+            font-size: 0.8em;
+            margin-top: 10px;
+            text-align: left;
+            display: none;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 8px 10px;
+            border-radius: 8px;
+        }
+        .weight-warning.show { display: block; }
+
+        /* 底部导航 */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        /* 结果页 */
+        .total-score-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .total-score-label { font-size: 0.9em; color: var(--text-muted); margin-bottom: 5px; }
+        .total-score-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .total-score-range { font-size: 0.8em; color: var(--text-muted); margin-top: 5px; }
+
+        .conclusion-pill {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 14px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .conclusion-pill.tier-1 { background: rgba(255, 107, 107, 0.2); color: var(--accent); }
+        .conclusion-pill.tier-2 { background: rgba(255, 159, 67, 0.2); color: #FF9F43; }
+        .conclusion-pill.tier-3 { background: rgba(78, 205, 196, 0.2); color: var(--success); }
+        .conclusion-pill.tier-4 { background: rgba(107, 92, 231, 0.2); color: var(--primary-light); }
+        .conclusion-pill.tier-unknown { background: var(--bg); color: var(--text-muted); }
+
+        /* 柱状图 */
+        .chart-container {
+            background: var(--bg);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .chart-title {
+            color: var(--primary-light);
+            font-size: 0.95em;
+            margin-bottom: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .chart-bar-row {
+            text-align: left;
+        }
+        .chart-bar-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82em;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .chart-bar-name { font-weight: 600; }
+        .chart-bar-pct { color: var(--primary-light); font-weight: 700; }
+        .chart-bar-tag {
+            display: inline-block;
+            font-size: 0.78em;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .chart-bar-track {
+            background: var(--card);
+            border-radius: 8px;
+            height: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.6s ease;
+        }
+        .chart-bar-fill.child { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+        .chart-bar-fill.school { background: linear-gradient(90deg, var(--success), #5FE3DA); }
+        .chart-bar-fill.family { background: linear-gradient(90deg, var(--accent), #FF8E8E); }
+        .chart-legend-text {
+            font-size: 0.74em;
+            color: var(--text-muted);
+            margin-top: 12px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* 高权重项卡片 */
+        .key-item-group {
+            margin: 12px 0;
+            text-align: left;
+        }
+        .key-item-group-title {
+            color: var(--primary-light);
+            font-size: 0.82em;
+            font-weight: 700;
+            margin: 10px 0 6px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed var(--text-muted);
+        }
+        .key-item-card {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 8px 0;
+            text-align: left;
+            border-left: 3px solid var(--accent);
+        }
+        .key-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .key-item-name { color: var(--text); font-size: 0.88em; font-weight: 600; }
+        .key-item-score { color: var(--accent); font-size: 0.82em; font-weight: 700; }
+        .key-item-desc { color: var(--text-muted); font-size: 0.75em; line-height: 1.5; }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.15), rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--primary);
+            padding: 14px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .insight-title { color: var(--primary-light); font-size: 0.95em; margin-bottom: 8px; font-weight: 600; }
+        .insight-text { color: var(--text); line-height: 1.7; white-space: pre-line; font-size: 0.85em; }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .card { padding: 18px; }
+            h1 { font-size: 1.3em; }
+            h2 { font-size: 1.1em; }
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+            .seg-btn { padding: 7px 8px; font-size: 0.78em; min-width: 30px; }
+            .step-label { font-size: 0.72em; }
+            .step-dot { width: 24px; height: 24px; font-size: 0.78em; }
+            .step-line { width: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration:none;">
+                <div class="nav-brand">有钳任性横着走的Mel</div>
+            </a>
+            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="casebook.html">助人自助</a>
+            <a href="about.html">关于我</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- 移动端下拉菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">首页</a>
+        <a href="casebook.html">助人自助</a>
+        <a href="about.html">关于我</a>
+        <a href="flower-gallery.html">花艺作品</a>
+        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+    </div>
+
+    <div class="container">
+        <!-- 欢迎页 -->
+        <div class="screen active" id="screen-welcome">
+            <div class="card">
+                <div class="intro-icon">🏫</div>
+                <h1>走读 VS 住宿计分表</h1>
+
+                <div class="privacy-notice">
+                    <div class="privacy-notice-title">🔒 隐私保护</div>
+                    <div class="privacy-notice-text">
+                        这是一个静态网页，你的打分和权重<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器或数据库。刷新页面数据会清除，请放心作答。
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <div class="rule-content">
+                        1. 家长和孩子对每一项评估打分、设定权重，最后得到总分。<br><br>
+                        2. 总分落在哪个区间，对应一个参考倾向。<br><br>
+                        过程中分数和权重都可以反复调整——<strong>调整的过程本身就是理清决策思路的过程。</strong>
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <div class="rule-title">💡 使用建议</div>
+                    <div class="rule-content">
+                        建议家长和孩子一起做每一项评估，<strong>同时考虑孩子的感受，不要只以家长的判断为准。</strong>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startAssessment()">开始评估</button>
+            </div>
+        </div>
+
+        <!-- 评估页 -->
+        <div class="screen" id="screen-assessment">
+            <div class="card">
+                <!-- 步骤指示 -->
+                <div class="step-indicator">
+                    <div class="step-dot active" id="step-child">1</div>
+                    <span class="step-label" id="label-child">孩子端</span>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="step-school">2</div>
+                    <span class="step-label" id="label-school">学校端</span>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="step-family">3</div>
+                    <span class="step-label" id="label-family">家庭端</span>
+                </div>
+
+                <div class="weight-warning" id="weightWarning">
+                    ⚠️ 3 分权重项已达 5 项上限。要再设一项 3 分，需要先把另一项降回 2 分或 1 分——分清主次的过程，本身就是理清决策思路的过程。
+                </div>
+
+                <!-- 孩子端 -->
+                <div class="role-panel active" id="panel-child">
+                    <div class="role-title-bar"><h2>孩子端</h2></div>
+                    <div id="childItems"></div>
+                </div>
+
+                <!-- 学校端 -->
+                <div class="role-panel" id="panel-school">
+                    <div class="role-title-bar"><h2>学校端</h2></div>
+                    <div id="schoolItems"></div>
+                </div>
+
+                <!-- 家庭端 -->
+                <div class="role-panel" id="panel-family">
+                    <div class="role-title-bar"><h2>家庭端</h2></div>
+                    <div id="familyItems"></div>
+                </div>
+
+                <!-- 底部导航 -->
+                <div class="bottom-nav" id="bottomNav">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="screen" id="screen-result">
+            <div class="card">
+                <h2>评估完成</h2>
+
+                <div class="total-score-box">
+                    <div class="total-score-label">你的总分占满分比例</div>
+                    <div class="total-score-value" id="finalTotalPct">0%</div>
+                    <div class="total-score-range" id="finalTotalRange">总分 0 / 满分 0</div>
+                    <div id="finalConclusion"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">📊 三个维度得分占各自满分的百分比</div>
+                    <div class="chart-bars" id="chartBars"></div>
+                    <div class="chart-legend-text">
+                        <strong>孩子端和学校端</strong>：柱子越长，住宿适应能力越强；<strong>家庭端</strong>：柱子越长，说明家里走读支持资源越不足，越不得不考虑住宿。
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-title">🎯 决定性项（3 分权重）的得失</div>
+                    <div class="insight-text" id="keyItemsText"></div>
+                </div>
+
+                <div id="keyItemsContainer"></div>
+
+                <div class="insight-box">
+                    <div class="insight-title">💡 你的结果解读</div>
+                    <div class="insight-text" id="insightText"></div>
+                </div>
+
+                <div class="rule-box" style="margin-top: 20px;">
+                    <div class="rule-title">📌 最后提醒</div>
+                    <div class="rule-content">
+                        分数和权重都可以回头调整。回去调任何一项，看总分怎么变——<strong>调整的过程本身，就是理清决策思路的过程。</strong>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="backToAssessment()">← 回去调整</button>
+                <button class="btn btn-primary" onclick="resetAssessment()">重新评估</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 评估项数据：所有描述均按"正向语义"书写，包括家庭端。
+        // 用户打分时一律按"越符合你家情况分越高"打分（5=非常符合，1=非常不符合）。
+        // 家庭端的反向计分由后台自动处理：actual = 6 - user_score。
+        const roles = {
+            child: {
+                label: '孩子端',
+                cls: 'child',
+                dimensions: [
+                    {
+                        title: '生活自理',
+                        mainDesc: '孩子能独立处理日常事务，并在宿舍噪声环境下睡得着、睡得好。',
+                        items: [
+                            {
+                                id: 'c1',
+                                name: '日常自理能力',
+                                desc: '孩子能独立搞定洗漱、衣物清洗、物品整理、时间安排。',
+                                example: '衣物知道什么时候洗、东西不乱丢、起床不靠催、能自己掌住节奏。'
+                            },
+                            {
+                                id: 'c2',
+                                name: '睡眠适应能力',
+                                desc: '孩子在宿舍噪声环境下能正常入睡、睡得好。',
+                                example: '室友打呼、磨牙、说梦话、深夜聊天时，孩子还能睡着；不怕声、不怕光、入睡不慢。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '情绪调节',
+                        mainDesc: '孩子遇到疲惫、想家、受挫后能自己缓过来，并且对住宿本身有主动意愿。',
+                        items: [
+                            {
+                                id: 'c3',
+                                name: '情绪恢复速度',
+                                desc: '孩子受委屈、想家、被打击后，能在一两天内自己缓过来，不持续低落、不影响吃饭睡眠和学习节奏。',
+                                example: '第一天难受、第二天还能正常上课吃饭；不会陷进低情绪里出不来、不会因为情绪拖垮身体和学习。'
+                            },
+                            {
+                                id: 'c4',
+                                name: '住宿主动意愿',
+                                desc: '孩子主动提出想住宿、喜欢住宿，对住校这件事是有期待而不是抵触的。',
+                                example: '孩子自己说"我想住校""我喜欢宿舍"；而不是被家长安排、被逼着住。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '人际适应',
+                        mainDesc: '孩子能和作息、性格不同的室友相处，遇到小摩擦能消化或沟通，不被孤立、不被针对。',
+                        items: [
+                            {
+                                id: 'c5',
+                                name: '作息与习惯差异耐受',
+                                desc: '孩子能接受室友作息、生活习惯和自己不一样。',
+                                example: '室友睡得晚/早起、卫生习惯不同、生活节奏不同，孩子能适应不炸毛。'
+                            },
+                            {
+                                id: 'c6',
+                                name: '小摩擦处理能力',
+                                desc: '孩子遇到夜聊、打呼、抢洗漱位等小摩擦，能消化或主动沟通，不升级成冲突。',
+                                example: '能直接跟室友说"能不能小声点"；能自己消化不影响情绪；不会一有事就闷着爆雷。'
+                            },
+                            {
+                                id: 'c7',
+                                name: '抗孤立与抗针对能力',
+                                desc: '孩子在群体里不容易被孤立、被针对，或在被边缘化时能扛得住、能寻求帮助。',
+                                example: '有朋友圈子、不被小团体排挤；万一被针对，知道怎么保护自己、找老师家长。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '求助意愿',
+                        mainDesc: '孩子遇到解决不了的问题，会及时跟家长、老师说，而不是硬扛到崩溃。',
+                        items: [
+                            {
+                                id: 'c8',
+                                name: '主动求助意愿',
+                                desc: '孩子现在还会主动跟家长、老师说负面的事和解决不了的问题。',
+                                example: '宿舍吵睡不好会说、被室友排挤会说、身体不舒服会说；不会憋着、不会"说了也没用"硬扛。'
+                            }
+                        ]
+                    }
+                ]
+            },
+            school: {
+                label: '学校端',
+                cls: 'school',
+                dimensions: [
+                    {
+                        title: '生活条件',
+                        mainDesc: '宿舍硬件能让孩子正常恢复体力，洗漱时间够用。',
+                        items: [
+                            {
+                                id: 's1',
+                                name: '宿舍人数与空间',
+                                desc: '针对宿舍人数与空间，孩子和家长觉得合适、能接受。',
+                                example: '几人间？挤不挤？孩子和家长自己的主观感受如何——主观判断，不是"6人间=满分"。'
+                            },
+                            {
+                                id: 's2',
+                                name: '基本设施状况',
+                                desc: '洗澡、厕所、热水、空调、洗衣晾晒等设施的实际状况，孩子和家长觉得能满足日常需求。',
+                                example: '洗澡要排队多久？热水稳不稳？空调能不能用？衣服能不能晾干？'
+                            },
+                            {
+                                id: 's3',
+                                name: '洗漱时间充足度',
+                                desc: '晚自习后到熄灯之间的洗漱窗口、洗澡排队时长，孩子和家长觉得够用。',
+                                example: '8人寝室5-7分钟洗一次澡够不够？20分钟洗漱完能不能做到？——主观判断"够不够"。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '作息管理',
+                        mainDesc: '作息节奏孩子能适应，规则详尽度与自由度的平衡适合这个孩子。',
+                        items: [
+                            {
+                                id: 's4',
+                                name: '作息节奏适应度',
+                                desc: '起床、熄灯、晚自习、查寝的时间节奏，孩子觉得自己能适应。',
+                                example: '6:20起床跑操自己能不能适应？熄灯时间能不能适应？查寝频率受不受得了？'
+                            },
+                            {
+                                id: 's5',
+                                name: '规则详尽度与自由度',
+                                desc: '学校管理规则的详尽程度与孩子自由度的平衡，孩子和家长觉得合适。',
+                                example: '熄灯后能不能写作业、能不能开台灯、能不能上厕所；强制早操跑操时间是否合理；手机管理实际有没有断。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '宿舍人际',
+                        mainDesc: '室友构成稳定，孩子不容易被开到差的"盲盒"。',
+                        items: [
+                            {
+                                id: 's6',
+                                name: '室友匹配预期',
+                                desc: '对室友作息、性格匹配的预期较好（要么有熟人，要么学校分宿机制合理）。',
+                                example: '有没有认识的同学同寝？学校按什么规则分？打呼、夜聊的概率高不高？'
+                            },
+                            {
+                                id: 's7',
+                                name: '差盲盒兜底能力',
+                                desc: '万一开到差的盲盒（打呼、霸凌、夜聊），学校和孩子都有兜底机制。',
+                                example: '能不能换宿舍？换宿舍难不难？孩子能不能扛到换？'
+                            }
+                        ]
+                    },
+                    {
+                        title: '调整机制',
+                        mainDesc: '孩子真出问题时，学校能接住反馈、有调整空间，并尊重学生隐私。',
+                        items: [
+                            {
+                                id: 's8',
+                                name: '调整通道畅通度',
+                                desc: '孩子睡不好、被影响、和室友冲突时，能换宿舍、能申请走读，通道畅通。',
+                                example: '换宿舍要走什么流程？批不批？申请走读难不难？'
+                            },
+                            {
+                                id: 's9',
+                                name: '老师反馈接住度',
+                                desc: '老师能接住孩子和家长的反馈，不会用"人家都能住你怎么不能住"堵回去。',
+                                example: '反映宿舍问题老师当不当回事？会不会反过来训孩子？'
+                            },
+                            {
+                                id: 's10',
+                                name: '隐私边界期待值',
+                                desc: '学校对学生私人空间的重视程度，孩子和家长觉得符合自己的期待。',
+                                example: '会不会未经允许进宿舍翻东西查违禁品？查寝会不会针对女生？'
+                            }
+                        ]
+                    }
+                ]
+            },
+            family: {
+                label: '家庭端',
+                cls: 'family',
+                reverse: true,  // 后台反向计分：actual = 6 - user_score
+                dimensions: [
+                    {
+                        title: '家庭氛围',
+                        mainDesc: '家是孩子的避风港，家人关系、家庭气氛让孩子想回，回家是放松而不是另一种消耗。',
+                        items: [
+                            {
+                                id: 'f1',
+                                name: '家是不是避风港',
+                                desc: '家是孩子的避风港，孩子愿意回、回家能放松。',
+                                example: '家人关系好、回家能喘口气、气氛轻松；孩子想回家、不躲着家人。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '通勤安排',
+                        mainDesc: '走读（含租房陪读）的通勤成本低，不会让走读反而比住宿更累。',
+                        items: [
+                            {
+                                id: 'f2',
+                                name: '通勤成本可控度',
+                                desc: '单程路程、接送方式、时间消耗可控，走读不会比住宿更累。',
+                                example: '骑车15分钟内、接送方便、路上时间短；租房陪读的话位置合适、陪读人手到位。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '家庭恢复力',
+                        mainDesc: '孩子回家以后能真正回血——能吃饭、洗澡、放松、睡好，不被追问成绩、不被管手机、不被家庭气氛压着。',
+                        items: [
+                            {
+                                id: 'f3',
+                                name: '回家回血能力',
+                                desc: '孩子回家能吃饭、洗澡、放松、睡好，不被追问成绩、不被管手机、不被家庭气氛压着。',
+                                example: '回家能喘口气、能好好吃饭睡觉；不会被追问成绩、气氛不压抑。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '作息管理',
+                        mainDesc: '孩子回家后，手机、睡眠、作业节奏能稳住。',
+                        items: [
+                            {
+                                id: 'f4',
+                                name: '回家作息稳定度',
+                                desc: '回家后手机、睡眠、作业节奏能稳住，不会回家就玩到12点。',
+                                example: '家长能盯住手机、孩子自己有节奏；回家能按时睡、不熬夜玩手机。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '走读对家长的精力消耗',
+                        mainDesc: '走读/陪读对家长的体力精力消耗可控，不会让家长长期处于疲惫或情绪紧绷状态。',
+                        items: [
+                            {
+                                id: 'f5',
+                                name: '走读额外精力消耗可控度',
+                                desc: '走读/陪读带来的额外精力消耗（接送、做饭、陪伴、租房），家长觉得自己扛得住、不会长期紧绷或透支。',
+                                example: '家长精力够、有分工；接送做饭陪读不会全压一个人身上、不会长期透支。'
+                            }
+                        ]
+                    },
+                    {
+                        title: '经济承受力',
+                        mainDesc: '走读/陪读的经济成本在家庭承受范围内，且投入后不会变成对孩子的情绪绑架。',
+                        items: [
+                            {
+                                id: 'f6',
+                                name: '经济成本可控度',
+                                desc: '租房、交通、生活成本在家庭承受范围内，不会变成新的家庭压力。',
+                                example: '房租、交通、生活成本花得轻松、不影响家底；不会因为陪读让家里拮据。'
+                            },
+                            {
+                                id: 'f7',
+                                name: '情绪绑架风险',
+                                desc: '投入后不会变成对孩子的情绪绑架，不会因为"回报不对等"心生怨恨。',
+                                example: '花得起也不怨恨、不会把"我为你花了这么多"挂在嘴边；不会因为孩子成绩波动就心生怨气。'
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // 状态：每个评估项的 score (1-5) 和 weight (1-3)。0 表示未打分。
+        const state = {};
+        Object.keys(roles).forEach(rk => {
+            roles[rk].dimensions.forEach(dim => {
+                dim.items.forEach(it => {
+                    state[it.id] = { score: 0, weight: 1 };
+                });
+            });
+        });
+
+        const stepOrder = ['child', 'school', 'family'];
+        let currentStep = 0;  // 0=child, 1=school, 2=family, 3=results
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startAssessment() {
+            currentStep = 0;
+            renderAll();
+            updateStepIndicator();
+            renderBottomNav();
+            showScreen('screen-assessment');
+        }
+
+        function renderAll() {
+            stepOrder.forEach(rk => renderItems(rk));
+        }
+
+        function renderItems(roleKey) {
+            const role = roles[roleKey];
+            const container = document.getElementById(roleKey + 'Items');
+            let html = '';
+            role.dimensions.forEach(dim => {
+                html += `<div class="dimension-group">`;
+                html += `<div class="dimension-title">${dim.title}</div>`;
+                html += `<div class="dimension-main">${dim.mainDesc}</div>`;
+                dim.items.forEach(it => {
+                    html += renderItemCard(roleKey, it);
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderItemCard(roleKey, it) {
+            const st = state[it.id];
+            const weight3Cls = st.weight === 3 ? 'weighted-3' : '';
+            const scoredCls = st.score > 0 ? 'scored' : '';
+            const weightedScore = st.score > 0 ? st.score * st.weight : 0;
+            const weightBtnCls = st.weight === 3 ? 'weight-3' : '';
+            return `
+                <div class="item ${scoredCls} ${weight3Cls}" id="item-${it.id}">
+                    <div class="item-name">${it.name}</div>
+                    <div class="item-desc">${it.desc}</div>
+                    ${it.example ? `<div class="item-example">举例：${it.example}</div>` : ''}
+                    <div class="item-controls">
+                        <div class="control-row">
+                            <div class="control-label">打分（越符合你家，分越高）</div>
+                            <div class="seg-control">
+                                ${[1,2,3,4,5].map(n => `
+                                    <button class="seg-btn ${st.score === n ? 'active' : ''}" onclick="setScore('${it.id}', ${n})">${n}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-label">权重（1一般 · 2重要 · 3决定性，最多 5 项 3 分）</div>
+                            <div class="seg-control">
+                                ${[1,2,3].map(n => `
+                                    <button class="seg-btn ${weightBtnCls} ${st.weight === n ? 'active' : ''}" onclick="setWeight('${it.id}', ${n})">${n}</button>
+                                `).join('')}
+                            </div>
+                            ${weightedScore > 0 ? `<div class="item-weighted-score">该项得分：${weightedScore}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setScore(itemId, n) {
+            state[itemId].score = n;
+            // 找到 item 所属 role，重渲染该 item 卡片
+            const roleKey = findRoleKeyByItemId(itemId);
+            renderItems(roleKey);
+            renderBottomNav();  // 更新下一步按钮可用状态
+        }
+
+        function setWeight(itemId, n) {
+            // 限制 3 分权重最多 5 项
+            if (n === 3) {
+                const count3 = Object.values(state).filter(s => s.weight === 3).length;
+                // 如果当前 item 不是 3 分，且已有 5 项 3 分
+                if (state[itemId].weight !== 3 && count3 >= 5) {
+                    const warning = document.getElementById('weightWarning');
+                    warning.classList.add('show');
+                    setTimeout(() => warning.classList.remove('show'), 3500);
+                    return;
+                }
+            }
+            state[itemId].weight = n;
+            const roleKey = findRoleKeyByItemId(itemId);
+            renderItems(roleKey);
+        }
+
+        function findRoleKeyByItemId(itemId) {
+            for (const rk of stepOrder) {
+                for (const dim of roles[rk].dimensions) {
+                    for (const it of dim.items) {
+                        if (it.id === itemId) return rk;
+                    }
+                }
+            }
+            return null;
+        }
+
+        function updateStepIndicator() {
+            stepOrder.forEach((rk, idx) => {
+                const dot = document.getElementById('step-' + rk);
+                const label = document.getElementById('label-' + rk);
+                dot.classList.remove('active', 'done');
+                if (idx < currentStep) {
+                    dot.classList.add('done');
+                } else if (idx === currentStep) {
+                    dot.classList.add('active');
+                }
+                // 隐藏非当前步骤的 label，避免视觉混乱
+                if (idx === currentStep) {
+                    label.style.display = 'inline';
+                } else {
+                    label.style.display = 'none';
+                }
+            });
+        }
+
+        function showPanel(roleKey) {
+            stepOrder.forEach(rk => {
+                document.getElementById('panel-' + rk).classList.remove('active');
+            });
+            document.getElementById('panel-' + roleKey).classList.add('active');
+            updateStepIndicator();
+            renderBottomNav();
+        }
+
+        function renderBottomNav() {
+            const nav = document.getElementById('bottomNav');
+            const rk = stepOrder[currentStep];
+            const allScored = roles[rk].dimensions.every(dim => dim.items.every(it => state[it.id].score > 0));
+
+            let html = '';
+            if (currentStep > 0) {
+                html += `<button class="btn btn-secondary" onclick="backStep()">← 上一步</button>`;
+            }
+            if (currentStep < stepOrder.length - 1) {
+                html += `<button class="btn btn-primary" onclick="nextStep()" ${allScored ? '' : 'disabled style="opacity:0.5;cursor:not-allowed;"'}>下一步 →</button>`;
+            } else {
+                html += `<button class="btn btn-primary" onclick="showResults()" ${allScored ? '' : 'disabled style="opacity:0.5;cursor:not-allowed;"'}>查看结果 →</button>`;
+            }
+            nav.innerHTML = html;
+        }
+
+        function nextStep() {
+            const rk = stepOrder[currentStep];
+            const allScored = roles[rk].dimensions.every(dim => dim.items.every(it => state[it.id].score > 0));
+            if (!allScored) {
+                alert('这一端还有评估项没打分，请逐项打完分再进入下一步。');
+                return;
+            }
+            if (currentStep < stepOrder.length - 1) {
+                currentStep++;
+                showPanel(stepOrder[currentStep]);
+                document.getElementById('screen-assessment').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        function backStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                showPanel(stepOrder[currentStep]);
+                document.getElementById('screen-assessment').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // ========== 结果计算 ==========
+
+        function calcRoleStats(roleKey) {
+            const role = roles[roleKey];
+            let userScore = 0;   // 用户实际打分（家庭端为反向前的原分）
+            let actualScore = 0; // 计分用分数（家庭端为反向后）
+            let maxScore = 0;
+            let itemCount = 0;
+            let scoredCount = 0;
+            role.dimensions.forEach(dim => {
+                dim.items.forEach(it => {
+                    const st = state[it.id];
+                    maxScore += 5 * st.weight;
+                    itemCount++;
+                    if (st.score > 0) {
+                        scoredCount++;
+                        userScore += st.score * st.weight;
+                        // 家庭端反向计分：actual = 6 - user_score
+                        const actual = role.reverse ? (6 - st.score) : st.score;
+                        actualScore += actual * st.weight;
+                    }
+                });
+            });
+            const pct = maxScore > 0 ? Math.round(actualScore / maxScore * 100) : 0;
+            return { userScore, actualScore, maxScore, pct, itemCount, scoredCount };
+        }
+
+        function showResults() {
+            const rk = stepOrder[currentStep];
+            const allScored = roles[rk].dimensions.every(dim => dim.items.every(it => state[it.id].score > 0));
+            if (!allScored) {
+                alert('这一维度还有评估项没打分，请逐项打完分再查看结果。');
+                return;
+            }
+
+            // 三个维度统计
+            const stats = {};
+            let totalActual = 0;
+            let totalMax = 0;
+            stepOrder.forEach(rk => {
+                stats[rk] = calcRoleStats(rk);
+                totalActual += stats[rk].actualScore;
+                totalMax += stats[rk].maxScore;
+            });
+
+            const totalPct = totalMax > 0 ? Math.round(totalActual / totalMax * 100) : 0;
+
+            // 总分显示
+            document.getElementById('finalTotalPct').textContent = totalPct + '%';
+            document.getElementById('finalTotalRange').textContent = `总分 ${totalActual} / 满分 ${totalMax}`;
+
+            // 四档结论（按能力维度+资源维度交叉判断）
+            const conclusion = getConclusion(stats);
+            const concEl = document.getElementById('finalConclusion');
+            concEl.innerHTML = `<div class="conclusion-pill ${conclusion.tier}">${conclusion.label}</div><div style="margin-top:8px;font-size:0.85em;color:var(--text-muted);line-height:1.6;">${conclusion.desc}</div>`;
+
+            // 柱状图
+            renderChart(stats);
+
+            // 关键项（3 分权重项，按维度分组）
+            renderKeyItems();
+
+            // 洞察
+            document.getElementById('insightText').textContent = buildInsight(stats, totalPct, conclusion);
+
+            showScreen('screen-result');
+        }
+
+        // 四档划分：能力维度（孩子端+学校端平均百分比）× 资源维度（家庭端百分比）
+        // 能力维度≥60% = 住宿能力够；<40% = 能力不足；40-60% = 中等
+        // 家庭端百分比≥60% = 走读支持资源不足；<60% = 资源充足
+        function getConclusion(stats) {
+            const abilityPct = Math.round((stats.child.pct + stats.school.pct) / 2);
+            const familyPct = stats.family.pct;
+            const abilitySufficient = abilityPct >= 60;
+            const abilityInsufficient = abilityPct < 40;
+            const resourceSufficient = familyPct < 60;  // 家庭端低分 = 资源充足
+
+            // 第四档：能力不足，或家庭资源极充足（≤20%）
+            if (abilityInsufficient || familyPct <= 20) {
+                return {
+                    tier: 'tier-4',
+                    label: '建议走读',
+                    desc: `住宿适应能力不足（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），或家里走读支持资源非常充足（从家长角度看 ${familyPct}%）。建议走读。`,
+                    abilityPct, familyPct
+                };
+            }
+            // 第一档：能力够 + 资源不足 → 建议住宿
+            if (abilitySufficient && !resourceSufficient) {
+                return {
+                    tier: 'tier-1',
+                    label: '建议住宿',
+                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），且家里走读支持资源不足（从家长角度看 ${familyPct}%）。可考虑住宿。`,
+                    abilityPct, familyPct
+                };
+            }
+            // 第二档：能力够 + 资源充足 → 可住宿也可走读
+            if (abilitySufficient && resourceSufficient) {
+                return {
+                    tier: 'tier-2',
+                    label: '可住宿也可走读',
+                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），家里走读支持资源也充足（从家长角度看 ${familyPct}%）。两种选择都可行，重点看 3 分权重项的得失，以及孩子自己的意愿。`,
+                    abilityPct, familyPct
+                };
+            }
+            // 第三档：能力中等 + 资源充足 → 建议走读
+            return {
+                tier: 'tier-3',
+                label: '建议走读',
+                desc: `住宿适应能力一般（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），但家里走读支持资源充足（从家长角度看 ${familyPct}%）。建议走读，可重点改善孩子的住宿适应能力后再考虑。`,
+                abilityPct, familyPct
+            };
+        }
+
+        function getBarTag(rk, pct) {
+            if (rk === 'child') {
+                if (pct >= 60) return '住宿适应能力较强';
+                if (pct >= 40) return '住宿适应能力一般';
+                return '住宿适应能力不足';
+            }
+            if (rk === 'school') {
+                if (pct >= 60) return '住宿条件基本满足';
+                if (pct >= 40) return '住宿条件部分不足';
+                return '住宿条件明显不足';
+            }
+            // family: 高分=资源不足
+            if (pct >= 60) return '走读支持资源不足';
+            if (pct >= 40) return '走读支持资源一般';
+            return '走读支持资源充足';
+        }
+
+        function renderChart(stats) {
+            const container = document.getElementById('chartBars');
+            let html = '';
+            const labels = { child: '孩子端', school: '学校端', family: '家庭端' };
+            stepOrder.forEach(rk => {
+                const s = stats[rk];
+                const fillWidth = Math.max(2, s.pct);  // 至少 2% 显示一小段
+                const tag = getBarTag(rk, s.pct);
+                html += `
+                    <div class="chart-bar-row">
+                        <div class="chart-bar-head">
+                            <span class="chart-bar-name">${labels[rk]}</span>
+                            <span class="chart-bar-pct">${s.pct}%</span>
+                        </div>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill ${rk}" style="width:${fillWidth}%"></div>
+                        </div>
+                        <div class="chart-bar-tag">${tag}（实际 ${s.actualScore} / 满分 ${s.maxScore}）</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderKeyItems() {
+            const container = document.getElementById('keyItemsContainer');
+            // 收集所有 3 分项，并记录所属维度信息以便分组
+            const groups = {};  // key: roleKey + '·' + dim.title
+            stepOrder.forEach(rk => {
+                const role = roles[rk];
+                role.dimensions.forEach(dim => {
+                    dim.items.forEach(it => {
+                        const st = state[it.id];
+                        if (st.weight === 3 && st.score > 0) {
+                            const actualScore = role.reverse ? (6 - st.score) : st.score;
+                            // 孩子端/学校端：高分=有住宿能力；家庭端：高分(actual≥3)=走读资源不足
+                            let orientation;
+                            if (rk === 'family') {
+                                orientation = actualScore >= 3 ? '走读支持资源不足' : '走读支持资源充足';
+                            } else {
+                                orientation = actualScore >= 3 ? '有住宿能力' : '能力不足';
+                            }
+                            const groupKey = rk + '·' + dim.title;
+                            if (!groups[groupKey]) {
+                                groups[groupKey] = {
+                                    roleLabel: role.label,
+                                    dimTitle: dim.title,
+                                    items: []
+                                };
+                            }
+                            groups[groupKey].items.push({
+                                name: it.name,
+                                desc: it.desc,
+                                score: st.score,
+                                actualScore: actualScore,
+                                orientation: orientation,
+                                reverse: role.reverse
+                            });
+                        }
+                    });
+                });
+            });
+
+            const textEl = document.getElementById('keyItemsText');
+            const groupKeys = Object.keys(groups);
+            const totalCount = groupKeys.reduce((sum, k) => sum + groups[k].items.length, 0);
+            if (totalCount === 0) {
+                textEl.textContent = '你还没有把任何一项设为 3 分（决定性重要）。建议回头想想：到底哪几件事是真的不能让步的？分清主次的过程，本身就是理清决策思路的过程。';
+                container.innerHTML = '';
+                return;
+            }
+            textEl.textContent = `你把 ${totalCount} 项设为了 3 分（决定性重要）。这是你决策的核心骨架——逐项看它们的得失：`;
+
+            let html = '';
+            groupKeys.forEach(gk => {
+                const g = groups[gk];
+                html += `<div class="key-item-group">`;
+                html += `<div class="key-item-group-title">${g.roleLabel} · ${g.dimTitle}</div>`;
+                g.items.forEach(k => {
+                    const scoreLabel = k.reverse
+                        ? `原打分 ${k.score} 分 → 反向计分后 ${k.actualScore} 分`
+                        : `${k.actualScore} 分 / 5 分`;
+                    html += `
+                        <div class="key-item-card">
+                            <div class="key-item-head">
+                                <span class="key-item-name">${k.name}</span>
+                                <span class="key-item-score">${k.orientation}</span>
+                            </div>
+                            <div class="key-item-desc">${k.desc}</div>
+                            <div class="key-item-desc" style="margin-top:4px;color:var(--primary-light);">${scoreLabel}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function buildInsight(stats, totalPct, conclusion) {
+            const lines = [];
+
+            const childPct = stats.child.pct;
+            const schoolPct = stats.school.pct;
+            const familyPct = stats.family.pct;
+            const abilityPct = conclusion.abilityPct;
+
+            // 1. 列出三个维度情况（带白话标签）
+            lines.push(`三个维度情况：`);
+            lines.push(`• 从孩子的角度看 ${childPct}%（${getBarTag('child', childPct)}）`);
+            lines.push(`• 从学校的角度看 ${schoolPct}%（${getBarTag('school', schoolPct)}）`);
+            lines.push(`• 从家长的角度看 ${familyPct}%（${getBarTag('family', familyPct)}）`);
+            lines.push(`住宿适应能力（孩子角度+学校角度平均）：${abilityPct}%`);
+
+            // 2. 找住宿能力的短板
+            const lowerAbility = childPct < schoolPct ? '孩子的角度' : '学校的角度';
+            const lowerAbilityPct = Math.min(childPct, schoolPct);
+            const higherAbility = childPct >= schoolPct ? '孩子的角度' : '学校的角度';
+            const higherAbilityPct = Math.max(childPct, schoolPct);
+            if (higherAbilityPct - lowerAbilityPct >= 20) {
+                lines.push(`\n住宿能力的两个角度落差较大：${higherAbility}（${higherAbilityPct}%）明显强于${lowerAbility}（${lowerAbilityPct}%）。${lowerAbility}是你们家住宿能力的短板，决策时要重点考虑这一角度能不能改善。`);
+            }
+
+            // 3. 单独看家庭端（走读资源维度）
+            lines.push(`\n从家长的角度单独看：${familyPct}% —— ${getBarTag('family', familyPct)}。家长角度衡量的是家里走读支持资源，分数低=资源充足、可以走读；分数高=资源不足、不得不考虑住宿。`);
+
+            // 4. 信号项检测
+            const signals = [];
+
+            // c4 住宿主动意愿低分：有能力但不想住
+            const c4Score = state['c4'].score;
+            if (c4Score > 0 && c4Score <= 2) {
+                signals.push(`住宿主动意愿——孩子给"想不想住宿"打了 ${c4Score} 分，说明主观上不想住宿。这种情况下即使能力够，也不等于应该住宿——能力具备不等于应该住宿，建议和孩子深谈一次，听听 ta 不想住的真正原因。`);
+            }
+
+            // f1 家庭氛围低分：走读前置条件失效
+            const f1Score = state['f1'].score;
+            if (f1Score > 0 && f1Score <= 2) {
+                signals.push(`家庭氛围——你给"家是不是避风港"打了 ${f1Score} 分，说明家不像避风港。走读的前置条件失效，家里走读支持资源不足，住宿反而可能是更稳的选择。`);
+            }
+
+            // c8 求助意愿低分：最危险信号
+            const c8Score = state['c8'].score;
+            if (c8Score > 0 && c8Score <= 2) {
+                signals.push(`求助意愿——孩子现在不太会主动跟家长说负面的事。这是最危险的信号：住宿最大的隐性损耗就是被磨掉的求助意愿。如果孩子已经不愿意说，住宿的风险会显著上升。`);
+            }
+
+            // c2 睡眠适应低分：住宿高风险
+            const c2Score = state['c2'].score;
+            if (c2Score > 0 && c2Score <= 2) {
+                signals.push(`睡眠适应——孩子在宿舍噪声环境下睡不好。睡眠敏感的孩子住宿后容易出现黑眼圈、神经衰弱，这一项低分就要重点警惕。`);
+            }
+
+            if (signals.length > 0) {
+                lines.push(`\n⚠️ 需要特别关注的信号项：`);
+                signals.forEach(s => lines.push(`• ${s}`));
+            }
+
+            return lines.join('\n');
+        }
+
+        function backToAssessment() {
+            showScreen('screen-assessment');
+            showPanel(stepOrder[currentStep]);
+        }
+
+        function resetAssessment() {
+            if (!confirm('确定要重新评估吗？所有打分和权重都会清空。')) return;
+            Object.keys(state).forEach(id => {
+                state[id] = { score: 0, weight: 1 };
+            });
+            currentStep = 0;
+            renderAll();
+            showScreen('screen-welcome');
+        }
+
+        // ========== 主题与导航 ==========
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            if (next === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.querySelector('.theme-toggle').textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                document.querySelector('.theme-toggle').textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        // 点击页面其他区域关闭移动端菜单
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu.classList.contains('show') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            }
+        });
+
+        // 初始化主题
+        (function initTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                const btn = document.querySelector('.theme-toggle');
+                if (btn) btn.textContent = '☀️';
+            }
+        })();
+    </script>
+</body>
+</html>
