@@ -199,6 +199,30 @@
         .screen { display: none; }
         .screen.active { display: block; }
 
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .privacy-note, .field-error {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .field-error {
+            min-height: 1.6em;
+            margin-top: 10px;
+            color: var(--accent);
+        }
+
         h1 {
             font-size: 2em;
             margin-bottom: 10px;
@@ -391,7 +415,10 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            color: var(--text);
+            font: inherit;
             font-size: 0.95em;
+            text-align: center;
         }
 
         .date-chip:hover {
@@ -740,38 +767,119 @@
             .menu-toggle { display: flex; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="通过生日相关记忆与干扰任务体验自我参照效应，生日信息仅在当前页面本地计算，不上传或保存。">
+    <link rel="canonical" href="https://melxia.github.io/birthday-gravity.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="生日引力场 - 自我参照效应体验游戏">
+    <meta property="og:description" content="通过生日相关记忆与干扰任务体验自我参照效应，生日信息仅在当前页面本地计算，不上传或保存。">
+    <meta property="og:url" content="https://melxia.github.io/birthday-gravity.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="生日引力场 - 自我参照效应体验游戏">
+    <meta name="twitter:description" content="通过生日相关记忆与干扰任务体验自我参照效应，生日信息仅在当前页面本地计算，不上传或保存。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
         <!-- 进度指示 -->
@@ -797,25 +905,26 @@
         <!-- 屏幕1：欢迎 -->
         <div class="screen active" id="screen-welcome">
             <div class="intro-icon">🧠</div>
-            <h1>生日引力场</h1>
+            <h1 tabindex="-1">生日引力场</h1>
             <p class="subtitle">一个关于记忆的小游戏<br>探索你的大脑有哪些"小秘密"</p>
             <button class="btn btn-primary" onclick="showScreen('screen-setup')">开始体验</button>
         </div>
 
         <!-- 屏幕2：设置生日 -->
         <div class="screen" id="screen-setup">
-            <h2>你的生日是？</h2>
+            <h2 tabindex="-1">你的生日是？</h2>
             <p class="subtitle">这将影响游戏体验，请如实填写</p>
+            <p class="privacy-note">生日月日仅在当前页面本地处理，用于生成本次实验的日期，不会上传，也不会写入本地存储。刷新或关闭页面后，本次生日选择、答题进度和结果都会清除，需要重新开始。</p>
 
             <div class="birthday-picker">
                 <div class="picker-group">
-                    <label>月份</label>
+                    <label for="birthMonth">月份</label>
                     <select id="birthMonth">
                         <option value="">选择</option>
                     </select>
                 </div>
                 <div class="picker-group">
-                    <label>日期</label>
+                    <label for="birthDay">日期</label>
                     <select id="birthDay">
                         <option value="">选择</option>
                     </select>
@@ -844,11 +953,13 @@
 
             <div class="math-task">
                 <div class="math-question" id="mathQuestion"></div>
-                <input type="number" class="math-input" id="mathAnswer" placeholder="输入答案">
-                <button class="btn btn-primary" id="mathSubmitBtn" onclick="submitMath()">提交答案</button>
+                <label class="visually-hidden" for="mathAnswer" id="mathAnswerLabel">计算题答案</label>
+                <input type="number" class="math-input" id="mathAnswer" placeholder="输入答案" aria-labelledby="mathAnswerLabel mathQuestion" aria-describedby="mathError" aria-invalid="false">
+                <button type="button" class="btn btn-primary" id="mathSubmitBtn" onclick="submitMath()">提交答案</button>
+                <p class="field-error" id="mathError" role="alert" aria-live="assertive" aria-atomic="true"></p>
             </div>
 
-            <div class="timer">剩余时间: <span id="mathTimer">30</span> 秒</div>
+            <div class="timer">剩余时间: <span id="mathTimer" role="timer" aria-live="off">30</span> 秒</div>
         </div>
 
         <!-- 屏幕5：回忆测试 -->
@@ -858,7 +969,7 @@
 
             <div class="recall-grid" id="recallGrid"></div>
 
-            <p style="color: var(--text-muted); margin: 20px 0;">已选择: <span id="selectedCount">0</span> 个</p>
+            <p role="status" aria-live="polite" aria-atomic="true" style="color: var(--text-muted); margin: 20px 0;">已选择: <span id="selectedCount">0</span> 个</p>
 
             <button class="btn btn-primary" id="submitRecall" onclick="submitRecall()">提交答案</button>
         </div>
@@ -892,7 +1003,7 @@
                 </div>
             </div>
 
-            <div class="result-card">
+            <div class="result-card" role="status" aria-live="polite" aria-atomic="true">
                 <div class="result-stat">
                     <span class="stat-label">总共记住了</span>
                     <span class="stat-value" id="statTotal">0 / 12 个日期</span>
@@ -909,7 +1020,7 @@
 
             <div class="insight-box">
                 <h3>🎯 发现规律了吗？</h3>
-                <p id="insightText"></p>
+                <p id="insightText" aria-live="polite"></p>
             </div>
 
             <button class="btn btn-primary" onclick="showScreen('screen-theory')">了解背后的心理学</button>
@@ -936,7 +1047,7 @@
                 </ul>
             </div>
 
-            <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='casebook.html#tools'">返回自助工具</button>
             <button class="btn btn-primary" onclick="showScreen('screen-welcome'); resetGame();">再玩一次</button>
         </div>
     </div>
@@ -946,6 +1057,7 @@
         let playerBirthday = { month: 0, day: 0 };
         let displayedDates = [];
         let selectedDates = [];
+        let recallSubmitted = false;
         let memoryTimer;
         let mathTimer;
         let currentMathQuestion = {};
@@ -991,8 +1103,9 @@
 
         // 显示屏幕
         function showScreen(screenId) {
+            const screen = document.getElementById(screenId);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+            screen.classList.add('active');
 
             // 更新进度指示
             const steps = ['screen-setup', 'screen-memory', 'screen-recall', 'screen-heatmap'];
@@ -1006,12 +1119,18 @@
                     stepEl.classList.add('active');
                 }
             }
+
+            const focusTarget = screen.querySelector('h1, h2') || screen;
+            if (!focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
+            focusTarget.focus({ preventScroll: true });
         }
 
         // 开始游戏
         function startGame() {
             playerBirthday.month = parseInt(document.getElementById('birthMonth').value);
             playerBirthday.day = parseInt(document.getElementById('birthDay').value);
+            recallSubmitted = false;
+            document.getElementById('submitRecall').disabled = false;
 
             showScreen('screen-memory');
             generateMemoryTask();
@@ -1047,6 +1166,8 @@
             let timeLeft = 30;
             const progressFill = document.getElementById('memoryProgress');
             const timeDisplay = document.getElementById('memoryTime');
+            timeDisplay.textContent = timeLeft;
+            progressFill.style.width = '0%';
 
             memoryTimer = setInterval(() => {
                 timeLeft--;
@@ -1179,7 +1300,11 @@
 
             currentMathQuestion = { a, b, op, answer };
             document.getElementById('mathQuestion').textContent = `${a} ${op} ${b} = ?`;
-            document.getElementById('mathAnswer').value = '';
+            const answerInput = document.getElementById('mathAnswer');
+            answerInput.value = '';
+            answerInput.classList.remove('error');
+            answerInput.setAttribute('aria-invalid', 'false');
+            document.getElementById('mathError').textContent = '';
 
             // 倒计时
             let timeLeft = 30;
@@ -1204,11 +1329,15 @@
             // 必须输入答案才能提交
             if (isNaN(answer) || answerInput.value.trim() === '') {
                 answerInput.classList.add('error');
+                answerInput.setAttribute('aria-invalid', 'true');
+                document.getElementById('mathError').textContent = '请先输入一个数字答案。';
                 setTimeout(() => answerInput.classList.remove('error'), 500);
                 answerInput.focus();
                 return;
             }
 
+            answerInput.setAttribute('aria-invalid', 'false');
+            document.getElementById('mathError').textContent = '';
             clearInterval(mathTimer);
             startRecall();
         }
@@ -1229,8 +1358,10 @@
             shuffleArray(options);
 
             options.forEach(date => {
-                const chip = document.createElement('div');
+                const chip = document.createElement('button');
+                chip.type = 'button';
                 chip.className = 'date-chip';
+                chip.setAttribute('aria-pressed', 'false');
                 chip.textContent = `${date.month}月${date.day}日`;
                 chip.dataset.month = date.month;
                 chip.dataset.day = date.day;
@@ -1251,6 +1382,7 @@
 
         function toggleDate(chip, date) {
             chip.classList.toggle('selected');
+            chip.setAttribute('aria-pressed', String(chip.classList.contains('selected')));
 
             const index = selectedDates.findIndex(d =>
                 d.month === date.month && d.day === date.day
@@ -1270,6 +1402,10 @@
         }
 
         function submitRecall() {
+            if (recallSubmitted) return;
+            recallSubmitted = true;
+            document.getElementById('submitRecall').disabled = true;
+
             // 计算结果
             let correctNearby = 0;
             let correctOther = 0;
@@ -1339,7 +1475,7 @@
                 insightText = `看！生日前后15天内的4个日期，你记住了 ${correctNearby} 个；而其他8个日期，你只记住了 ${correctOther} 个。你的大脑就像个"自私"的小雷达，悄悄把和你有关的日子都"吸"住了！`;
             } else if (nearbyRate > otherRate) {
                 insightText = `不错！生日前后15天内的4个日期，你记住了 ${correctNearby} 个；其他8个日期，你记住了 ${correctOther} 个。自我参照效应正在悄悄发挥作用！`;
-            } else if (nearbyRate === otherRate && correctNearby === correctOther) {
+            } else if (nearbyRate === otherRate) {
                 insightText = `有趣！生日前后15天内和其他日期，你分别记住了 ${correctNearby} 个和 ${correctOther} 个。这次干扰任务让你的记忆"一视同仁"了。`;
             } else {
                 insightText = `这次结果有点意外：其他8个日期你记住了 ${correctOther} 个，生日前后15天内的4个日期只记住了 ${correctNearby} 个。可能是偶然因素，再玩一次试试？`;
@@ -1394,6 +1530,10 @@
         function resetGame() {
             displayedDates = [];
             selectedDates = [];
+            recallSubmitted = false;
+            clearInterval(memoryTimer);
+            clearInterval(mathTimer);
+            document.getElementById('submitRecall').disabled = false;
             document.getElementById('birthMonth').value = '';
             document.getElementById('birthDay').innerHTML = '<option value="">选择</option>';
             document.getElementById('startBtn').disabled = true;
@@ -1446,8 +1586,91 @@
 
         initTheme();
 
+        document.getElementById('mathAnswer').addEventListener('input', function() {
+            this.classList.remove('error');
+            this.setAttribute('aria-invalid', 'false');
+            document.getElementById('mathError').textContent = '';
+        });
+
         // 初始化
         initPickers();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

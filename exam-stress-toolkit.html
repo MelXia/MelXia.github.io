@@ -208,7 +208,7 @@
             margin-bottom: 15px;
         }
 
-        h1 {
+        h1, .page-title {
             font-size: 1.5em;
             margin-bottom: 8px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -282,6 +282,15 @@
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
+            color: var(--text);
+            font: inherit;
+            text-align: center;
+        }
+
+        .split-card-icon,
+        .split-card-title,
+        .split-card-desc {
+            display: block;
         }
 
         .split-card:hover {
@@ -422,6 +431,25 @@
             margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
+        }
+
+        .check-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .check-item:focus-within,
+        .compare-item:focus-within {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
         }
 
         .check-item:hover {
@@ -654,6 +682,7 @@
         }
 
         .exercise-title {
+            display: block;
             font-weight: 600;
             margin-bottom: 10px;
             font-size: 0.95em;
@@ -910,7 +939,7 @@
                 padding: 18px;
             }
 
-            h1 {
+            h1, .page-title {
                 font-size: 1.3em;
             }
 
@@ -930,51 +959,132 @@
             .menu-toggle { display: flex; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="为中高考家长提供压力自我观察、考前 48 小时清单、沟通提醒和稳定情绪的小工具，帮助家庭减少额外施压。">
+    <link rel="canonical" href="https://melxia.github.io/exam-stress-toolkit.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="中高考家长稳压工具台">
+    <meta property="og:description" content="为中高考家长提供压力自我观察、考前 48 小时清单、沟通提醒和稳定情绪的小工具，帮助家庭减少额外施压。">
+    <meta property="og:url" content="https://melxia.github.io/exam-stress-toolkit.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="中高考家长稳压工具台">
+    <meta name="twitter:description" content="为中高考家长提供压力自我观察、考前 48 小时清单、沟通提醒和稳定情绪的小工具，帮助家庭减少额外施压。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
         <!-- 欢迎页面 -->
         <div class="screen active" id="screen-welcome">
             <div class="card">
                 <div class="intro-icon">🧘</div>
-                <h1>中高考家长稳压工具台</h1>
+                <h1 tabindex="-1">中高考家长稳压工具台</h1>
                 <p class="subtitle">出分前后，家长先稳住自己，才能成为孩子的后盾，一起面对无论好坏的结果</p>
 
                 <div class="privacy-notice">
                     <div class="privacy-notice-title">🔒 隐私保护</div>
                     <div class="privacy-notice-text">
-                        这是一个静态网页，你的填写内容<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器。刷新页面后数据将清除，请放心使用。
+                        这是一个静态网页，你的填写内容<strong>仅在当前页面内处理</strong>，不会上传到任何服务器，也不会写入本地存储。刷新或关闭页面后，本次勾选和填写内容将清除。
                     </div>
                 </div>
 
@@ -986,16 +1096,16 @@
                 </div>
 
                 <div class="split-cards">
-                    <div class="split-card" onclick="selectParentType('zhongkao-gz', this)">
-                        <div class="split-card-icon">🎓</div>
-                        <div class="split-card-title">广州中考家长</div>
-                        <div class="split-card-desc">还不知道分数，正在等出分和录取结果</div>
-                    </div>
-                    <div class="split-card" onclick="selectParentType('waiting-admission', this)">
-                        <div class="split-card-icon">📋</div>
-                        <div class="split-card-title">其他地区中考或高考家长</div>
-                        <div class="split-card-desc">已经知道分数，正在等待最终录取确认</div>
-                    </div>
+                    <button type="button" class="split-card" onclick="selectParentType('zhongkao-gz', this)">
+                        <span class="split-card-icon">🎓</span>
+                        <span class="split-card-title">广州中考家长</span>
+                        <span class="split-card-desc">还不知道分数，正在等出分和录取结果</span>
+                    </button>
+                    <button type="button" class="split-card" onclick="selectParentType('waiting-admission', this)">
+                        <span class="split-card-icon">📋</span>
+                        <span class="split-card-title">其他地区中考或高考家长</span>
+                        <span class="split-card-desc">已经知道分数，正在等待最终录取确认</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1004,7 +1114,7 @@
         <div class="screen" id="screen-zhongkao-phase">
             <div class="card">
                 <div class="intro-icon">🎓</div>
-                <h1>广州中考家长稳压工具台</h1>
+                <h2 class="page-title" tabindex="-1">广州中考家长稳压工具台</h2>
                 <p class="subtitle">你现在在哪个阶段？</p>
 
                 <button class="phase-btn" onclick="selectPhase('before-score')">
@@ -1029,7 +1139,7 @@
         <!-- 工具台主页面 -->
         <div class="screen" id="screen-toolkit">
             <div class="card">
-                <h2 id="toolkitTitle">稳压工具台</h2>
+                <h2 id="toolkitTitle" tabindex="-1">稳压工具台</h2>
                 <p class="subtitle" id="toolkitSubtitle">按需使用，一步一步来</p>
 
                 <div class="tool-nav" id="toolNav">
@@ -1069,7 +1179,7 @@
     </div>
 
     <!-- 复制成功提示 -->
-    <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板</div>
+    <div class="copy-toast" id="copyToast" role="status" aria-live="polite" aria-atomic="true">✓ 已复制到剪贴板</div>
 
     <script>
         // 状态管理
@@ -1105,11 +1215,18 @@
             'tool5': { icon: '🌙', name: '夜间稳压练习', desc: '今晚睡不着就做这个' }
         };
 
-        // 显示屏幕
+        // 显示屏幕，并将键盘与读屏焦点移到新屏幕标题
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const screen = document.getElementById(screenId);
+            screen.classList.add('active');
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+
+            const focusTarget = screen.querySelector('h1, h2') || screen;
+            if (!focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
+            focusTarget.focus({ preventScroll: true });
         }
 
         // 选择家长类型
@@ -1168,8 +1285,9 @@
 
             // 渲染工具导航（顶部和底部）
             const navHtml = availableTools.map(toolId => `
-                <button class="tool-nav-btn ${toolId === availableTools[0] ? 'active' : ''}"
-                        onclick="showTool('${toolId}')" data-tool="${toolId}">
+                <button type="button" class="tool-nav-btn ${toolId === availableTools[0] ? 'active' : ''}"
+                        onclick="showTool('${toolId}')" data-tool="${toolId}"
+                        aria-pressed="${toolId === availableTools[0]}">
                     ${toolInfo[toolId].icon} ${toolInfo[toolId].name}
                 </button>
             `).join('');
@@ -1177,8 +1295,8 @@
             document.getElementById('toolNav').innerHTML = navHtml;
             document.getElementById('toolNavBottom').innerHTML = navHtml;
 
-            // 显示第一个工具
-            showTool(availableTools[0]);
+            // 显示第一个工具，再由 showScreen 统一移动焦点
+            showTool(availableTools[0], false);
             showScreen('screen-toolkit');
         }
 
@@ -1195,21 +1313,28 @@
         }
 
         // 显示工具
-        function showTool(toolId) {
+        function showTool(toolId, moveFocus = true) {
             state.currentTool = toolId;
 
             // 更新导航按钮
             document.querySelectorAll('.tool-nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.tool === toolId) btn.classList.add('active');
+                const isActive = btn.dataset.tool === toolId;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', String(isActive));
             });
 
             // 渲染工具内容
             const content = getToolContent(toolId);
-            document.getElementById('toolContent').innerHTML = content;
+            const toolContent = document.getElementById('toolContent');
+            toolContent.innerHTML = content;
 
-            // 滚动到页面顶部，让用户看到功能入口
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+
+            if (moveFocus) {
+                const toolTitle = toolContent.querySelector('.tool-title');
+                if (toolTitle) toolTitle.focus({ preventScroll: true });
+            }
         }
 
         // 获取工具内容
@@ -1244,7 +1369,7 @@
                     <div class="tool-type-tag checklist">📋 多选自测</div>
                     <div class="tool-header">
                         <div class="tool-icon">📋</div>
-                        <div class="tool-title">${title}</div>
+                        <h3 class="tool-title" tabindex="-1">${title}</h3>
                     </div>
                     <p class="tool-desc">${desc}</p>
 
@@ -1252,59 +1377,68 @@
                     <div id="stressQuestions">
                         <div class="check-section">
                             <div class="check-section-title">A. 不可预测感</div>
-                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 0)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我反复想象${isZhongkao ? '出分后的各种结果' : '录取结果出来后的各种情况'}，停不下来。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 1)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我总觉得现在还缺一条关键消息，必须继续刷群、刷小红书。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'unpredictable', 2)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我很难接受"${isZhongkao ? '分数还没出来' : '录取结果还没出来'}，现在无法确定"这件事。</div>
-                            </div>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'unpredictable', 0)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我反复想象${isZhongkao ? '出分后的各种结果' : '录取结果出来后的各种情况'}，停不下来。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'unpredictable', 1)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我总觉得现在还缺一条关键消息，必须继续刷群、刷小红书。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'unpredictable', 2)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我很难接受"${isZhongkao ? '分数还没出来' : '录取结果还没出来'}，现在无法确定"这件事。</span>
+                            </label>
                         </div>
 
                         <div class="check-section">
                             <div class="check-section-title">B. 不可控制感</div>
-                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 0)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我觉得自己现在什么也帮不上孩子。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 1)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我明知道急也没用，但就是停不下来。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'uncontrollable', 2)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我很想反复打听${isZhongkao ? '往年分数线、录取可能性、补录消息' : '录取进度、补录消息、调剂可能性'}，好像多问一点就能安心一点。</div>
-                            </div>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'uncontrollable', 0)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我觉得自己现在什么也帮不上孩子。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'uncontrollable', 1)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我明知道急也没用，但就是停不下来。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'uncontrollable', 2)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我很想反复打听${isZhongkao ? '往年分数线、录取可能性、补录消息' : '录取进度、补录消息、调剂可能性'}，好像多问一点就能安心一点。</span>
+                            </label>
                         </div>
 
                         <div class="check-section">
                             <div class="check-section-title">C. 超负荷感</div>
-                            <div class="check-item" onclick="toggleCheck(this, 'overload', 0)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">${isZhongkao ? '分数、学校、录取、补录、民办、职高、亲友意见' : '录取结果、专业调剂、补录、复读、亲友意见'}，全都压在一起。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'overload', 1)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我已经分不清哪些信息是真的重要，哪些只是让我更焦虑。</div>
-                            </div>
-                            <div class="check-item" onclick="toggleCheck(this, 'overload', 2)">
-                                <div class="check-box">✓</div>
-                                <div class="check-text">我很累，但脑子停不下来。</div>
-                            </div>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'overload', 0)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">${isZhongkao ? '分数、学校、录取、补录、民办、职高、亲友意见' : '录取结果、专业调剂、补录、复读、亲友意见'}，全都压在一起。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'overload', 1)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我已经分不清哪些信息是真的重要，哪些只是让我更焦虑。</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" class="check-input" onchange="toggleCheck(this, 'overload', 2)">
+                                <span class="check-box" aria-hidden="true">✓</span>
+                                <span class="check-text">我很累，但脑子停不下来。</span>
+                            </label>
                         </div>
 
                         <div style="text-align: center; margin: 20px 0;">
-                            <button class="btn btn-primary" onclick="submitStressTest()">提交查看结果</button>
+                            <button type="button" class="btn btn-primary" onclick="submitStressTest()">提交查看结果</button>
                         </div>
                     </div>
 
                     <!-- 结果区域 -->
-                    <div id="stressResult" style="display: none;">
+                    <div id="stressResult" role="status" aria-live="polite" tabindex="-1" style="display: none;">
                         <!-- 动态生成雷达图和结果解读 -->
                     </div>
                 </div>
@@ -1318,17 +1452,17 @@
                     <div class="tool-type-tag scenario">💬 情景卡片</div>
                     <div class="tool-header">
                         <div class="tool-icon">💬</div>
-                        <div class="tool-title">出分当天第一句话脚本</div>
+                        <h3 class="tool-title" tabindex="-1">出分当天第一句话脚本</h3>
                     </div>
                     <p class="tool-desc">孩子查完成绩后，先别急着问排名、分数线、学校。先看孩子的反应，选择最接近的情况：</p>
 
                     <div class="scenario-buttons">
-                        <button class="scenario-btn" onclick="showScenario('better')">比预期好</button>
-                        <button class="scenario-btn" onclick="showScenario('similar')">差不多</button>
-                        <button class="scenario-btn" onclick="showScenario('worse')">明显低于预期</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showScenario('better', this)">比预期好</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showScenario('similar', this)">差不多</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showScenario('worse', this)">明显低于预期</button>
                     </div>
 
-                    <div class="scenario-content" id="scenario-better">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="scenario-better">
                         <div class="say-box">
                             <div class="say-label can">✅ 可以说：</div>
                             <div class="say-text">"你这段时间真的撑住了。先缓一缓，我们晚点再一起看后面的安排。"</div>
@@ -1342,7 +1476,7 @@
                         </div>
                     </div>
 
-                    <div class="scenario-content" id="scenario-similar">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="scenario-similar">
                         <div class="say-box">
                             <div class="say-label can">✅ 可以说：</div>
                             <div class="say-text">"这个结果和我们预估差不多。今天先不用急着下结论，录取结果还要再等几天，我们一项一项看。"</div>
@@ -1356,7 +1490,7 @@
                         </div>
                     </div>
 
-                    <div class="scenario-content" id="scenario-worse">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="scenario-worse">
                         <div class="say-box">
                             <div class="say-label can">✅ 可以说：</div>
                             <div class="say-text">"我知道你现在可能也不好受。我们先不急着分析，先吃饭、休息一下，晚点再看下一步。"</div>
@@ -1401,7 +1535,7 @@
                     <div class="tool-type-tag checklist">📝 对照清单</div>
                     <div class="tool-header">
                         <div class="tool-icon">📝</div>
-                        <div class="tool-title">48小时不做决定清单</div>
+                        <h3 class="tool-title" tabindex="-1">48小时不做决定清单</h3>
                     </div>
                     <p class="tool-desc">${desc}</p>
 
@@ -1437,40 +1571,48 @@
                         <div class="compare-column do">
                             <div class="compare-title do">✅ 可以先做</div>
                             ${isZhongkao ? `
-                            <div class="compare-item" onclick="toggleDoItem(this, 0)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 0)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>如果对成绩有疑问，马上联系班主任，按学校要求提交成绩复核申请。</span>
-                            </div>
-                            <div class="compare-item" onclick="toggleDoItem(this, 1)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            </label>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 1)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>记录录取时间线，提醒自己：出分不等于录取结果，后面还有等待期。</span>
-                            </div>
+                            </label>
                             ` : `
-                            <div class="compare-item" onclick="toggleDoItem(this, 0)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 0)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>关注官方录取查询渠道，记下关键时间节点。</span>
-                            </div>
-                            <div class="compare-item" onclick="toggleDoItem(this, 1)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            </label>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 1)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>把可能的路径（接受录取、调剂、补录、复读）写在纸上，不只在脑子里想。</span>
-                            </div>
+                            </label>
                             `}
-                            <div class="compare-item" onclick="toggleDoItem(this, 2)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 2)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>${isZhongkao ? '把可选路径写在纸上，不只放在脑子里。' : '只看官方通知，不在十几个群里来回刷消息。'}</span>
-                            </div>
-                            <div class="compare-item" onclick="toggleDoItem(this, 3)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            </label>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 3)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>只看官方通知和学校老师发布的信息，不在十几个群里来回刷。</span>
-                            </div>
-                            <div class="compare-item" onclick="toggleDoItem(this, 4)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            </label>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 4)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>和孩子约一个具体讨论时间，不追着问。</span>
-                            </div>
-                            <div class="compare-item" onclick="toggleDoItem(this, 5)" style="cursor: pointer;">
-                                <span class="compare-icon">☐</span>
+                            </label>
+                            <label class="compare-item" style="cursor: pointer;">
+                                <input type="checkbox" class="check-input" onchange="toggleDoItem(this, 5)">
+                                <span class="compare-icon" aria-hidden="true">☐</span>
                                 <span>先照顾吃饭、睡觉、情绪，再谈方案。</span>
-                            </div>
+                            </label>
                         </div>
                     </div>
 
@@ -1499,17 +1641,17 @@
                     <div class="tool-type-tag scenario">🗣️ 情景卡片</div>
                     <div class="tool-header">
                         <div class="tool-icon">🗣️</div>
-                        <div class="tool-title">录取期家庭沟通卡</div>
+                        <h3 class="tool-title" tabindex="-1">录取期家庭沟通卡</h3>
                     </div>
                     <p class="tool-desc">录取结果出来前后，选择最接近你家情况的结果：</p>
 
                     <div class="scenario-buttons">
-                        <button class="scenario-btn" onclick="showResultScenario('ideal')">结果理想</button>
-                        <button class="scenario-btn" onclick="showResultScenario('uncertain')">结果不确定</button>
-                        <button class="scenario-btn" onclick="showResultScenario('not-ideal')">结果不理想</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showResultScenario('ideal', this)">结果理想</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showResultScenario('uncertain', this)">结果不确定</button>
+                        <button type="button" class="scenario-btn" aria-pressed="false" onclick="showResultScenario('not-ideal', this)">结果不理想</button>
                     </div>
 
-                    <div class="scenario-content" id="result-ideal">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="result-ideal">
                         <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--success);">接住</strong>，而不是立刻加码。</p>
                         <div class="say-box">
                             <div class="say-label can">✅ 可以说：</div>
@@ -1524,7 +1666,7 @@
                         </div>
                     </div>
 
-                    <div class="scenario-content" id="result-uncertain">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="result-uncertain">
                         <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--warning);">整理路径</strong>，而不是制造恐慌。</p>
                         <div class="say-box">
                             <div class="say-label can">✅ 可以说：</div>
@@ -1536,7 +1678,7 @@
                         </div>
                     </div>
 
-                    <div class="scenario-content" id="result-not-ideal">
+                    <div class="scenario-content" role="region" aria-live="polite" tabindex="-1" id="result-not-ideal">
                         <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9em;">家长要做的是<strong style="color: var(--accent);">先接住孩子</strong>，再谈下一步。</p>
                         <p style="font-size: 0.85em; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
                             这个时候孩子可能会羞愧、沉默、暴躁，也可能假装无所谓。家长先不要急着判断他"态度不好"。很多孩子在重大失利后，最怕的不是分数低，而是觉得自己让全家失望。
@@ -1580,13 +1722,13 @@
                     <div class="tool-type-tag fillin">🌙 填写练习</div>
                     <div class="tool-header">
                         <div class="tool-icon">🌙</div>
-                        <div class="tool-title">家长夜间5分钟稳压练习</div>
+                        <h3 class="tool-title" tabindex="-1">家长夜间5分钟稳压练习</h3>
                     </div>
                     <p class="tool-desc">如果你今晚睡不着，先不要继续刷信息。拿一张纸（或者就在下面），写三栏：</p>
 
                     <div class="exercise-grid">
                         <div class="exercise-column">
-                            <div class="exercise-title fact">📌 第一栏：已经发生的事实</div>
+                            <label class="exercise-title fact" for="exercise-fact">📌 第一栏：已经发生的事实</label>
                             <textarea class="exercise-input" id="exercise-fact" placeholder="只写事实，不写想象..." oninput="updateCopyText()"></textarea>
                             <div class="exercise-example">
                                 <strong>例如：</strong><br>
@@ -1598,7 +1740,7 @@
                         </div>
 
                         <div class="exercise-column">
-                            <div class="exercise-title worry">💭 第二栏：我脑子里的最坏想象</div>
+                            <label class="exercise-title worry" for="exercise-worry">💭 第二栏：我脑子里的最坏想象</label>
                             <textarea class="exercise-input" id="exercise-worry" placeholder="允许自己写出来，但要提醒自己：这是想象，不是事实..." oninput="updateCopyText()"></textarea>
                             <div class="exercise-example">
                                 <strong>例如：</strong><br>
@@ -1610,7 +1752,7 @@
                         </div>
 
                         <div class="exercise-column">
-                            <div class="exercise-title action">🎯 第三栏：明天我只做一件事</div>
+                            <label class="exercise-title action" for="exercise-action">🎯 第三栏：明天我只做一件事</label>
                             <textarea class="exercise-input" id="exercise-action" placeholder="只写一个动作..." oninput="updateCopyText()"></textarea>
                             <div class="exercise-example">
                                 <strong>例如：</strong><br>
@@ -1639,10 +1781,10 @@
         }
 
         // 勾选切换
-        function toggleCheck(el, category, index) {
-            el.classList.toggle('checked');
+        function toggleCheck(input, category, index) {
+            input.closest('.check-item').classList.toggle('checked', input.checked);
 
-            if (el.classList.contains('checked')) {
+            if (input.checked) {
                 if (!state.checkItems[category].includes(index)) {
                     state.checkItems[category].push(index);
                 }
@@ -1677,8 +1819,10 @@
             // 生成雷达图和结果解读
             result.innerHTML = generateRadarResult(scores);
 
-            // 滚动到结果区域
-            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 滚动并聚焦结果，配合 aria-live 宣读动态内容
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            result.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+            result.focus({ preventScroll: true });
         }
 
         // 生成雷达图结果
@@ -1891,38 +2035,57 @@
             questions.style.display = 'block';
             result.style.display = 'none';
 
-            // 清除所有勾选状态
+            // 清除所有原生复选框及视觉勾选状态
             questions.querySelectorAll('.check-item').forEach(item => {
                 item.classList.remove('checked');
             });
+            questions.querySelectorAll('.check-input').forEach(input => {
+                input.checked = false;
+            });
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+            const firstInput = questions.querySelector('.check-input');
+            if (firstInput) firstInput.focus({ preventScroll: true });
         }
 
         // 显示情景
-        function showScenario(scenario) {
+        function showScenario(scenario, button) {
             document.querySelectorAll('.scenario-content').forEach(el => el.classList.remove('show'));
-            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
 
-            document.getElementById('scenario-' + scenario).classList.add('show');
-            event.currentTarget.classList.add('active');
+            const panel = document.getElementById('scenario-' + scenario);
+            panel.classList.add('show');
+            button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
+            panel.focus({ preventScroll: true });
         }
 
         // 显示录取情景
-        function showResultScenario(scenario) {
+        function showResultScenario(scenario, button) {
             document.querySelectorAll('.scenario-content').forEach(el => el.classList.remove('show'));
-            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
 
-            document.getElementById('result-' + scenario).classList.add('show');
-            event.currentTarget.classList.add('active');
+            const panel = document.getElementById('result-' + scenario);
+            panel.classList.add('show');
+            button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
+            panel.focus({ preventScroll: true });
         }
 
         // 切换"可以做"项
-        function toggleDoItem(el, index) {
-            const icon = el.querySelector('.compare-icon');
-            if (icon.textContent === '☐') {
+        function toggleDoItem(input, index) {
+            const item = input.closest('.compare-item');
+            const icon = item.querySelector('.compare-icon');
+            if (input.checked) {
                 icon.textContent = '☑️';
-                state.doList.push(index);
+                if (!state.doList.includes(index)) state.doList.push(index);
             } else {
                 icon.textContent = '☐';
                 state.doList = state.doList.filter(i => i !== index);
@@ -1954,6 +2117,12 @@ ${action}
 
             navigator.clipboard.writeText(text).then(() => {
                 const toast = document.getElementById('copyToast');
+                toast.textContent = '✓ 已复制到剪贴板';
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }).catch(() => {
+                const toast = document.getElementById('copyToast');
+                toast.textContent = '复制失败，请手动记录填写内容。';
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 2000);
             });
@@ -2001,5 +2170,82 @@ ${action}
 
         initTheme();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

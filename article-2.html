@@ -278,41 +278,122 @@
             .menu-toggle { display: flex; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="写给高考前十天的家长：保持日常节奏、减少过度关心，让孩子感到爱不取决于分数，用稳定陪伴替代额外施压。">
+    <link rel="canonical" href="https://melxia.github.io/article-2.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="高考倒数10天，家长最重要的是&quot;稳住&quot; - Mel的翻译间">
+    <meta property="og:description" content="写给高考前十天的家长：保持日常节奏、减少过度关心，让孩子感到爱不取决于分数，用稳定陪伴替代额外施压。">
+    <meta property="og:url" content="https://melxia.github.io/article-2.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="高考倒数10天，家长最重要的是&quot;稳住&quot; - Mel的翻译间">
+    <meta name="twitter:description" content="写给高考前十天的家长：保持日常节奏、减少过度关心，让孩子感到爱不取决于分数，用稳定陪伴替代额外施压。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html" aria-current="page">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html" aria-current="page">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
-        <a href="index.html" class="back-link">← 返回首页</a>
+        <a href="articles.html" class="back-link">← 返回看见心声</a>
 
         <div class="article-header">
             <h1 class="article-title">高考倒数10天，家长最重要的是"稳住"</h1>
@@ -377,7 +458,7 @@
         </div>
 
         <div class="footer-nav">
-            <a href="index.html">← 返回首页</a>
+            <a href="articles.html">← 返回看见心声</a>
         </div>
     </div>
 
@@ -423,5 +504,82 @@
 
         initTheme();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

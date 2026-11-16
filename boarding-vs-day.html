@@ -546,36 +546,119 @@
             .step-line { width: 16px; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="由孩子、父亲和母亲分别评估走读与住宿的家庭决策工具，支持权重设置、反向计分和结果重算，仅用于促进家庭讨论。">
+    <link rel="canonical" href="https://melxia.github.io/boarding-vs-day.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="走读 VS 住宿计分表">
+    <meta property="og:description" content="由孩子、父亲和母亲分别评估走读与住宿的家庭决策工具，支持权重设置、反向计分和结果重算，仅用于促进家庭讨论。">
+    <meta property="og:url" content="https://melxia.github.io/boarding-vs-day.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="走读 VS 住宿计分表">
+    <meta name="twitter:description" content="由孩子、父亲和母亲分别评估走读与住宿的家庭决策工具，支持权重设置、反向计分和结果重算，仅用于促进家庭讨论。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span><span></span><span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
         <!-- 欢迎页 -->
@@ -587,7 +670,7 @@
                 <div class="privacy-notice">
                     <div class="privacy-notice-title">🔒 隐私保护</div>
                     <div class="privacy-notice-text">
-                        这是一个静态网页，你的打分和权重<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器或数据库。刷新页面数据会清除，请放心作答。
+                        你的打分和权重<strong>仅在当前页面内处理</strong>，不会上传到任何服务器或数据库。刷新或关闭页面后数据将清除。
                     </div>
                 </div>
 
@@ -595,7 +678,8 @@
                     <div class="rule-content">
                         1. 家长和孩子对每一项评估打分、设定权重，最后得到总分。<br><br>
                         2. 总分落在哪个区间，对应一个参考倾向。<br><br>
-                        过程中分数和权重都可以反复调整——<strong>调整的过程本身就是理清决策思路的过程。</strong>
+                        过程中分数和权重都可以反复调整——<strong>调整的过程本身就是理清决策思路的过程。</strong><br><br>
+                        结果仅用于家庭讨论和梳理，不代替孩子的真实意愿、学校实际情况或专业评估。
                     </div>
                 </div>
 
@@ -625,7 +709,7 @@
                     <span class="step-label" id="label-family">家庭端</span>
                 </div>
 
-                <div class="weight-warning" id="weightWarning">
+                <div class="weight-warning" id="weightWarning" role="alert" aria-live="assertive">
                     ⚠️ 3 分权重项已达 5 项上限。要再设一项 3 分，需要先把另一项降回 2 分或 1 分——分清主次的过程，本身就是理清决策思路的过程。
                 </div>
 
@@ -659,7 +743,7 @@
             <div class="card">
                 <h2>评估完成</h2>
 
-                <div class="total-score-box">
+                <div class="total-score-box" aria-live="polite">
                     <div class="total-score-label">你的总分占满分比例</div>
                     <div class="total-score-value" id="finalTotalPct">0%</div>
                     <div class="total-score-range" id="finalTotalRange">总分 0 / 满分 0</div>
@@ -974,16 +1058,22 @@
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const screen = document.getElementById(id);
+            screen.classList.add('active');
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+            const heading = screen.querySelector('h1, h2');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.focus({ preventScroll: true });
+            }
         }
 
         function startAssessment() {
             currentStep = 0;
             renderAll();
-            updateStepIndicator();
-            renderBottomNav();
             showScreen('screen-assessment');
+            showPanel('child');
         }
 
         function renderAll() {
@@ -1010,7 +1100,8 @@
             const st = state[it.id];
             const weight3Cls = st.weight === 3 ? 'weighted-3' : '';
             const scoredCls = st.score > 0 ? 'scored' : '';
-            const weightedScore = st.score > 0 ? st.score * st.weight : 0;
+            const actualScore = roleKey === 'family' && st.score > 0 ? 6 - st.score : st.score;
+            const weightedScore = actualScore > 0 ? actualScore * st.weight : 0;
             const weightBtnCls = st.weight === 3 ? 'weight-3' : '';
             return `
                 <div class="item ${scoredCls} ${weight3Cls}" id="item-${it.id}">
@@ -1022,7 +1113,7 @@
                             <div class="control-label">打分（越符合你家，分越高）</div>
                             <div class="seg-control">
                                 ${[1,2,3,4,5].map(n => `
-                                    <button class="seg-btn ${st.score === n ? 'active' : ''}" onclick="setScore('${it.id}', ${n})">${n}</button>
+                                    <button type="button" class="seg-btn ${st.score === n ? 'active' : ''}" data-score="${n}" aria-label="${it.name}，符合程度 ${n} 分" aria-pressed="${st.score === n}" onclick="setScore('${it.id}', ${n})">${n}</button>
                                 `).join('')}
                             </div>
                         </div>
@@ -1030,7 +1121,7 @@
                             <div class="control-label">权重（1一般 · 2重要 · 3决定性，最多 5 项 3 分）</div>
                             <div class="seg-control">
                                 ${[1,2,3].map(n => `
-                                    <button class="seg-btn ${weightBtnCls} ${st.weight === n ? 'active' : ''}" onclick="setWeight('${it.id}', ${n})">${n}</button>
+                                    <button type="button" class="seg-btn ${weightBtnCls} ${st.weight === n ? 'active' : ''}" data-weight="${n}" aria-label="${it.name}，权重 ${n} 分" aria-pressed="${st.weight === n}" onclick="setWeight('${it.id}', ${n})">${n}</button>
                                 `).join('')}
                             </div>
                             ${weightedScore > 0 ? `<div class="item-weighted-score">该项得分：${weightedScore}</div>` : ''}
@@ -1042,10 +1133,11 @@
 
         function setScore(itemId, n) {
             state[itemId].score = n;
-            // 找到 item 所属 role，重渲染该 item 卡片
             const roleKey = findRoleKeyByItemId(itemId);
             renderItems(roleKey);
-            renderBottomNav();  // 更新下一步按钮可用状态
+            renderBottomNav();
+            const button = document.querySelector(`#item-${itemId} [data-score="${n}"]`);
+            if (button) button.focus({ preventScroll: true });
         }
 
         function setWeight(itemId, n) {
@@ -1063,6 +1155,8 @@
             state[itemId].weight = n;
             const roleKey = findRoleKeyByItemId(itemId);
             renderItems(roleKey);
+            const button = document.querySelector(`#item-${itemId} [data-weight="${n}"]`);
+            if (button) button.focus({ preventScroll: true });
         }
 
         function findRoleKeyByItemId(itemId) {
@@ -1099,9 +1193,15 @@
             stepOrder.forEach(rk => {
                 document.getElementById('panel-' + rk).classList.remove('active');
             });
-            document.getElementById('panel-' + roleKey).classList.add('active');
+            const panel = document.getElementById('panel-' + roleKey);
+            panel.classList.add('active');
             updateStepIndicator();
             renderBottomNav();
+            const heading = panel.querySelector('h2');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.focus({ preventScroll: true });
+            }
         }
 
         function renderBottomNav() {
@@ -1131,7 +1231,7 @@
             if (currentStep < stepOrder.length - 1) {
                 currentStep++;
                 showPanel(stepOrder[currentStep]);
-                document.getElementById('screen-assessment').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('screen-assessment').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
             } else {
                 showResults();
             }
@@ -1141,7 +1241,7 @@
             if (currentStep > 0) {
                 currentStep--;
                 showPanel(stepOrder[currentStep]);
-                document.getElementById('screen-assessment').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('screen-assessment').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
             }
         }
 
@@ -1222,13 +1322,22 @@
             const abilitySufficient = abilityPct >= 60;
             const abilityInsufficient = abilityPct < 40;
             const resourceSufficient = familyPct < 60;  // 家庭端低分 = 资源充足
+            const resourceText = getBarTag('family', familyPct);
 
             // 第四档：能力不足，或家庭资源极充足（≤20%）
             if (abilityInsufficient || familyPct <= 20) {
+                let reason = '';
+                if (abilityInsufficient) {
+                    reason = `住宿适应能力不足（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%）`;
+                }
+                if (familyPct <= 20) {
+                    if (reason) reason += '，';
+                    reason += `家里走读支持资源非常充足（从家长角度看 ${familyPct}%）`;
+                }
                 return {
                     tier: 'tier-4',
                     label: '建议走读',
-                    desc: `住宿适应能力不足（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），或家里走读支持资源非常充足（从家长角度看 ${familyPct}%）。建议走读。`,
+                    desc: `${reason}。建议走读。`,
                     abilityPct, familyPct
                 };
             }
@@ -1237,7 +1346,7 @@
                 return {
                     tier: 'tier-1',
                     label: '建议住宿',
-                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），且家里走读支持资源不足（从家长角度看 ${familyPct}%）。可考虑住宿。`,
+                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），且家里${resourceText}（从家长角度看 ${familyPct}%）。可考虑住宿。`,
                     abilityPct, familyPct
                 };
             }
@@ -1246,15 +1355,15 @@
                 return {
                     tier: 'tier-2',
                     label: '可住宿也可走读',
-                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），家里走读支持资源也充足（从家长角度看 ${familyPct}%）。两种选择都可行，重点看 3 分权重项的得失，以及孩子自己的意愿。`,
+                    desc: `住宿适应能力较强（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），家里${resourceText}（从家长角度看 ${familyPct}%）。两种选择都可行，重点看 3 分权重项的得失，以及孩子自己的意愿。`,
                     abilityPct, familyPct
                 };
             }
-            // 第三档：能力中等 + 资源充足 → 建议走读
+            // 第三档：能力中等，根据家庭资源说明不同前提
             return {
                 tier: 'tier-3',
                 label: '建议走读',
-                desc: `住宿适应能力一般（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），但家里走读支持资源充足（从家长角度看 ${familyPct}%）。建议走读，可重点改善孩子的住宿适应能力后再考虑。`,
+                desc: `住宿适应能力一般（从孩子角度看 ${stats.child.pct}%、从学校角度看 ${stats.school.pct}%，平均 ${abilityPct}%），家里${resourceText}（从家长角度看 ${familyPct}%）。${resourceSufficient ? '建议走读，可重点改善孩子的住宿适应能力后再考虑。' : '若优先考虑走读，需要先补足接送、陪伴等支持；也请结合孩子意愿和学校条件进一步讨论。'}`,
                 abilityPct, familyPct
             };
         }
@@ -1451,48 +1560,83 @@
             showScreen('screen-welcome');
         }
 
-        // ========== 主题与导航 ==========
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            if (next === 'light') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                document.querySelector('.theme-toggle').textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                document.querySelector('.theme-toggle').textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const toggle = document.querySelector('.menu-toggle');
-            menu.classList.toggle('show');
-            toggle.classList.toggle('active');
-        }
-
-        // 点击页面其他区域关闭移动端菜单
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('mobileMenu');
-            const toggle = document.querySelector('.menu-toggle');
-            if (menu.classList.contains('show') && !menu.contains(e.target) && !toggle.contains(e.target)) {
-                menu.classList.remove('show');
-                toggle.classList.remove('active');
-            }
-        });
-
-        // 初始化主题
-        (function initTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'light') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                const btn = document.querySelector('.theme-toggle');
-                if (btn) btn.textContent = '☀️';
-            }
-        })();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

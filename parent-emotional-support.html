@@ -197,6 +197,17 @@
 
         .screen { display: none; }
         .screen.active { display: block; }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
 
         .card {
             background: var(--card);
@@ -679,38 +690,120 @@
             }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="父母版情感支持自测，帮助家长回顾倾听、理解与回应孩子的方式，结果用于自我观察和亲子沟通，不作诊断。">
+    <link rel="canonical" href="https://melxia.github.io/parent-emotional-support.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="父母情感支持测评 - 心理测验">
+    <meta property="og:description" content="父母版情感支持自测，帮助家长回顾倾听、理解与回应孩子的方式，结果用于自我观察和亲子沟通，不作诊断。">
+    <meta property="og:url" content="https://melxia.github.io/parent-emotional-support.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="父母情感支持测评 - 心理测验">
+    <meta name="twitter:description" content="父母版情感支持自测，帮助家长回顾倾听、理解与回应孩子的方式，结果用于自我观察和亲子沟通，不作诊断。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
+    <p id="statusAnnouncement" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
 
     <div class="container">
         <!-- 欢迎页面 -->
@@ -722,7 +815,7 @@
                 <div class="privacy-notice">
                     <div class="privacy-notice-title">🔒 隐私保护</div>
                     <div class="privacy-notice-text">
-                        这是一个静态网页，你的测试结果<strong>仅保存在你的浏览器本地</strong>，不会上传到任何服务器或数据库。刷新页面后数据将清除，请放心作答。
+                        你的答案和测试结果<strong>仅在当前页面内存中处理</strong>，不会上传到任何服务器或数据库，也不会持久保存。刷新或关闭页面后，答案与结果将清除。
                     </div>
                 </div>
 
@@ -731,7 +824,8 @@
                     <div class="rule-content">
                         <strong>适用人群：</strong>中学生父母（评估自己对子女的情感支持程度）。<br><br>
                         <strong>题目数量：</strong>13题，约需3-5分钟。<br><br>
-                        请根据你平时与孩子互动的真实情况作答。没有对错之分，请诚实作答。
+                        请根据你平时与孩子互动的真实情况作答。没有对错之分，请诚实作答。<br><br>
+                        <strong>使用边界：</strong>本工具用于自我观察与梳理，不能单凭测评结果进行医学或心理诊断。
                     </div>
                 </div>
 
@@ -743,15 +837,15 @@
                     <div class="reliability-badge">Cronbach's α = 0.96</div>
                 </div>
 
-                <button class="btn btn-primary" onclick="startTest()">开始测评</button>
+                <button type="button" class="btn btn-primary" onclick="startTest()">开始测评</button>
             </div>
         </div>
 
         <!-- 测评页面 -->
         <div class="screen" id="screen-test">
             <div class="card">
-                <div class="progress-text" id="progressText">第 1 题 / 共 13 题</div>
-                <div class="progress-bar">
+                <div class="progress-text" id="progressText" aria-hidden="true">第 1 题 / 共 13 题</div>
+                <div class="progress-bar" id="progressBar" role="progressbar" aria-label="答题进度" aria-valuemin="1" aria-valuemax="13" aria-valuenow="1" aria-valuetext="第 1 题，共 13 题">
                     <div class="progress-fill" id="progressFill" style="width: 7.7%"></div>
                 </div>
 
@@ -759,7 +853,8 @@
                     <!-- 动态填充 -->
                 </div>
 
-                <div class="scale-buttons" id="scaleButtons">
+                <p id="answerHint" class="visually-hidden">选择答案后将自动进入下一题；可使用 Tab 键移动，并按空格或回车选择。</p>
+                <div class="scale-buttons" id="scaleButtons" role="group" aria-labelledby="questionText" aria-describedby="answerHint">
                     <!-- 动态填充 -->
                 </div>
             </div>
@@ -769,6 +864,10 @@
         <div class="screen" id="screen-result">
             <div class="card">
                 <h2>测评完成！</h2>
+                <div class="rule-box" role="note" aria-label="结果使用边界">
+                    <div class="rule-title">结果使用边界</div>
+                    <div class="rule-content">本结果仅用于自我观察与梳理，不能单凭结果进行医学或心理诊断。</div>
+                </div>
 
                 <div class="total-score-box">
                     <div class="total-score-label">你的总分</div>
@@ -777,6 +876,11 @@
                 </div>
 
                 <div class="support-level" id="supportLevel">计算中...</div>
+
+                <div class="privacy-notice" role="note" aria-label="获取帮助">
+                    <div class="privacy-notice-title">何时寻求支持</div>
+                    <div class="privacy-notice-text">如果测评所反映的困扰持续存在、加重，或已影响学习、工作和生活，请联系正规专业机构寻求帮助；在校学生也可以联系学校心理老师。<strong>如有即时自伤或伤人风险，请立即联系可信赖的成年人，并拨打危机求助电话 12356。</strong></div>
+                </div>
 
                 <div class="chart-container">
                     <div class="chart-title">📊 四维度得分对比</div>
@@ -795,7 +899,7 @@
                     <!-- 动态填充 -->
                 </div>
 
-                <button class="btn btn-primary" onclick="goToTheory()">了解背后的心理学原理</button>
+                <button type="button" class="btn btn-primary" onclick="goToTheory()">了解背后的心理学原理</button>
             </div>
         </div>
 
@@ -848,8 +952,8 @@
                     <p style="font-size:0.75em;color:var(--text-muted);font-style:italic;">唐雅君, 黄守桢, 许世梅, 龚楚依, 孟迎芳. (2026). 青少年父母情感支持量表的编制及效度和信度检验. <em>中国心理卫生杂志, 40</em>(3), 249-256.</p>
                 </div>
 
-                <button class="btn btn-secondary" onclick="window.location.href='index.html'">返回首页</button>
-                <button class="btn btn-primary" onclick="resetTest()">重新测评</button>
+                <a class="btn btn-secondary" href="casebook.html#tools" style="display:inline-block;text-decoration:none;">返回工具目录</a>
+                <button type="button" class="btn btn-primary" onclick="resetTest()">重新测评</button>
             </div>
         </div>
     </div>
@@ -890,35 +994,56 @@
         let answers = [];
 
         // 显示屏幕
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        function showScreen(screenId, moveFocus = true) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.toggle('active', s.id === screenId);
+            });
+
+            if (!moveFocus) return;
+            const focusTarget = document.querySelector(`#${screenId} h1, #${screenId} h2`);
+            if (focusTarget) {
+                focusTarget.setAttribute('tabindex', '-1');
+                requestAnimationFrame(() => focusTarget.focus({ preventScroll: true }));
+            }
+        }
+
+        // 仅播报简短进度或结果摘要，避免朗读整个动态页面
+        function announce(message) {
+            const region = document.getElementById('statusAnnouncement');
+            region.textContent = '';
+            setTimeout(() => {
+                region.textContent = message;
+            }, 30);
         }
 
         // 开始测评
         function startTest() {
             currentQuestion = 0;
             answers = [];
+            showScreen('screen-test', false);
             showQuestion();
-            showScreen('screen-test');
         }
 
         // 显示问题
         function showQuestion() {
             const q = questions[currentQuestion];
 
-            document.getElementById('progressText').textContent = `第 ${currentQuestion + 1} 题 / 共 ${questions.length} 题`;
+            const progressText = `第 ${currentQuestion + 1} 题 / 共 ${questions.length} 题`;
+            document.getElementById('progressText').textContent = progressText;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.setAttribute('aria-valuenow', String(currentQuestion + 1));
+            progressBar.setAttribute('aria-valuetext', `第 ${currentQuestion + 1} 题，共 ${questions.length} 题`);
             document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
 
             document.getElementById('questionCard').innerHTML = `
                 <div class="question-number">问题 ${q.id}</div>
-                <div class="question-text">${q.text}</div>
+                <div class="question-text" id="questionText" role="heading" aria-level="2" tabindex="-1">${q.text}</div>
             `;
 
             let buttonsHTML = '';
             scaleOptions.forEach(opt => {
                 buttonsHTML += `
-                    <button class="scale-btn" onclick="selectAnswer(${opt.value})">
+                    <button type="button" class="scale-btn" onclick="selectAnswer(${opt.value})" aria-label="${opt.label}，${opt.value} 分" aria-pressed="false">
                         ${opt.value}
                         <span class="scale-btn-label">${opt.label}</span>
                     </button>
@@ -929,22 +1054,30 @@
             if (answers[currentQuestion] !== undefined) {
                 const btns = document.querySelectorAll('.scale-btn');
                 btns[answers[currentQuestion] - 1].classList.add('selected');
+                btns[answers[currentQuestion] - 1].setAttribute('aria-pressed', 'true');
             }
+
+            const questionText = document.getElementById('questionText');
+            requestAnimationFrame(() => questionText.focus({ preventScroll: true }));
+            announce(progressText);
         }
 
         // 选择答案
+        let answerLocked = false;
         function selectAnswer(value) {
+            if (answerLocked) return;
+            answerLocked = true;
             answers[currentQuestion] = value;
 
             const btns = document.querySelectorAll('.scale-btn');
             btns.forEach((btn, index) => {
-                btn.classList.remove('selected');
-                if (index === value - 1) {
-                    btn.classList.add('selected');
-                }
+                const isSelected = index === value - 1;
+                btn.classList.toggle('selected', isSelected);
+                btn.setAttribute('aria-pressed', String(isSelected));
             });
 
             setTimeout(() => {
+                answerLocked = false;
                 if (currentQuestion < questions.length - 1) {
                     currentQuestion++;
                     showQuestion();
@@ -956,7 +1089,6 @@
 
         // 显示结果
         function showResults() {
-            showScreen('screen-result');
 
             const validAnswers = answers.filter(a => a !== undefined);
             const totalScore = validAnswers.reduce((sum, val) => sum + val, 0);
@@ -1046,6 +1178,9 @@
             levelEl.className = 'support-level ' + levelClass;
 
             generateInsight(totalScore, dimensionScores, dimensions);
+
+            showScreen('screen-result');
+            announce(`测评完成。总分 ${totalScore} 分。${levelEl.textContent}。结果仅供自我观察与梳理，不能作为诊断依据。`);
         }
 
         // 生成洞察
@@ -1143,5 +1278,82 @@
 
         initTheme();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

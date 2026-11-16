@@ -237,16 +237,44 @@
             transition: all 0.3s;
             background: var(--card);
         }
-        .drop-zone:hover, .drop-zone.dragover {
+        .drop-zone:hover, .drop-zone.dragover, .drop-zone:focus-within {
             border-color: var(--primary);
             background: var(--bg);
         }
-        .drop-zone p {
+        .drop-zone:focus-within {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
+        }
+        .drop-zone-label {
+            display: block;
+            cursor: pointer;
+        }
+        .drop-zone p, .drop-zone-text {
             color: var(--text-muted);
             margin-bottom: 10px;
         }
-        .drop-zone input {
-            display: none;
+        .drop-zone-text, .drop-zone-help {
+            display: block;
+        }
+        .drop-zone-help {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+        .file-input, .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .upload-status {
+            margin-top: 12px;
+            margin-bottom: 0;
+            color: var(--text);
         }
         .preview-grid {
             display: grid;
@@ -296,7 +324,7 @@
             flex-direction: column;
             gap: 8px;
         }
-        .control-group label {
+        .control-group label, .control-group .control-label {
             font-weight: 500;
             color: var(--text);
         }
@@ -397,6 +425,12 @@
             color: var(--text-muted);
             font-size: 0.95em;
         }
+        .back-link {
+            display: block;
+            margin-top: 24px;
+            text-align: center;
+            color: var(--primary-light);
+        }
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -408,38 +442,119 @@
             .menu-toggle { display: flex; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="在本机选择照片、编辑文字并合成师恩难忘 A3 挂画，可下载 PNG；照片与参数仅在当前页面处理，不上传。">
+    <link rel="canonical" href="https://melxia.github.io/teacher-portrait-generator.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="师恩难忘 - 照片挂画生成器">
+    <meta property="og:description" content="在本机选择照片、编辑文字并合成师恩难忘 A3 挂画，可下载 PNG；照片与参数仅在当前页面处理，不上传。">
+    <meta property="og:url" content="https://melxia.github.io/teacher-portrait-generator.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="师恩难忘 - 照片挂画生成器">
+    <meta name="twitter:description" content="在本机选择照片、编辑文字并合成师恩难忘 A3 挂画，可下载 PNG；照片与参数仅在当前页面处理，不上传。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools" aria-current="page">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
         <h1>师恩难忘 - 照片挂画生成器</h1>
@@ -448,29 +563,36 @@
         <div class="info">
             <p><strong>输出尺寸：</strong>A3 (3508 × 4961 像素，300dpi 高清打印)</p>
             <p><strong>使用说明：</strong>上传照片 → 上传文字模板 → 调整参数 → 生成下载</p>
+            <p><strong>隐私与保存：</strong>照片读取、画布合成和下载文件生成全部在本机当前浏览器内完成，不会上传照片或模板，也不会发送网络请求。所选照片、模板、预览和生成结果仅保留在当前页面内存中，刷新或关闭页面后会清除，需要重新选择和生成；已下载到本机的图片不受影响。</p>
         </div>
 
         <!-- 步骤1：上传照片 -->
         <div class="section">
             <h2><span class="step">1</span> 上传照片素材</h2>
             <div class="drop-zone" id="photoZone">
-                <p>拖拽照片到这里，或点击选择</p>
-                <p style="color: #999; font-size: 0.9em;">支持 JPG、PNG 格式，可多选</p>
-                <input type="file" id="photoInput" multiple accept="image/*">
+                <label class="drop-zone-label" for="photoInput">
+                    <span class="drop-zone-text">拖拽照片到这里，或点击选择</span>
+                    <span class="drop-zone-help" id="photoHelp">支持 JPG、PNG 等浏览器可读图片，可多选；也可按 Tab 聚焦后打开文件选择器</span>
+                </label>
+                <input type="file" class="file-input" id="photoInput" multiple accept="image/*" aria-describedby="photoHelp photoStatus">
+                <p class="upload-status" id="photoStatus" role="status" aria-live="polite" aria-atomic="true">尚未选择照片。</p>
             </div>
             <div class="preview-grid" id="photoPreview"></div>
-            <p id="photoCount" style="margin-top: 10px; color: #666;"></p>
+            <p id="photoCount" aria-live="polite" aria-atomic="true" style="margin-top: 10px; color: #666;"></p>
         </div>
 
         <!-- 步骤2：上传文字模板 -->
         <div class="section">
             <h2><span class="step">2</span> 上传文字模板</h2>
             <div class="drop-zone" id="templateZone">
-                <p>拖拽模板图片到这里，或点击选择</p>
-                <p style="color: #999; font-size: 0.9em;">白底黑字的"师恩难忘"图片</p>
-                <input type="file" id="templateInput" accept="image/*">
+                <label class="drop-zone-label" for="templateInput">
+                    <span class="drop-zone-text">拖拽模板图片到这里，或点击选择</span>
+                    <span class="drop-zone-help" id="templateHelp">白底黑字的"师恩难忘"图片；也可按 Tab 聚焦后打开文件选择器</span>
+                </label>
+                <input type="file" class="file-input" id="templateInput" accept="image/*" aria-describedby="templateHelp templateStatus">
+                <p class="upload-status" id="templateStatus" role="status" aria-live="polite" aria-atomic="true">尚未选择文字模板。</p>
             </div>
-            <img id="templatePreview" class="template-preview" alt="模板预览">
+            <img id="templatePreview" class="template-preview" alt="已选择的文字模板预览">
         </div>
 
         <!-- 步骤3：参数设置 -->
@@ -478,37 +600,39 @@
             <h2><span class="step">3</span> 参数设置</h2>
             <div class="controls">
                 <div class="control-group">
-                    <label>照片间距</label>
+                    <label for="spacing">照片间距</label>
                     <input type="range" id="spacing" min="0" max="30" value="8">
                     <div class="range-value"><span id="spacingValue">8</span>px</div>
                 </div>
                 <div class="control-group">
-                    <label>照片大小范围</label>
+                    <span class="control-label">照片大小范围</span>
                     <div style="display: flex; gap: 10px; align-items: center;">
+                        <label class="visually-hidden" for="minPhotoSize">最小照片大小（像素）</label>
                         <input type="range" id="minPhotoSize" min="80" max="300" value="150" style="width: 45%;">
-                        <span style="color: #666;">~</span>
+                        <span aria-hidden="true" style="color: #666;">~</span>
+                        <label class="visually-hidden" for="maxPhotoSize">最大照片大小（像素）</label>
                         <input type="range" id="maxPhotoSize" min="100" max="500" value="350" style="width: 45%;">
                     </div>
                     <div class="range-value"><span id="minSizeValue">150</span>px ~ <span id="maxSizeValue">350</span>px（随机）</div>
                 </div>
                 <div class="control-group">
-                    <label>布局模式</label>
+                    <label for="layoutMode">布局模式</label>
                     <select id="layoutMode">
                         <option value="random">随机大小瀑布流</option>
                         <option value="grid">整齐网格排列</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label>背景颜色</label>
+                    <label for="bgColor">背景颜色</label>
                     <input type="color" id="bgColor" value="#ffffff">
                 </div>
                 <div class="control-group">
-                    <label>照片圆角</label>
+                    <label for="borderRadius">照片圆角</label>
                     <input type="range" id="borderRadius" min="0" max="50" value="5">
                     <div class="range-value"><span id="borderRadiusValue">5</span>%</div>
                 </div>
                 <div class="control-group">
-                    <label>照片旋转</label>
+                    <label for="rotation">照片旋转</label>
                     <input type="range" id="rotation" min="0" max="30" value="0">
                     <div class="range-value"><span id="rotationValue">0</span>°（随机角度）</div>
                 </div>
@@ -516,10 +640,10 @@
         </div>
 
         <!-- 生成按钮 -->
-        <button class="generate-btn" id="generateBtn" disabled>请先上传照片和模板</button>
+        <button type="button" class="generate-btn" id="generateBtn" disabled>请先上传照片和模板</button>
 
         <!-- 进度显示 -->
-        <div class="progress" id="progress">
+        <div class="progress" id="progress" role="status" aria-live="polite" aria-atomic="true">
             <p id="progressText">正在生成...</p>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -527,11 +651,13 @@
         </div>
 
         <!-- 结果显示 -->
-        <div class="result" id="result">
-            <canvas id="outputCanvas"></canvas>
+        <div class="result" id="result" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+            <canvas id="outputCanvas" role="img" aria-label="生成的师恩难忘挂画预览"></canvas>
             <br>
             <a class="download-btn" id="downloadBtn" download="师恩难忘挂画.png">下载高清图片</a>
         </div>
+
+        <a class="back-link" href="casebook.html#tools">返回自助工具</a>
     </div>
 
     <script>
@@ -573,9 +699,11 @@
         const photoInput = document.getElementById('photoInput');
         const photoPreview = document.getElementById('photoPreview');
         const photoCount = document.getElementById('photoCount');
+        const photoStatus = document.getElementById('photoStatus');
         const templateZone = document.getElementById('templateZone');
         const templateInput = document.getElementById('templateInput');
         const templatePreview = document.getElementById('templatePreview');
+        const templateStatus = document.getElementById('templateStatus');
         const generateBtn = document.getElementById('generateBtn');
         const progress = document.getElementById('progress');
         const progressText = document.getElementById('progressText');
@@ -613,8 +741,7 @@
             document.getElementById('borderRadiusValue').textContent = this.value;
         };
 
-        // 照片拖拽上传
-        photoZone.addEventListener('click', () => photoInput.click());
+        // 照片拖拽上传；点击与键盘操作由原生文件输入和 label 处理
         photoZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             photoZone.classList.add('dragover');
@@ -628,24 +755,73 @@
             handlePhotoFiles(e.dataTransfer.files);
         });
         photoInput.addEventListener('change', (e) => {
+            if (e.target.files.length === 0) {
+                photoStatus.textContent = '已取消选择，现有照片保持不变。';
+                return;
+            }
             handlePhotoFiles(e.target.files);
+        });
+        photoInput.addEventListener('cancel', () => {
+            photoStatus.textContent = '已取消选择，现有照片保持不变。';
         });
 
         function handlePhotoFiles(files) {
-            for (let file of files) {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            photos.push(img);
-                            updatePhotoPreview();
-                        };
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
+            const selectedFiles = Array.from(files || []);
+            photoInput.value = '';
+            if (selectedFiles.length === 0) {
+                photoStatus.textContent = '没有读取到文件，现有照片保持不变。';
+                return;
             }
+
+            const imageFiles = selectedFiles.filter(file => file.type.startsWith('image/'));
+            let completed = 0;
+            let added = 0;
+            let failed = selectedFiles.length - imageFiles.length;
+
+            if (imageFiles.length === 0) {
+                photoStatus.textContent = '未读取到支持的图片文件，请选择 JPG、PNG 等图片；现有照片保持不变。';
+                return;
+            }
+
+            photoStatus.textContent = `正在本机读取 ${imageFiles.length} 个图片文件...`;
+
+            function finishOneFile() {
+                completed++;
+                if (completed !== imageFiles.length) return;
+                updatePhotoPreview();
+                const failureText = failed > 0 ? `；${failed} 个文件不是支持的图片或读取失败` : '';
+                photoStatus.textContent = `本次在本机新增 ${added} 张照片${failureText}。`;
+            }
+
+            imageFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onerror = () => {
+                    failed++;
+                    finishOneFile();
+                };
+                reader.onabort = () => {
+                    failed++;
+                    finishOneFile();
+                };
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        if (isPhotoValid(img)) {
+                            photos.push(img);
+                            added++;
+                        } else {
+                            failed++;
+                        }
+                        finishOneFile();
+                    };
+                    img.onerror = () => {
+                        failed++;
+                        finishOneFile();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
         function updatePhotoPreview() {
@@ -660,7 +836,7 @@
                 item.style.border = isValid ? 'none' : '2px solid red';
                 item.innerHTML = `
                     <img src="${img.src}" alt="照片${index + 1}" style="opacity: ${isValid ? '1' : '0.3'}">
-                    <button class="remove" onclick="removePhoto(${index})">×</button>
+                    <button type="button" class="remove" aria-label="移除照片${index + 1}" onclick="removePhoto(${index})">×</button>
                     ${!isValid ? '<span style="position:absolute;bottom:0;left:0;right:0;background:red;color:white;font-size:10px;padding:2px;">加载失败</span>' : ''}
                 `;
                 photoPreview.appendChild(item);
@@ -672,10 +848,10 @@
         window.removePhoto = function(index) {
             photos.splice(index, 1);
             updatePhotoPreview();
+            photoStatus.textContent = `已移除照片，当前保留 ${photos.length} 张。`;
         };
 
-        // 模板拖拽上传
-        templateZone.addEventListener('click', () => templateInput.click());
+        // 模板拖拽上传；点击与键盘操作由原生文件输入和 label 处理
         templateZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             templateZone.classList.add('dragover');
@@ -689,24 +865,50 @@
             handleTemplateFile(e.dataTransfer.files[0]);
         });
         templateInput.addEventListener('change', (e) => {
+            if (e.target.files.length === 0) {
+                templateStatus.textContent = '已取消选择，现有模板保持不变。';
+                return;
+            }
             handleTemplateFile(e.target.files[0]);
+        });
+        templateInput.addEventListener('cancel', () => {
+            templateStatus.textContent = '已取消选择，现有模板保持不变。';
         });
 
         function handleTemplateFile(file) {
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        templateImage = img;
-                        templatePreview.src = e.target.result;
-                        templatePreview.style.display = 'block';
-                        checkGenerateReady();
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            if (!file) {
+                templateStatus.textContent = '没有读取到模板文件，现有模板保持不变。';
+                return;
             }
+            templateInput.value = '';
+            if (!file.type.startsWith('image/')) {
+                templateStatus.textContent = '模板必须是图片文件，请重新选择；现有模板保持不变。';
+                return;
+            }
+
+            templateStatus.textContent = '正在本机读取文字模板...';
+            const reader = new FileReader();
+            reader.onerror = () => {
+                templateStatus.textContent = '模板读取失败，请换一张图片重试；现有模板保持不变。';
+            };
+            reader.onabort = () => {
+                templateStatus.textContent = '模板读取已取消，现有模板保持不变。';
+            };
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    templateImage = img;
+                    templatePreview.src = e.target.result;
+                    templatePreview.style.display = 'block';
+                    templateStatus.textContent = '文字模板已在本机读取，可以调整参数并生成挂画。';
+                    checkGenerateReady();
+                };
+                img.onerror = () => {
+                    templateStatus.textContent = '模板图片无法解码，请换一张图片重试；现有模板保持不变。';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function checkGenerateReady() {
@@ -893,6 +1095,7 @@
             // 只使用有效的照片
             const validPhotos = getValidPhotos();
             if (validPhotos.length === 0) {
+                photoStatus.textContent = '没有有效照片，请检查已选择的图片后重试。';
                 alert('没有有效的照片！请检查照片是否正确上传。');
                 progress.style.display = 'none';
                 return;
@@ -1021,6 +1224,7 @@
             result.style.display = 'block';
             generateBtn.disabled = false;
             generateBtn.textContent = '重新生成';
+            result.focus({ preventScroll: true });
         }
 
         function toggleTheme() {
@@ -1064,5 +1268,82 @@
 
         initTheme();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

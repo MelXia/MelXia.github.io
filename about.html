@@ -15,6 +15,11 @@
             --card: #252742;
             --text: #E8E8F0;
             --text-muted: #9899AC;
+            --line: #454862;
+            --soft: #30324D;
+            --link: #B7ABFA;
+            --action-bg: #A9344B;
+            --accent-text: #FF9AA6;
         }
 
         [data-theme="light"] {
@@ -27,6 +32,11 @@
             --card: #FFFFFF;
             --text: #2A2A3E;
             --text-muted: #6A6A7E;
+            --line: #E4DDD5;
+            --soft: #F3ECE6;
+            --link: #5743BE;
+            --action-bg: #A9344B;
+            --accent-text: #A9344B;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -90,8 +100,8 @@
             text-decoration: none;
         }
 
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a.active { color: var(--accent); font-weight: 600; }
+        .nav-links a:hover { color: var(--accent-text); }
+        .nav-links a.active { color: var(--accent-text); font-weight: 600; }
 
         .theme-toggle {
             background: var(--card);
@@ -292,7 +302,7 @@
 
         .timeline-year {
             font-size: 0.85em;
-            color: var(--accent);
+            color: var(--accent-text);
             font-weight: 600;
         }
 
@@ -442,6 +452,143 @@
             color: var(--text-muted);
         }
 
+        /* 关于页新版内容样式 */
+        body { line-height: 1.75; }
+        .container { width: min(920px, calc(100% - 32px)); margin: 0 auto; padding: 52px 0 64px; }
+        .hero-section {
+            display: grid;
+            gap: 26px;
+            align-items: center;
+            padding: 18px 0 52px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+        }
+        .name-mark {
+            display: grid;
+            min-height: 210px;
+            place-content: center;
+            padding: 30px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: linear-gradient(145deg, var(--soft), var(--card));
+            text-align: center;
+        }
+        .name-mark strong { color: var(--accent-text); font-size: clamp(3.4rem, 10vw, 5.5rem); line-height: 1; letter-spacing: 0.04em; }
+        .name-mark span { margin-top: 14px; color: var(--text-muted); font-size: 0.86rem; letter-spacing: 0.16em; }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            color: var(--link);
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+        .eyebrow::before { content: ""; width: 24px; height: 2px; border-radius: 2px; background: var(--accent); }
+        .hero-title { margin-bottom: 14px; color: var(--text); font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.2; -webkit-text-fill-color: currentColor; background: none; }
+        .hero-subtitle { margin-bottom: 12px; color: var(--accent-text); font-size: 1.12rem; font-weight: 700; }
+        .hero-desc { max-width: 580px; color: var(--text-muted); }
+
+        .about-section { margin: 0; padding: 52px 0; border-bottom: 1px solid var(--line); }
+        .section-title { display: block; margin-bottom: 20px; color: var(--text); font-size: clamp(1.45rem, 4vw, 1.9rem); line-height: 1.35; }
+        .section-intro { max-width: 720px; margin: -8px 0 24px; color: var(--text-muted); }
+        .about-text { max-width: 760px; color: var(--text-muted); font-size: 1rem; line-height: 1.75; }
+        .about-text p { margin-bottom: 16px; }
+        .about-text p:last-child { margin-bottom: 0; }
+        .about-text strong { color: var(--text); }
+        .role-grid { display: grid; gap: 14px; margin-top: 24px; }
+        .role-card { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+        .role-card h3 { margin-bottom: 8px; color: var(--link); font-size: 1rem; }
+        .role-card p { color: var(--text-muted); font-size: 0.9rem; }
+        .text-link { color: var(--link); font-weight: 650; text-underline-offset: 4px; }
+        .text-link:hover { color: var(--accent-text); }
+        .inline-links { display: flex; flex-wrap: wrap; gap: 12px 22px; margin-top: 22px; }
+
+        .credentials { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+        .credential-card { height: 100%; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+        .credential-kicker { margin-bottom: 8px; color: var(--accent-text); font-size: 0.75rem; font-weight: 750; letter-spacing: 0.08em; }
+        .credential-title { margin-bottom: 7px; color: var(--text); font-size: 1rem; font-weight: 700; }
+        .credential-desc { color: var(--text-muted); font-size: 0.86rem; }
+
+        .timeline { position: relative; margin: 30px 0 0; padding: 0; list-style: none; }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            bottom: 0;
+            left: 7px;
+            width: 2px;
+            background: var(--line);
+            transform: none;
+        }
+        .timeline .timeline-item { position: relative; left: 0; width: 100%; padding: 0 0 26px 34px; text-align: left; }
+        .timeline .timeline-item::before {
+            content: "";
+            position: absolute;
+            top: 7px;
+            left: 0;
+            right: auto;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--card);
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+        .timeline-year { color: var(--accent-text); font-size: 0.84rem; font-weight: 700; }
+        .timeline-title { margin: 4px 0; color: var(--text); font-size: 1rem; font-weight: 650; }
+        .timeline-desc { color: var(--text-muted); font-size: 0.88rem; }
+
+        .boundary-grid { display: grid; gap: 16px; }
+        .boundary-card { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); }
+        .boundary-card h3 { margin-bottom: 10px; color: var(--link); font-size: 1.06rem; }
+        .boundary-card ul { display: grid; gap: 10px; padding-left: 1.2em; color: var(--text-muted); font-size: 0.92rem; }
+        .boundary-card li::marker { color: var(--accent-text); }
+        .boundary-note { margin-top: 18px; padding: 16px 18px; border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0; background: var(--soft); color: var(--text-muted); font-size: 0.9rem; }
+
+        .contact-section, .flower-section { margin-top: 28px; padding: 30px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); text-align: center; }
+        .contact-title { margin-bottom: 10px; color: var(--text); font-size: 1.35rem; }
+        .contact-subtitle { max-width: 560px; margin: 0 auto 20px; color: var(--text-muted); font-size: 0.92rem; }
+        .button {
+            display: inline-flex;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            background: var(--action-bg);
+            color: #FFFFFF;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .button:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(217, 79, 99, 0.22); }
+        .button-secondary { border-color: var(--link); background: var(--bg); color: var(--text); }
+        .contact-note { margin-top: 14px; color: var(--text-muted); font-size: 0.8rem; }
+        .contact-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+        @media (min-width: 700px) {
+            .container { width: min(920px, calc(100% - 64px)); padding-top: 68px; }
+            .hero-section { grid-template-columns: 0.72fr 1.28fr; padding-bottom: 64px; }
+            .role-grid, .credentials, .boundary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .about-section { padding: 64px 0; }
+            .timeline::before { left: 130px; }
+            .timeline .timeline-item { display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 44px; padding: 0 0 30px; }
+            .timeline .timeline-item::before { top: 8px; left: 124px; right: auto; }
+            .timeline-year { padding-top: 1px; text-align: right; }
+            .timeline-title { margin-top: 0; }
+            .timeline-content { grid-column: 2; }
+        }
+        @media (max-width: 600px) {
+            .timeline::before { left: 7px; }
+            .timeline .timeline-item { left: 0 !important; padding: 0 0 26px 34px !important; text-align: left !important; }
+            .timeline .timeline-item::before { left: 0 !important; right: auto !important; }
+            .contact-buttons { flex-direction: column; }
+            .contact-buttons .button { width: 100%; }
+        }
+
         /* 底部 */
         .footer {
             text-align: center;
@@ -477,297 +624,381 @@
             .contact-buttons { flex-direction: column; align-items: center; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="了解 Mel 的应用心理与工商管理背景、家庭心理教育经历、公益活动和服务边界，以及为什么做青少年与家长之间的翻译。">
+    <link rel="canonical" href="https://melxia.github.io/about.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="关于Mel - 有钳任性横着走的Mel">
+    <meta property="og:description" content="了解 Mel 的应用心理与工商管理背景、家庭心理教育经历、公益活动和服务边界，以及为什么做青少年与家长之间的翻译。">
+    <meta property="og:url" content="https://melxia.github.io/about.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="关于Mel - 有钳任性横着走的Mel">
+    <meta name="twitter:description" content="了解 Mel 的应用心理与工商管理背景、家庭心理教育经历、公益活动和服务边界，以及为什么做青少年与家长之间的翻译。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="score.html">自主招生</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="score.html">自主招生</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html" aria-current="page">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html" aria-current="page">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
-        <!-- Hero -->
-        <section class="hero-section">
-            <div class="hero-icon">🦀</div>
-            <h1 class="hero-title">关于Mel</h1>
-            <p class="hero-subtitle">有钳任性横着走</p>
+        <!-- 我是谁 -->
+        <section class="hero-section" aria-labelledby="about-page-title">
+            <div class="name-mark" aria-label="Mel，有钳任性横着走">
+                <strong>Mel</strong>
+                <span>有钳任性横着走</span>
+            </div>
+            <div>
+                <p class="eyebrow">青少年和家长之间的翻译官</p>
+                <h1 class="hero-title" id="about-page-title">你好，我是 Mel</h1>
+                <p class="hero-subtitle">让双方都被听见，也让下一步变得清楚</p>
+                <p class="hero-desc">我不替家长说服孩子，也不替孩子指责家长。我的工作，是协助双方把担心、压力、期待与边界说清楚。</p>
+            </div>
         </section>
 
-        <!-- 个人介绍 -->
-        <section class="about-section">
-            <h2 class="section-title">🙋‍♀️ 我是谁</h2>
+        <section class="about-section" aria-labelledby="who-title">
+            <h2 class="section-title" id="who-title">我是谁：站在双方之间的沟通翻译者</h2>
             <div class="about-text">
-                <p>我是巨蟹座，所以我说自己"有钳任性"。2014年开始做公益，后来发现，帮别人的过程，其实也在治愈自己。</p>
-                <p>我见过太多家长和孩子"互相听不懂"。孩子说"你不懂我"，家长说"你怎么这样"。两个人明明在说话，却像隔着一片海。</p>
-                <p>我站在这片海的中间，试着把两边的话翻译成彼此能听懂的语言。</p>
+                <p>我是巨蟹座，所以我说自己“有钳任性”。2014年开始做公益，后来发现，帮别人的过程，其实也在治愈自己。</p>
+                <p>我见过家长和孩子“互相听不懂”：孩子说“你不懂我”，家长说“你怎么这样”。两个人明明在说话，却像隔着一片海。我站在这片海的中间，试着把两边的话翻译成彼此能听懂的语言。</p>
+            </div>
+            <div class="role-grid">
+                <article class="role-card">
+                    <h3>面对家长</h3>
+                    <p>把担心、规则与爱分开说，既看见养育的不易，也寻找不伤害关系的表达方式。</p>
+                </article>
+                <article class="role-card">
+                    <h3>面对青少年</h3>
+                    <p>把压力、想法与需要放进对话，既尊重自主，也讨论现实边界和可获得的支持。</p>
+                </article>
             </div>
         </section>
 
-        <!-- 我为什么做这件事 -->
-        <section class="about-section">
-            <h2 class="section-title">💭 我为什么做这件事</h2>
+        <!-- 为什么做 -->
+        <section class="about-section" aria-labelledby="why-title">
+            <h2 class="section-title" id="why-title">为什么做：很多冲突里，双方并非不在意彼此</h2>
             <div class="about-text">
-                <p>每当看到家长说"我终于懂他了"，孩子说"原来我妈是这样想的"，我就觉得——这件事，值得继续做。</p>
-                <p>我不是什么专家，我只是站在中间的那个人。</p>
-                <p>我发现，很多时候问题不是"不爱"，而是"不懂"。孩子爱父母，父母也爱孩子，但他们说不同的语言。我帮他们翻译。</p>
+                <p>每当看到家长说“我终于懂他了”，孩子说“原来我妈是这样想的”，我就觉得——这件事，值得继续做。</p>
+                <p>我关心的是，怎样让关心不再只以催促出现，让委屈不再只以沉默表达。翻译不是替任何一方赢得争论，而是帮助双方重新理解彼此，再讨论一个现实可行的小动作。</p>
+                <p><strong>我的角色有专业训练与实践经验作为基础，也有清楚的服务边界。</strong>我提供心理科普、自助工具和初步沟通梳理；遇到超出能力或服务范围的情况，应转介或寻求合适的专业资源。</p>
+            </div>
+            <div class="inline-links">
+                <a class="text-link" href="casebook.html">查看助人自助 →</a>
+                <a class="text-link" href="articles.html">阅读看见心声 →</a>
             </div>
         </section>
 
-        <!-- 资质 -->
-        <section class="about-section">
-            <h2 class="section-title">🎓 背景与资质</h2>
-            <div class="credentials">
-                <div class="credential-card">
-                    <div class="credential-icon">🧠</div>
-                    <div class="credential-title">应用心理硕士</div>
-                    <div class="credential-desc">Master of Applied Psychology (MAP)</div>
-                </div>
-                <div class="credential-card">
-                    <div class="credential-icon">💼</div>
-                    <div class="credential-title">工商管理硕士</div>
-                    <div class="credential-desc">Master of Business Administration (MBA)</div>
-                </div>
-                <div class="credential-card">
-                    <div class="credential-icon">🏠</div>
-                    <div class="credential-title">家庭心理与教育专委会会员</div>
-                    <div class="credential-desc">广东省心理学会</div>
-                </div>
-                <div class="credential-card">
-                    <div class="credential-icon">📞</div>
-                    <div class="credential-title">心晴热线志愿者</div>
-                    <div class="credential-desc">华南师范大学</div>
-                </div>
-            </div>
+        <!-- 背景与资质 -->
+        <section class="about-section" aria-labelledby="credentials-title">
+            <h2 class="section-title" id="credentials-title">背景与资质</h2>
+            <p class="section-intro">以下是与当前工作直接相关的学习背景、专业参与和志愿服务经历。</p>
+            <ul class="credentials">
+                <li class="credential-card">
+                    <div class="credential-kicker">学习背景</div>
+                    <div class="credential-title">应用心理硕士（MAP）</div>
+                    <div class="credential-desc">Master of Applied Psychology</div>
+                </li>
+                <li class="credential-card">
+                    <div class="credential-kicker">学习背景</div>
+                    <div class="credential-title">工商管理硕士（MBA）</div>
+                    <div class="credential-desc">Master of Business Administration</div>
+                </li>
+                <li class="credential-card">
+                    <div class="credential-kicker">专业参与</div>
+                    <div class="credential-title">广东省心理学会家庭心理和教育专业委员会会员</div>
+                    <div class="credential-desc">家庭心理与教育领域的专业组织参与</div>
+                </li>
+                <li class="credential-card">
+                    <div class="credential-kicker">专业参与</div>
+                    <div class="credential-title">中国心理学学会会员</div>
+                    <div class="credential-desc">心理学专业组织会员</div>
+                </li>
+                <li class="credential-card">
+                    <div class="credential-kicker">志愿服务</div>
+                    <div class="credential-title">华南师大心晴热线志愿者</div>
+                    <div class="credential-desc">华南师范大学心晴热线志愿服务</div>
+                </li>
+            </ul>
         </section>
 
-        <!-- 时间线 -->
-        <section class="about-section">
-            <h2 class="section-title">📅 我的家庭教育之路</h2>
-            <div class="timeline">
-                <div class="timeline-item">
+        <!-- 实际经历 -->
+        <section class="about-section" aria-labelledby="experience-title">
+            <h2 class="section-title" id="experience-title">实际经历：从儿童安全到家庭支持</h2>
+            <p class="section-intro">这些活动构成了我理解儿童、家庭与不同成长阶段的实践背景。时间线保留原有记录，按发生顺序排列。</p>
+            <ol class="timeline">
+                <li class="timeline-item">
                     <div class="timeline-year">2013年12月</div>
-                    <div class="timeline-title">儿童安全活动 · 江南幼儿园</div>
-                    <div class="timeline-desc">为孩子播下安全的种子</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">儿童安全活动 · 江南幼儿园</div><div class="timeline-desc">为孩子播下安全的种子</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2014年4月</div>
-                    <div class="timeline-title">儿童安全活动 · 儿福幼儿园</div>
-                    <div class="timeline-desc">活动推广到姐妹幼儿园</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">儿童安全活动 · 儿福幼儿园</div><div class="timeline-desc">活动推广到姐妹幼儿园</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2014年10月</div>
-                    <div class="timeline-title">社区关爱活动 · 海珠区江南中街道</div>
-                    <div class="timeline-desc">获颁"义心同行伙伴"奖状</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 海珠区江南中街道</div><div class="timeline-desc">获颁"义心同行伙伴"奖状</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2016年10月</div>
-                    <div class="timeline-title">社区关爱活动 · 荔湾区华林街道</div>
-                    <div class="timeline-desc">志愿者规模翻倍，建立反思平台</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 荔湾区华林街道</div><div class="timeline-desc">志愿者规模翻倍，建立反思平台</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2017年10月</div>
-                    <div class="timeline-title">社区关爱活动 · 海珠区江南中街道</div>
-                    <div class="timeline-desc">志愿者超过60人，驾轻就熟</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 海珠区江南中街道</div><div class="timeline-desc">志愿者超过60人，驾轻就熟</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2017年11月</div>
-                    <div class="timeline-title">图书馆项目 · 郁南镇小学</div>
-                    <div class="timeline-desc">图书捐赠，点燃阅读希望</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">图书馆项目 · 郁南镇小学</div><div class="timeline-desc">图书捐赠，点燃阅读希望</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2018年1月</div>
-                    <div class="timeline-title">儿童安全活动 · 蒋光鼐纪念小学</div>
-                    <div class="timeline-desc">家委会共同组织，平等对话</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">儿童安全活动 · 蒋光鼐纪念小学</div><div class="timeline-desc">家委会共同组织，平等对话</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2018年10月</div>
-                    <div class="timeline-title">社区关爱活动 · 蒋光鼐纪念小学</div>
-                    <div class="timeline-desc">慰问大书包，培养活动搞手</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 蒋光鼐纪念小学</div><div class="timeline-desc">慰问大书包，培养活动搞手</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2019年6月</div>
-                    <div class="timeline-title">儿童安全活动 · 海珠区</div>
-                    <div class="timeline-desc">安全教育持续推广</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">儿童安全活动 · 海珠区</div><div class="timeline-desc">安全教育持续推广</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2021年4月</div>
-                    <div class="timeline-title">儿童安全活动 · 白云区同和小学</div>
-                    <div class="timeline-desc">活动带到白云区</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">儿童安全活动 · 白云区同和小学</div><div class="timeline-desc">活动带到白云区</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2021年5月</div>
-                    <div class="timeline-title">生涯规划分享 · 广州中学</div>
-                    <div class="timeline-desc">与高中生分享职业规划</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划分享 · 广州中学</div><div class="timeline-desc">与高中生分享职业规划</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2021年8月</div>
-                    <div class="timeline-title">花艺减压沙龙 · 海珠区</div>
-                    <div class="timeline-desc">花艺作为情绪翻译的媒介</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">花艺减压沙龙 · 海珠区</div><div class="timeline-desc">花艺作为情绪翻译的媒介</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2022年4月</div>
-                    <div class="timeline-title">生涯规划分享 · 华南师大附中</div>
-                    <div class="timeline-desc">与学霸们探讨时间规划</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划分享 · 华南师大附中</div><div class="timeline-desc">与学霸们探讨时间规划</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2022年8月</div>
-                    <div class="timeline-title">社区关爱活动 · 白云区</div>
-                    <div class="timeline-desc">活动推广到白云区</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 白云区</div><div class="timeline-desc">活动推广到白云区</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2022年9-12月</div>
-                    <div class="timeline-title">图书馆项目 · 微澜图书馆21馆</div>
-                    <div class="timeline-desc">常态化驻守，长期陪伴</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">图书馆项目 · 微澜图书馆21馆</div><div class="timeline-desc">常态化驻守，长期陪伴</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2022年9月</div>
-                    <div class="timeline-title">花艺减压沙龙 · 珠江新城</div>
-                    <div class="timeline-desc">针对白领群体，冥想+花艺</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">花艺减压沙龙 · 珠江新城</div><div class="timeline-desc">针对白领群体，冥想+花艺</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2023年3月</div>
-                    <div class="timeline-title">花艺减压沙龙 · 珠江新城</div>
-                    <div class="timeline-desc">探讨"女性的身份"议题</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">花艺减压沙龙 · 珠江新城</div><div class="timeline-desc">探讨"女性的身份"议题</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2023年11月</div>
-                    <div class="timeline-title">生涯规划 · 广东工业大学</div>
-                    <div class="timeline-desc">职业规划大赛指导</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划 · 广东工业大学</div><div class="timeline-desc">职业规划大赛指导</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2023年12月</div>
-                    <div class="timeline-title">生涯规划 · 广东工业大学</div>
-                    <div class="timeline-desc">模拟面试活动</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划 · 广东工业大学</div><div class="timeline-desc">模拟面试活动</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2023年至今</div>
-                    <div class="timeline-title">心晴热线志愿者 · 华南师范大学</div>
-                    <div class="timeline-desc">电话线两端的翻译家</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">心晴热线志愿者 · 华南师范大学</div><div class="timeline-desc">电话线两端的翻译家</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年3月</div>
-                    <div class="timeline-title">生涯规划分享 · 广州中学</div>
-                    <div class="timeline-desc">高一年级职业规划教育</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划分享 · 广州中学</div><div class="timeline-desc">高一年级职业规划教育</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年4月</div>
-                    <div class="timeline-title">生涯规划 · 暨南大学</div>
-                    <div class="timeline-desc">大学生模拟面试活动</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划 · 暨南大学</div><div class="timeline-desc">大学生模拟面试活动</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年5月</div>
-                    <div class="timeline-title">花艺减压沙龙 · 金碧花园</div>
-                    <div class="timeline-desc">社区妈妈们的减压时刻</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">花艺减压沙龙 · 金碧花园</div><div class="timeline-desc">社区妈妈们的减压时刻</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年7月</div>
-                    <div class="timeline-title">生涯规划 · 广州市第一中学</div>
-                    <div class="timeline-desc">组织学生参观华南师大</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">生涯规划 · 广州市第一中学</div><div class="timeline-desc">组织学生参观华南师大</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年7月</div>
-                    <div class="timeline-title">职场减压沙龙 · 天河区</div>
-                    <div class="timeline-desc">为职场人士提供减压空间</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">职场减压沙龙 · 天河区</div><div class="timeline-desc">为职场人士提供减压空间</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2024年10月</div>
-                    <div class="timeline-title">老母亲疯会 · 心静瑜伽馆</div>
-                    <div class="timeline-desc">为妈妈们创造减压空间</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">老母亲疯会 · 心静瑜伽馆</div><div class="timeline-desc">为妈妈们创造减压空间</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2025年1月</div>
-                    <div class="timeline-title">职场减压沙龙 · 越秀区</div>
-                    <div class="timeline-desc">情绪调节主题，近30人参与</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">职场减压沙龙 · 越秀区</div><div class="timeline-desc">情绪调节主题，近30人参与</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2025年3月</div>
-                    <div class="timeline-title">老母亲疯会 · 海珠区心静瑜伽</div>
-                    <div class="timeline-desc">妈妈们的持续支持与交流</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">老母亲疯会 · 海珠区心静瑜伽</div><div class="timeline-desc">妈妈们的持续支持与交流</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2025年5月</div>
-                    <div class="timeline-title">社区关爱活动 · 大哥哥课堂</div>
-                    <div class="timeline-desc">青少年性教育，同龄人沟通</div>
-                </div>
-                <div class="timeline-item">
+                    <div class="timeline-content"><div class="timeline-title">社区关爱活动 · 大哥哥课堂</div><div class="timeline-desc">青少年性教育，同龄人沟通</div></div>
+                </li>
+                <li class="timeline-item">
                     <div class="timeline-year">2026年5月</div>
-                    <div class="timeline-title">老母亲疯会 · 海珠区</div>
-                    <div class="timeline-desc">妈妈们的持续减压空间</div>
-                </div>
-            </div>
+                    <div class="timeline-content"><div class="timeline-title">老母亲疯会 · 海珠区</div><div class="timeline-desc">妈妈们的持续减压空间</div></div>
+                </li>
+            </ol>
         </section>
 
-        <!-- 联系方式 -->
-        <section class="contact-section">
-            <h3 class="contact-title">约30分钟通话</h3>
-            <p class="contact-subtitle">一次简短、有用的对话，帮你理清问题</p>
-            <span class="contact-free">✓ 免费 · 无压力</span>
-            <div class="contact-buttons">
-                <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
-                    <span>📱</span>
-                    <span>小红书私信</span>
-                </a>
-                <a href="mailto:19469728@qq.com" class="btn-email">
-                    <span>✉️</span>
-                    <span>邮件联系</span>
-                </a>
+        <!-- 服务边界 -->
+        <section class="about-section" aria-labelledby="boundary-title">
+            <h2 class="section-title" id="boundary-title">服务边界：清楚能做什么，也说明不能做什么</h2>
+            <div class="boundary-grid">
+                <article class="boundary-card">
+                    <h3>我可以提供</h3>
+                    <ul>
+                        <li>心理科普、自助工具与真实故事，帮助你先整理自己的处境。</li>
+                        <li>30分钟初步梳理，了解当前困扰、已尝试的方法与希望目标。</li>
+                        <li>在亲子沟通、学习支持与压力议题中，协助双方表达需要、讨论下一步。</li>
+                    </ul>
+                </article>
+                <article class="boundary-card">
+                    <h3>不在我的服务范围内</h3>
+                    <ul>
+                        <li>不以初步沟通替代心理诊断、心理治疗或危机干预。</li>
+                        <li>不替任何一方作决定，也不承诺固定的沟通结果或改变效果。</li>
+                        <li>遇到超出能力或服务范围的情况，应寻求医疗、心理或其他合适的专业支持。</li>
+                    </ul>
+                </article>
             </div>
-            <p class="contact-note">通常1天内回复</p>
+            <p class="boundary-note">涉及未成年人时，需要监护人知情并参与沟通安排。隐私与保密边界、紧急情况处理，以及首次联系的隐私提醒，请在预约前查看首页说明。</p>
+        </section>
+
+        <!-- 预约入口 -->
+        <section class="contact-section" aria-labelledby="contact-cta-title">
+            <h2 class="contact-title" id="contact-cta-title">想先梳理一件具体的困扰？</h2>
+            <p class="contact-subtitle">到首页查看30分钟初步梳理的参与方式、隐私提醒和私信模板，再选择小红书或邮件联系。</p>
+            <a class="button" href="index.html#contact">查看预约方式与私信模板</a>
         </section>
 
         <!-- 花艺作品入口 -->
-        <section class="contact-section" style="margin-top:20px;">
-            <div style="font-size:28px;margin-bottom:10px;">🌸</div>
-            <h3 class="contact-title">Mel的花艺作品</h3>
+        <section class="flower-section" aria-labelledby="flower-title">
+            <h2 class="contact-title" id="flower-title">Mel 的花艺作品</h2>
             <p class="contact-subtitle">每一款都是独一无二的高定款</p>
             <div class="contact-buttons">
-                <a href="flower-gallery.html" class="btn-xiaohongshu" style="background:linear-gradient(135deg, var(--primary), var(--primary-light));">
-                    <span>💐</span>
-                    <span>欣赏花艺作品</span>
-                </a>
-                <a href="mailto:19469728@qq.com" class="btn-email">
-                    <span>🛒</span>
-                    <span>我要买这款</span>
-                </a>
+                <a href="flower-gallery.html" class="button">欣赏花艺作品</a>
+                <a href="mailto:19469728@qq.com" class="button button-secondary">我要买这款</a>
             </div>
             <p class="contact-note">通过小红书或邮件与我沟通定制</p>
         </section>
     </div>
 
     <!-- 底部 -->
-    <footer class="footer">
+</main>
+<footer class="footer">
         <p>有钳任性横着走的Mel</p>
         <p style="margin-top:8px;">应用心理硕士（MAP） · 工商管理硕士（MBA）</p>
-        <p style="margin-top:8px;">广东省心理学会家庭心理和教育专业委员会会员</p>
+        <p style="margin-top:8px;">广东省心理学会家庭心理和教育专业委员会会员 · 中国心理学学会会员</p>
     </footer>
 
     <!-- 返回顶部 -->
-    <div class="back-top" onclick="scrollToTop()">↑</div>
+    <button type="button" class="back-top" onclick="scrollToTop()" aria-label="返回顶部">↑</button>
 
     <script>
         function toggleTheme() {
@@ -820,5 +1051,80 @@
 
         initTheme();
     </script>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

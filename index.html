@@ -15,6 +15,11 @@
             --card: #252742;
             --text: #E8E8F0;
             --text-muted: #9899AC;
+            --line: #454862;
+            --soft: #30324D;
+            --link: #B7ABFA;
+            --action-bg: #A9344B;
+            --accent-text: #FF9AA6;
         }
 
         /* 浅色模式 */
@@ -28,6 +33,11 @@
             --card: #FFFFFF;
             --text: #2A2A3E;
             --text-muted: #6A6A7E;
+            --line: #E4DDD5;
+            --soft: #F3ECE6;
+            --link: #5743BE;
+            --action-bg: #A9344B;
+            --accent-text: #A9344B;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -90,7 +100,7 @@
             text-decoration: none;
         }
 
-        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover { color: var(--accent-text); }
 
         .theme-toggle {
             background: var(--card);
@@ -181,353 +191,266 @@
             color: white;
         }
 
-        /* ========== Hero区域 ========== */
-        .hero {
-            padding: 80px 20px 60px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(107,92,231,0.15) 0%, var(--bg) 100%);
-            min-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        /* ========== 首页专属内容 ========== */
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body { line-height: 1.75; }
+        section[id] { scroll-margin-top: 80px; }
+        .page-shell { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+        .home-section { padding: 64px 0; }
+        .home-section:nth-of-type(even) { background: var(--card); }
+        .eyebrow {
+            display: inline-flex;
             align-items: center;
-        }
-
-        .hero-role {
-            font-size: 1.1em;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .hero-title {
-            font-size: 2.2em;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--link);
+            font-size: 0.86rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.08em;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 24px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--accent);
+        }
+        .section-heading { max-width: 700px; margin-bottom: 30px; }
+        .section-heading h2 {
+            margin-bottom: 10px;
+            color: var(--text);
+            font-size: clamp(1.65rem, 4vw, 2.25rem);
             line-height: 1.3;
         }
-
-        .hero-desc {
-            color: var(--text-muted);
-            font-size: 1.05em;
-            max-width: 400px;
-            margin: 0 auto 30px;
-            line-height: 1.8;
+        .section-heading p, .muted { color: var(--text-muted); }
+        .text-link {
+            color: var(--link);
+            font-weight: 650;
+            text-underline-offset: 4px;
+            text-decoration-thickness: 1px;
         }
-
-        .hero-stats {
-            display: flex;
+        .text-link:hover { color: var(--accent-text); }
+        .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+        .button {
+            display: inline-flex;
+            min-height: 48px;
+            align-items: center;
             justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2em;
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            font: inherit;
             font-weight: 700;
-            color: var(--primary-light);
-        }
-
-        .stat-label {
-            font-size: 0.85em;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-size: 1em;
-            font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
+        .button:hover { transform: translateY(-2px); }
+        .button-primary {
+            background: var(--action-bg);
+            color: #FFFFFF;
+            box-shadow: 0 8px 22px rgba(217, 79, 99, 0.18);
         }
+        .button-primary:hover { box-shadow: 0 10px 26px rgba(217, 79, 99, 0.28); }
+        .button-secondary { border-color: var(--link); background: var(--card); color: var(--text); }
+        .button-secondary:hover { background: var(--soft); }
+        .button-small { min-height: 44px; padding: 9px 18px; font-size: 0.9rem; }
 
-        .btn-secondary {
-            background: var(--card);
-            color: var(--text);
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-size: 1em;
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid var(--primary);
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* ========== 痛点共鸣区域 ========== */
-        .pain-section {
-            padding: 40px 20px;
-            background: var(--card);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 1.3em;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .section-subtitle {
-            font-size: 0.9em;
-            color: var(--text-muted);
-        }
-
-        .pain-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .pain-card {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--primary);
-        }
-
-        .pain-card-header {
-            font-size: 1em;
-            color: var(--primary-light);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pain-list {
-            list-style: none;
-        }
-
-        .pain-item {
-            font-size: 0.85em;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            padding-left: 18px;
-            position: relative;
-            line-height: 1.5;
-        }
-
-        .pain-item::before {
-            content: "•";
+        .hero { position: relative; overflow: hidden; padding: 64px 0 56px; }
+        .hero::before, .hero::after {
+            content: "";
             position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-
-        /* ========== 能力聚焦区域 ========== */
-        .strength-section {
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .strength-title {
-            font-size: 1.3em;
-            color: var(--text);
-            margin-bottom: 25px;
-        }
-
-        .strength-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .strength-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px 15px;
-            border: 1px solid var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .strength-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-
-        .strength-icon {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .strength-name {
-            font-size: 0.95em;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .strength-desc {
-            font-size: 0.8em;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* ========== 预约流程 ========== */
-        .booking-section {
-            padding: 60px 20px;
-            background: var(--card);
-        }
-
-        .booking-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .booking-title {
-            font-size: 1.5em;
-            color: var(--text);
-            margin-bottom: 10px;
-        }
-
-        .booking-subtitle {
-            font-size: 0.95em;
-            color: var(--text-muted);
-        }
-
-        .booking-free {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--success), var(--primary-light));
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-
-        .booking-steps {
-            max-width: 500px;
-            margin: 0 auto 35px;
-        }
-
-        .step-item {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .step-number {
-            flex-shrink: 0;
-            width: 28px;
-            height: 28px;
-            background: var(--primary);
-            color: white;
+            z-index: -1;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85em;
-            font-weight: 600;
+            pointer-events: none;
         }
-
-        .step-content {
-            flex: 1;
+        .hero::before {
+            width: 360px;
+            height: 360px;
+            top: -150px;
+            right: -100px;
+            background: rgba(217, 79, 99, 0.09);
         }
-
-        .step-title {
-            font-size: 0.95em;
-            color: var(--accent);
-            font-weight: 600;
-            margin-bottom: 6px;
+        .hero::after {
+            width: 280px;
+            height: 280px;
+            bottom: -160px;
+            left: -120px;
+            background: rgba(102, 84, 217, 0.1);
         }
+        .hero-grid { display: grid; gap: 36px; align-items: center; }
+        .hero h1 {
+            max-width: 720px;
+            margin-bottom: 20px;
+            color: var(--text);
+            font-size: clamp(2.15rem, 7vw, 4rem);
+            line-height: 1.18;
+            letter-spacing: -0.035em;
+        }
+        .hero h1 span { color: var(--accent-text); }
+        .hero-desc { max-width: 620px; margin-bottom: 26px; color: var(--text-muted); font-size: 1.05rem; }
+        .hero-note { margin-top: 16px; color: var(--text-muted); font-size: 0.86rem; }
+        .translation-card {
+            position: relative;
+            padding: 26px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: var(--card);
+            box-shadow: 0 18px 50px rgba(46, 41, 56, 0.08);
+        }
+        .translation-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 26px;
+            width: 56px;
+            height: 4px;
+            border-radius: 0 0 4px 4px;
+            background: var(--accent);
+        }
+        .translation-label { margin-bottom: 8px; color: var(--text-muted); font-size: 0.8rem; font-weight: 700; }
+        .translation-quote { margin-bottom: 18px; font-size: 1.12rem; font-weight: 650; line-height: 1.65; }
+        .translation-answer { padding-top: 18px; border-top: 1px solid var(--line); color: var(--text-muted); }
+        .translation-answer strong { display: block; margin-bottom: 4px; color: var(--link); }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 34px;
+            padding-top: 26px;
+            border-top: 1px solid var(--line);
+        }
+        .stat-number { color: var(--link); font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; }
+        .stat-label { margin-top: 6px; color: var(--text-muted); font-size: 0.78rem; line-height: 1.45; }
 
-        .step-desc {
-            font-size: 0.85em;
+        .pain-grid { display: grid; gap: 18px; }
+        .pain-card {
+            padding: 26px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: var(--bg);
+        }
+        .pain-card h3 { margin-bottom: 14px; color: var(--link); font-size: 1.18rem; }
+        .pain-list { display: grid; gap: 12px; padding-left: 1.25em; color: var(--text-muted); }
+        .pain-list li::marker { color: var(--accent-text); }
+        .bridge-note {
+            margin-top: 20px;
+            padding: 18px 22px;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            background: var(--soft);
             color: var(--text-muted);
+        }
+        .bridge-note strong { color: var(--text); }
+
+        .tool-grid { display: grid; gap: 16px; }
+        .tool-card {
+            display: flex;
+            min-height: 100%;
+            flex-direction: column;
+            padding: 24px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--card);
+            color: var(--text);
+            text-decoration: none;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--link);
+            box-shadow: 0 12px 28px rgba(46, 41, 56, 0.08);
+        }
+        .tool-for { margin-bottom: 10px; color: var(--accent-text); font-size: 0.78rem; font-weight: 750; }
+        .tool-card h3 { margin-bottom: 8px; font-size: 1.08rem; line-height: 1.45; }
+        .tool-card p { flex: 1; margin-bottom: 18px; color: var(--text-muted); font-size: 0.9rem; }
+        .tool-action { color: var(--link); font-size: 0.88rem; font-weight: 700; }
+        .tool-note { margin-top: 20px; color: var(--text-muted); font-size: 0.84rem; }
+
+        .story-grid { display: grid; gap: 18px; }
+        .story-card {
+            display: flex;
+            flex-direction: column;
+            padding: 26px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: var(--bg);
+        }
+        .story-tag { margin-bottom: 12px; color: var(--success); font-size: 0.8rem; font-weight: 700; }
+        .story-card h3 { margin-bottom: 12px; font-size: 1.16rem; line-height: 1.5; }
+        .story-card p { flex: 1; margin-bottom: 18px; color: var(--text-muted); font-size: 0.92rem; }
+        .story-card a { align-self: flex-start; }
+
+        .about-summary { display: grid; gap: 24px; align-items: start; }
+        .name-mark {
+            display: grid;
+            min-height: 220px;
+            place-content: center;
+            padding: 30px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: linear-gradient(145deg, var(--soft), var(--card));
+            text-align: center;
+        }
+        .name-mark strong { color: var(--accent-text); font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: 0.04em; }
+        .name-mark span { margin-top: 12px; color: var(--text-muted); font-size: 0.88rem; letter-spacing: 0.16em; }
+        .about-summary h2 { margin-bottom: 12px; font-size: clamp(1.65rem, 4vw, 2.25rem); }
+        .about-summary p { margin-bottom: 14px; color: var(--text-muted); }
+        .credential-list { display: grid; gap: 8px; margin: 20px 0 24px; padding: 0; list-style: none; }
+        .credential-list li { position: relative; padding-left: 20px; }
+        .credential-list li::before { content: ""; position: absolute; top: 0.72em; left: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+
+        .contact-wrap { display: grid; gap: 24px; }
+        .contact-intro h2 { margin-bottom: 12px; font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.3; }
+        .contact-intro > p { color: var(--text-muted); }
+        .contact-badge { display: inline-block; margin: 18px 0; padding: 6px 12px; border-radius: 8px; background: var(--soft); color: var(--link); font-weight: 700; }
+        .boundary-list { display: grid; gap: 12px; padding-left: 1.25em; color: var(--text-muted); font-size: 0.9rem; }
+        .boundary-list li::marker { color: var(--accent-text); }
+        .safety-note { margin-top: 18px; padding: 16px; border: 1px solid var(--accent); border-radius: 12px; color: var(--text); font-size: 0.88rem; }
+        .contact-panel { padding: 26px; border: 1px solid var(--line); border-radius: 22px; background: var(--bg); }
+        .contact-panel h3 { margin-bottom: 8px; font-size: 1.2rem; }
+        .contact-panel > p { color: var(--text-muted); font-size: 0.9rem; }
+        .contact-buttons { margin: 20px 0; }
+        .contact-panel .button { flex: 1; }
+        .template-label { display: block; margin-bottom: 8px; font-weight: 700; }
+        #messageTemplate {
+            display: block;
+            width: 100%;
+            min-height: 260px;
+            resize: vertical;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            font-size: 0.9rem;
             line-height: 1.7;
         }
+        .template-actions { display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; }
+        .copy-status { flex: 1; min-height: 1.6em; color: var(--success); font-size: 0.84rem; }
+        .privacy-note { margin-top: 14px; color: var(--text-muted); font-size: 0.8rem; }
 
-        .booking-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+        @media (min-width: 700px) {
+            .page-shell { width: min(1080px, calc(100% - 64px)); }
+            .home-section { padding: 84px 0; }
+            .hero { padding: 88px 0 64px; }
+            .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr); }
+            .hero-stats { grid-column: 1 / -1; }
+            .pain-grid, .about-summary, .contact-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .story-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
-
-        .btn-xiaohongshu {
-            background: linear-gradient(135deg, #FF2442, #FE2C55);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 25px;
-            font-size: 0.95em;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+        @media (min-width: 980px) {
+            .tool-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
-
-        .btn-xiaohongshu:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255,36,66,0.3);
-        }
-
-        .btn-email {
-            background: var(--bg);
-            color: var(--text);
-            padding: 12px 28px;
-            border-radius: 25px;
-            font-size: 0.95em;
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid var(--primary);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-email:hover {
-            background: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .booking-note {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.8em;
-            color: var(--text-muted);
+        @media (max-width: 600px) {
+            .hero .button-row, .contact-buttons { flex-direction: column; }
+            .hero .button, .contact-buttons .button { width: 100%; }
+            .hero-stats { gap: 8px; }
+            .stat-label { font-size: 0.72rem; }
+            .translation-card, .contact-panel { padding: 22px; }
+            .template-actions { flex-direction: column; }
         }
 
         /* ========== 底部 ========== */
@@ -587,182 +510,347 @@
             .booking-buttons { flex-direction: column; align-items: center; }
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="Mel 的个人主页：在青少年与家长之间做翻译，提供家庭决策、自我观察、认知实验等自助工具，以及真实故事和初步沟通说明。">
+    <link rel="canonical" href="https://melxia.github.io/">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="有钳任性横着走的Mel - 青少年和家长之间的翻译官">
+    <meta property="og:description" content="Mel 的个人主页：在青少年与家长之间做翻译，提供家庭决策、自我观察、认知实验等自助工具，以及真实故事和初步沟通说明。">
+    <meta property="og:url" content="https://melxia.github.io/">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="有钳任性横着走的Mel - 青少年和家长之间的翻译官">
+    <meta name="twitter:description" content="Mel 的个人主页：在青少年与家长之间做翻译，提供家庭决策、自我观察、认知实验等自助工具，以及真实故事和初步沟通说明。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
 
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <div class="nav-brand">有钳任性横着走的Mel</div>
-            <a href="#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html" style="color:var(--text-muted);text-decoration:none;">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="切换配色">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html" aria-current="page">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html" aria-current="page">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
-    <!-- Hero -->
-    <section class="hero">
-        <p class="hero-role">青少年和家长之间的翻译官</p>
-        <h1 class="hero-title">把彼此听不懂的话<br>翻译成能听懂的心</h1>
-        <p class="hero-desc">
-            孩子说"你不懂我"，家长说"你怎么这样"<br>
-            两个人明明在说话，却像隔着一片海<br>
-            我站在这片海的中间，帮你看见彼此的真实
-        </p>
-
-        <!-- 数据背书 -->
-        <div class="hero-stats">
-            <div class="stat-item">
-                <div class="stat-number">30+</div>
-                <div class="stat-label">场组织讲座</div>
+    <!-- 定位 -->
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="page-shell">
+            <div class="hero-grid">
+                <div>
+                    <p class="eyebrow">青少年和家长之间的翻译官</p>
+                    <h1 id="hero-title">把彼此听不懂的话，<span>翻译成能靠近的一步</span></h1>
+                    <p class="hero-desc">家长的担心值得被听见，青少年的感受也值得被理解。Mel 站在双方之间，把指责背后的在意、沉默背后的需要说清楚，一起找到现实中做得到的小改变。</p>
+                    <div class="button-row">
+                        <a href="#tool-finder" class="button button-primary">按我的困扰选工具</a>
+                        <a href="casebook.html" class="button button-secondary">先看看真实故事</a>
+                    </div>
+                    <p class="hero-note">可以先自己梳理，再决定是否需要进一步交流。</p>
+                </div>
+                <aside class="translation-card" aria-label="一个双向翻译示例">
+                    <p class="translation-label">当一句话让双方都很受伤</p>
+                    <p class="translation-quote">“我说什么你都不听，算了。”</p>
+                    <div class="translation-answer">
+                        <strong>先不急着判定谁对谁错</strong>
+                        这句话里可能同时有孩子的挫败，也有家长的无力。翻译，是让双方有机会把真正想说的话重新说一遍。
+                    </div>
+                </aside>
+                <dl class="hero-stats" aria-label="公益与陪伴经历">
+                    <div class="stat-item">
+                        <dt class="stat-number">30+</dt>
+                        <dd class="stat-label">场讲座与公益活动</dd>
+                    </div>
+                    <div class="stat-item">
+                        <dt class="stat-number">100+</dt>
+                        <dd class="stat-label">个家庭陪伴与支持</dd>
+                    </div>
+                    <div class="stat-item">
+                        <dt class="stat-number">1000+</dt>
+                        <dd class="stat-label">小时志愿服务</dd>
+                    </div>
+                </dl>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">100+</div>
-                <div class="stat-label">个受助家庭</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">1000+</div>
-                <div class="stat-label">小时志愿服务</div>
-            </div>
-        </div>
-
-        <!-- 双按钮 CTA -->
-        <div class="hero-buttons">
-            <a href="#contact" class="btn-primary">💬 约个时间聊聊</a>
-            <a href="casebook.html" class="btn-secondary">📖 心理测验</a>
         </div>
     </section>
 
-    <!-- 痛点共鸣 -->
-    <section class="pain-section">
-        <div class="section-header">
-            <h2 class="section-title">你可能正处于这样的困境</h2>
-            <p class="section-subtitle">如果是，那我们聊聊</p>
+    <!-- 双方困扰 -->
+    <section class="home-section" aria-labelledby="pain-title">
+        <div class="page-shell">
+            <div class="section-heading">
+                <p class="eyebrow">先被理解，再谈改变</p>
+                <h2 id="pain-title">同一段关系里，两个人可能都很辛苦</h2>
+                <p>不必急着把责任归给某一方。先看看，下面这些时刻是否熟悉。</p>
+            </div>
+            <div class="pain-grid">
+                <article class="pain-card">
+                    <h3>如果你是家长</h3>
+                    <ul class="pain-list">
+                        <li>想提醒学习，一开口却变成催促和争执。</li>
+                        <li>看见孩子关门或沉默，心里担心，又怕问多了让TA更烦。</li>
+                        <li>已经试着让步，仍不确定怎样既守住边界，又保留亲近。</li>
+                    </ul>
+                </article>
+                <article class="pain-card">
+                    <h3>如果你是青少年</h3>
+                    <ul class="pain-list">
+                        <li>想解释压力和想法，话到嘴边，又担心被理解成借口。</li>
+                        <li>需要一点自己安排的空间，也希望遇到困难时有人可找。</li>
+                        <li>不是不在意家里，只是反复争论后，不知道怎样再说。</li>
+                    </ul>
+                </article>
+            </div>
+            <p class="bridge-note"><strong>这些感受可以同时为真。</strong>翻译不是评判谁对谁错，而是让担心不再只以指责出现，让需要不再只藏在沉默里。</p>
         </div>
+    </section>
 
-        <div class="pain-grid">
-            <div class="pain-card">
-                <div class="pain-card-header">👨‍👩‍👧 如果你是家长</div>
-                <ul class="pain-list">
-                    <li class="pain-item">孩子说"你不懂我"，你不知道哪里出了问题</li>
-                    <li class="pain-item">每次沟通都变成争吵，最后谁都不说话</li>
-                    <li class="pain-item">孩子越来越沉默，你担心却不知如何开口</li>
-                    <li class="pain-item">你只关心成绩，孩子觉得你不在乎TA这个人</li>
+    <!-- 按困扰选工具 -->
+    <section class="home-section" id="tool-finder" aria-labelledby="tool-title">
+        <div class="page-shell">
+            <div class="section-heading">
+                <p class="eyebrow">工具前置</p>
+                <h2 id="tool-title">先按眼前的困扰，选一个小工具</h2>
+                <p>不必先给问题下结论。从最接近此刻的一张卡片开始，用几分钟整理现状。</p>
+            </div>
+            <div class="tool-grid">
+                <a class="tool-card" href="exam-stress-toolkit.html">
+                    <span class="tool-for">考前，家里都很紧张</span>
+                    <h3>中高考家长稳压工具台</h3>
+                    <p>梳理考前的情绪、沟通与陪伴方式，给家庭一个可以一起查看的工具台。</p>
+                    <span class="tool-action">打开工具台 →</span>
+                </a>
+                <a class="tool-card" href="study-strategy.html">
+                    <span class="tool-for">想支持学习，却总变成盯和催</span>
+                    <h3>学习支持策略自测</h3>
+                    <p>从家长视角回顾自己的学习支持方式，看看哪些互动值得继续，哪些地方可以调整。</p>
+                    <span class="tool-action">开始自测 →</span>
+                </a>
+                <a class="tool-card" href="parent-emotional-support.html">
+                    <span class="tool-for">想知道自己怎样回应孩子</span>
+                    <h3>父母情感支持测评</h3>
+                    <p>回顾倾听、回应与支持中的互动方式，把模糊的“我是不是做得不够”说得更具体。</p>
+                    <span class="tool-action">开始测评 →</span>
+                </a>
+                <a class="tool-card" href="child-emotional-support.html">
+                    <span class="tool-for">想说出自己感受到的支持</span>
+                    <h3>子女情感支持测评</h3>
+                    <p>从子女视角梳理在家庭互动中感受到的理解与支持，为表达感受找到一个起点。</p>
+                    <span class="tool-action">开始测评 →</span>
+                </a>
+                <a class="tool-card" href="boarding-vs-day.html">
+                    <span class="tool-for">走读还是住宿，各有顾虑</span>
+                    <h3>高中走读 vs 住宿决策量表</h3>
+                    <p>把双方看重的条件逐项列出，作为家庭讨论不同选择的参考。</p>
+                    <span class="tool-action">一起梳理 →</span>
+                </a>
+                <a class="tool-card" href="pss-assessment.html">
+                    <span class="tool-for">最近的压力有些说不清</span>
+                    <h3>压力知觉测评</h3>
+                    <p>通过自测回顾近期压力感受，帮助描述当前状态；结果不用于诊断。</p>
+                    <span class="tool-action">开始测评 →</span>
+                </a>
+                <a class="tool-card" href="casebook.html#tools">
+                    <span class="tool-for">想先了解心理学如何看问题</span>
+                    <h3>认知实验小工具</h3>
+                    <p>用互动实验观察注意、判断等心理现象，抱着好奇心认识自己多一点。</p>
+                    <span class="tool-action">查看认知实验 →</span>
+                </a>
+            </div>
+            <p class="tool-note">工具用于自助梳理，不替代诊断、治疗或面对面的专业评估。</p>
+        </div>
+    </section>
+
+    <!-- 精选真实故事 -->
+    <section class="home-section" aria-labelledby="stories-title">
+        <div class="page-shell">
+            <div class="section-heading">
+                <p class="eyebrow">精选真实故事</p>
+                <h2 id="stories-title">换一个角度，也许能听见新的内容</h2>
+                <p>故事不提供标准答案，只呈现那些曾经被忽略的担忧、需要与环境。</p>
+            </div>
+            <div class="story-grid">
+                <article class="story-card">
+                    <p class="story-tag">焦虑背后的担忧</p>
+                    <h3>“我怕不能长久陪伴她”</h3>
+                    <p>故事从一位母亲对女儿成绩与习惯的焦虑开始。当被问到“背后到底在怕什么”，她说出的是对陪伴时间的担忧，以及对孩子独立生活能力的牵挂。</p>
+                    <a class="text-link" href="story-1.html">读这个故事 →</a>
+                </article>
+                <article class="story-card">
+                    <p class="story-tag">陪伴而不是说教</p>
+                    <h3>“不唠叨的妈妈是最好的”</h3>
+                    <p>高一那年，家里的事情让他难以投入学习。后来谈到什么样的妈妈最好，他的回答是：“不唠叨、默默陪伴我的妈妈是最好的。”</p>
+                    <a class="text-link" href="story-2.html">读这个故事 →</a>
+                </article>
+                <article class="story-card">
+                    <p class="story-tag">考试与家庭节奏</p>
+                    <h3>成绩越好的孩子，越怕考试前家庭发生这件事</h3>
+                    <p>一次成绩波动后的复盘，没有把原因简单归到努力或能力，而是一起查看考前作息、家庭安排与节奏的变化，也提醒家庭环境并非唯一因素。</p>
+                    <a class="text-link" href="story-5.html">读这个故事 →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于 Mel 摘要 -->
+    <section class="home-section" aria-labelledby="about-title">
+        <div class="page-shell about-summary">
+            <div class="name-mark" aria-label="Mel，青少年和家长之间的翻译官">
+                <strong>Mel</strong>
+                <span>听见双方 · 翻译需要</span>
+            </div>
+            <div>
+                <p class="eyebrow">关于 Mel</p>
+                <h2 id="about-title">站在中间，但不替任何一方下结论</h2>
+                <p>Mel 的角色，是在青少年与家长之间做沟通翻译和支持：既听见家长对安全、成长与未来的担心，也听见青少年对理解、空间与自主的需要。</p>
+                <ul class="credential-list">
+                    <li>应用心理硕士（MAP）</li>
+                    <li>工商管理硕士（MBA）</li>
+                    <li>广东省心理学会家庭心理和教育专业委员会会员</li>
+                    <li>华南师大心晴热线志愿者</li>
                 </ul>
+                <a class="text-link" href="about.html">了解我的经历与服务边界 →</a>
             </div>
+        </div>
+    </section>
 
-            <div class="pain-card">
-                <div class="pain-card-header">🧒 如果你是青少年</div>
-                <ul class="pain-list">
-                    <li class="pain-item">爸妈从来不真正听你说话，只顾着说他们的</li>
-                    <li class="pain-item">你有自己的想法，但说出来就被否定</li>
-                    <li class="pain-item">家里像战场，你只想躲进房间</li>
-                    <li class="pain-item">你觉得孤独，明明家里有人却没人懂你</li>
+    <!-- 预约 -->
+    <section class="home-section" id="contact" aria-labelledby="contact-title">
+        <div class="page-shell contact-wrap">
+            <div class="contact-intro">
+                <p class="eyebrow">预约一次初步梳理</p>
+                <h2 id="contact-title">带着一件最困扰你的事来，就好</h2>
+                <p>我们先听现状、已经尝试的方法和希望的变化，再一起看可行的下一步。不需要先把整件事讲得完整。</p>
+                <span class="contact-badge">免费 · 30分钟初步梳理</span>
+                <ul class="boundary-list">
+                    <li>这是初步梳理与支持性沟通，不是心理诊断、心理治疗，也不是危机热线。</li>
+                    <li>涉及未成年人时，需要监护人知情并参与沟通安排；具体参与方式会结合年龄与情况一起确认。</li>
+                    <li>尊重隐私，但保密有边界：如涉及本人或他人的安全风险，或法律法规要求，需要与监护人或相关专业、紧急支持方共享必要信息。</li>
                 </ul>
+                <p class="safety-note"><strong>如已有即时自伤或伤人风险，请不要等待私信或邮件回复：</strong>立即联系身边可信赖的成年人，并拨打危机求助电话 12356。</p>
             </div>
-        </div>
-    </section>
-
-    <!-- 能力聚焦 -->
-    <section class="strength-section">
-        <h2 class="strength-title">我最擅长帮你走出如下困境</h2>
-
-        <div class="strength-grid">
-            <div class="strength-card">
-                <div class="strength-icon">🌉</div>
-                <div class="strength-name">亲子沟通障碍</div>
-                <div class="strength-desc">当双方都在说话却谁也听不懂谁，我帮你翻译各自的真实意思</div>
-            </div>
-
-            <div class="strength-card">
-                <div class="strength-icon">🎓</div>
-                <div class="strength-name">厌学/情绪问题</div>
-                <div class="strength-desc">孩子不想上学、情绪失控背后，往往有说不出口的原因</div>
-            </div>
-
-            <div class="strength-card">
-                <div class="strength-icon">🏠</div>
-                <div class="strength-name">家庭关系紧张</div>
-                <div class="strength-desc">长期累积的误解和委屈，需要一个中立的翻译官来解开</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 预约流程 -->
-    <section class="booking-section" id="contact">
-        <div class="booking-header">
-            <h2 class="booking-title">预约30分钟通话</h2>
-            <p class="booking-subtitle">一次简短、有用的对话，帮你理清问题</p>
-            <span class="booking-free">✓ 免费 · 无压力</span>
-        </div>
-
-        <div class="booking-steps">
-            <div class="step-item">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <div class="step-title">发一条小红书私信</div>
-                    <div class="step-desc">告诉我你是家长还是孩子，现在最困扰你们的沟通难题是什么。几句话就够了。</div>
+            <div class="contact-panel">
+                <h3>先写几句，不必一次讲清全部</h3>
+                <p>选择你方便的方式联系，也可以复制下面的模板后再修改。</p>
+                <div class="button-row contact-buttons">
+                    <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="button button-primary" rel="noopener noreferrer" aria-label="在小红书私信Mel（新窗口打开）">小红书私信</a>
+                    <a href="mailto:19469728@qq.com" class="button button-secondary" aria-label="发送邮件至19469728@qq.com">邮件联系</a>
                 </div>
-            </div>
-
-            <div class="step-item">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <div class="step-title">预约30分钟通话</div>
-                    <div class="step-desc">我会听听你们现在的情况、试过什么方法、我能怎么帮上忙。有时候问题不在孩子，我会直说。</div>
+                <label class="template-label" for="messageTemplate">私信模板（可直接修改）</label>
+                <textarea id="messageTemplate" aria-describedby="templatePrivacy copyStatus" spellcheck="false">我的身份：
+大致学段：
+最困扰的一件事：
+已经尝试过的方法（选填）：
+希望达到的目标：
+方便沟通的时段：</textarea>
+                <div class="template-actions">
+                    <button type="button" id="copyTemplate" class="button button-primary button-small">复制私信模板</button>
+                    <p id="copyStatus" class="copy-status" role="status" aria-live="polite" aria-atomic="true"></p>
                 </div>
-            </div>
-
-            <div class="step-item">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <div class="step-title">如果合适，给出下一步建议</div>
-                    <div class="step-desc">可能是后续深入咨询、一个沟通工具，或者只是推荐一本书。不推销、不套模板。</div>
-                </div>
+                <p class="privacy-note" id="templatePrivacy">请不要发送身份证号、完整考生号、详细住址、病历等敏感信息。首次联系只需说明大致情况。</p>
             </div>
         </div>
-
-        <div class="booking-buttons">
-            <a href="https://www.xiaohongshu.com/user/profile/6686298800000000030312ab" target="_blank" class="btn-xiaohongshu">
-                <span>📱</span>
-                <span>小红书私信</span>
-            </a>
-            <a href="mailto:19469728@qq.com" class="btn-email">
-                <span>✉️</span>
-                <span>邮件联系</span>
-            </a>
-        </div>
-
-        <p class="booking-note">通常1天内回复</p>
     </section>
 
     <!-- 底部 -->
-    <footer class="footer">
+</main>
+<footer class="footer">
         <p>有钳任性横着走的Mel</p>
         <p class="footer-line">应用心理硕士 (MAP) · 工商管理硕士 (MBA)</p>
         <p class="footer-line">广东省心理学会家庭心理和教育专业委员会会员</p>
     </footer>
 
     <!-- 返回顶部 -->
-    <div class="back-top" onclick="scrollToTop()">↑</div>
+    <button type="button" class="back-top" onclick="scrollToTop()" aria-label="返回顶部">↑</button>
 
     <script>
         // 主题切换功能
@@ -826,5 +914,117 @@
 
         initTheme();
     </script>
+
+<script>
+(function () {
+    var button = document.getElementById('copyTemplate');
+    var template = document.getElementById('messageTemplate');
+    var status = document.getElementById('copyStatus');
+    if (!button || !template || !status) return;
+
+    function selectForManualCopy() {
+        template.focus();
+        template.select();
+        status.textContent = '自动复制未成功，模板已选中，请使用系统复制命令；触屏设备可长按后选择“复制”。';
+    }
+
+    button.addEventListener('click', async function () {
+        status.textContent = '';
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(template.value);
+            } else {
+                template.focus();
+                template.select();
+                var copied = document.execCommand && document.execCommand('copy');
+                if (!copied) throw new Error('copy-unavailable');
+                button.focus();
+            }
+            status.textContent = '模板已复制，可粘贴到小红书私信或邮件中。';
+        } catch (error) {
+            selectForManualCopy();
+        }
+    });
+
+    template.addEventListener('input', function () {
+        status.textContent = '';
+    });
+})();
+</script>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>

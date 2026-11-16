@@ -247,40 +247,121 @@
             display: block;
         }
     </style>
+
+<script>
+(function () {
+    var theme = 'light';
+    try { theme = localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<style id="v2-shared">
+    html[data-theme="light"] {
+        --primary: #6654D9;
+        --primary-light: #6C58D9;
+        --accent: #D94F63;
+        --success: #237F76;
+        --warning: #806800;
+        --warning-text: #806800;
+        --bg: #F7F4EF;
+        --card: #FFFEFC;
+        --text: #2E2938;
+        --text-muted: #625D6C;
+    }
+    .v2-skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: var(--text);
+        color: var(--bg);
+        transform: translateY(-150%);
+    }
+    .v2-skip-link:focus { transform: translateY(0); }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+    }
+    .v2-theme-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--primary);
+        border-radius: 22px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.8em;
+    }
+    .v2-menu-toggle { min-width: 44px; min-height: 44px; }
+    .mobile-menu .v2-theme-toggle { width: 100%; text-align: left; border-radius: 8px; }
+    .back-top { border: 0; padding: 0; min-width: 44px; min-height: 44px; }
+    main { display: block; }
+    img { max-width: 100%; }
+    @media (max-width: 760px) {
+        .nav-brand { max-width: 180px; line-height: 1.35; }
+        .top-nav { gap: 8px; }
+        .nav-left { gap: 8px; min-width: 0; }
+    }
+    @media (max-width: 420px) {
+        .nav-brand { max-width: 125px; font-size: 0.8em; }
+        .nav-cta { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto !important; }
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+    <meta name="description" content="记录儿童安全活动的科普与互动内容，帮助孩子和家长练习识别风险、表达求助与保护自己。">
+    <link rel="canonical" href="https://melxia.github.io/activity-safety.html">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="有钳任性横着走的Mel">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="儿童安全活动 - 有钳任性横着走的Mel">
+    <meta property="og:description" content="记录儿童安全活动的科普与互动内容，帮助孩子和家长练习识别风险、表达求助与保护自己。">
+    <meta property="og:url" content="https://melxia.github.io/activity-safety.html">
+    <meta property="og:image" content="https://melxia.github.io/assets/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="有钳任性横着走的 Mel 品牌分享图">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="儿童安全活动 - 有钳任性横着走的Mel">
+    <meta name="twitter:description" content="记录儿童安全活动的科普与互动内容，帮助孩子和家长练习识别风险、表达求助与保护自己。">
+    <meta name="twitter:image" content="https://melxia.github.io/assets/og-cover.jpg">
 </head>
 <body>
     <!-- 顶部导航 -->
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" style="text-decoration:none;">
-                <div class="nav-brand">有钳任性横着走的Mel</div>
-            </a>
-            <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="casebook.html">助人自助</a>
-            <a href="about.html">关于我</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </div>
-        <button class="menu-toggle" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </nav>
-
-    <!-- 移动端下拉菜单 -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">首页</a>
-        <a href="casebook.html">助人自助</a>
-        <a href="about.html">关于我</a>
-        <a href="flower-gallery.html">花艺作品</a>
-        <a href="#" onclick="toggleTheme(); toggleMobileMenu(); return false;">切换配色</a>
+<a class="v2-skip-link" href="#v2-main">跳到主要内容</a>
+<nav class="top-nav" aria-label="主导航">
+    <div class="nav-left">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;">有钳任性横着走的Mel</a>
+        <a href="index.html#contact" class="nav-cta">约个时间聊聊</a>
     </div>
+    <div class="nav-links">
+        <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+        <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+    </div>
+    <button type="button" id="v2MenuButton" class="menu-toggle v2-menu-toggle" onclick="v2ToggleMenu()" aria-label="打开导航菜单" aria-expanded="false" aria-controls="v2MobileMenu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="mobile-menu" id="v2MobileMenu">
+    <a href="index.html">首页</a><a href="casebook.html#tools">自助工具</a><a href="articles.html">看见心声</a><a href="about.html">关于我</a>
+    <button type="button" class="v2-theme-toggle" onclick="v2ToggleTheme()"><span class="v2-theme-label">深色模式</span></button>
+</div>
+<main id="v2-main" tabindex="-1">
 
     <div class="container">
-        <a href="index.html#一起搞事情" class="back-link">← 返回首页</a>
+        <a href="casebook.html#growth" class="back-link">← 返回陪伴成长</a>
 
         <div class="page-header">
             <h1 class="page-title">🚸 儿童安全活动</h1>
@@ -303,7 +384,7 @@
             <div class="activity-section">
                 <div class="activity-date">📍 2021年4月 · 白云区同和小学（青少年自我保护主题）</div>
                 <div class="activity-images">
-                    <img src="照片素材/儿童安全活动2021年4月广州市白云区同和小学.jpeg" alt="儿童安全活动2021" style="max-width: 450px;">
+                    <img alt="儿童安全活动2021" style="width:100%;max-width:450px;height:auto;" src="assets/images/mel-07.webp" width="1561" height="1600" loading="lazy" decoding="async">
                 </div>
                 <div class="activity-text">
                     <p>本次活动我面向小学中高年级青少年开展，聚焦青少年自我保护、心理边界、人际防护核心主题。这个年龄段的孩子自主意识快速觉醒，独立活动范围变大，但自我保护意识薄弱、边界认知模糊，遇到困扰习惯沉默隐忍，不愿和长辈沟通，极易形成安全隐患与心理隔阂。</p>
@@ -318,7 +399,7 @@
             <div class="activity-section">
                 <div class="activity-date">📍 2019年6月 · 海珠区（儿童急救主题）</div>
                 <div class="activity-images">
-                    <img src="照片素材/儿童安全活动2019年6月广州市海珠区.jpeg" alt="儿童安全活动2019" style="max-width: 450px;">
+                    <img alt="儿童安全活动2019" style="width:100%;max-width:450px;height:auto;" src="assets/images/mel-06.webp" width="1030" height="763" loading="lazy" decoding="async">
                 </div>
                 <div class="activity-text">
                     <p>本次活动我聚焦家庭应急安全短板，专门面向家长与成年志愿者群体开设儿童急救专场。我特邀三甲医院新生儿科医生亲临分享，把专业、严谨、晦涩的儿童急救知识，翻译成普通家庭能听懂、能上手、可实操的居家应急技能。</p>
@@ -333,7 +414,7 @@
             <div class="activity-section">
                 <div class="activity-date">📍 2018年1月 · 蒋光鼐纪念小学</div>
                 <div class="activity-images">
-                    <img src="照片素材/儿童安全活动2018年1月广州市荔湾区蒋光鼐小学一年级.JPG" alt="儿童安全活动2018" style="max-width: 450px;">
+                    <img alt="儿童安全活动2018" style="width:100%;max-width:450px;height:auto;" src="assets/images/mel-05.webp" width="1600" height="1200" loading="lazy" decoding="async">
                 </div>
                 <div class="activity-text">
                     <p>本次活动我将成熟的幼儿园安全启蒙模式，全新迭代落地小学一年级场景。小学生已经掌握基础安全常识，对简单说教产生审美疲劳，自主意识、独立思考能力更强。为此我全新升级活动形式，放弃单一讲解，采用<strong>「互动游戏 + 小组竞赛」</strong>的模式，充分调动孩子的主动性与参与感，让孩子主动思考、主动学习。</p>
@@ -348,7 +429,7 @@
             <div class="activity-section">
                 <div class="activity-date">📍 2014年4月 · 儿福幼儿园</div>
                 <div class="activity-images">
-                    <img src="照片素材/儿童安全活动2014年4月广州市海珠区儿福幼儿园.jpeg" alt="儿童安全活动2014" style="max-width: 450px;">
+                    <img alt="儿童安全活动2014" style="width:100%;max-width:450px;height:auto;" src="assets/images/mel-04.webp" width="360" height="640" loading="lazy" decoding="async">
                 </div>
                 <div class="activity-text">
                     <p>凭借首场幼儿园安全活动的良好口碑与成熟模式，本次活动由幼儿园主动邀约落地。我沿用成熟的活动体系，志愿者团队妥善保存、迭代优化往期趣味道具，将成熟、优质的公益模式持续复制推广，让更多低龄孩子受益。</p>
@@ -364,7 +445,7 @@
             <div class="activity-section">
                 <div class="activity-date">📍 2013年12月 · 江南幼儿园</div>
                 <div class="activity-images">
-                    <img src="照片素材/儿童安全活动2013年12月广州市海珠区江南幼儿园.jpeg" alt="儿童安全活动2013" style="max-width: 450px;">
+                    <img alt="儿童安全活动2013" style="width:100%;max-width:450px;height:auto;" src="assets/images/mel-03.webp" width="1024" height="768" loading="lazy" decoding="async">
                 </div>
                 <div class="activity-text">
                     <p>这是我落地的首场儿童安全启蒙公益活动。我和志愿者团队一起，精心制作各类趣味精美道具，彻底摒弃刻板的课堂说教，用沉浸式互动的方式，带领孩子轻松学会过马路三步法，掌握基础的出行安全规则。</p>
@@ -386,7 +467,7 @@
         </div>
 
         <div class="footer-nav">
-            <a href="index.html#一起搞事情">← 返回首页</a>
+            <a href="casebook.html#growth">← 返回陪伴成长</a>
         </div>
     </div>
 
@@ -442,5 +523,82 @@
 
         initTheme();
     </script>
+
+</main>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var menu = document.getElementById('v2MobileMenu');
+    var menuButton = document.getElementById('v2MenuButton');
+    try {
+        root.setAttribute('data-theme', localStorage.getItem('mel-theme-v2') === 'dark' ? 'dark' : 'light');
+    } catch (e) {}
+
+    function currentTheme() {
+        return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function paintThemes() {
+        var next = currentTheme() === 'dark' ? '浅色' : '深色';
+        document.querySelectorAll('.v2-theme-label').forEach(function (label) {
+            label.textContent = next + '模式';
+        });
+        document.querySelectorAll('.v2-theme-toggle').forEach(function (button) {
+            button.setAttribute('aria-label', '切换到' + next + '模式');
+        });
+    }
+
+    window.v2ToggleTheme = function () {
+        var theme = currentTheme() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mel-theme-v2', theme); } catch (e) {}
+        paintThemes();
+    };
+
+    window.v2CloseMenu = function (restoreFocus) {
+        if (!menu || !menuButton) return;
+        menu.classList.remove('show');
+        menuButton.classList.remove('active');
+        menuButton.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) menuButton.focus();
+    };
+
+    window.v2ToggleMenu = function () {
+        if (!menu || !menuButton) return;
+        var open = !menu.classList.contains('show');
+        if (open) {
+            menu.classList.add('show');
+            menuButton.classList.add('active');
+            menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+            window.v2CloseMenu(false);
+        }
+    };
+
+    window.scrollToTop = function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu && menu.classList.contains('show')) {
+            window.v2CloseMenu(true);
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!menu || !menuButton || !menu.classList.contains('show')) return;
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            window.v2CloseMenu(false);
+        }
+    });
+    if (menu) {
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () { window.v2CloseMenu(false); });
+        });
+    }
+    paintThemes();
+})();
+</script>
 </body>
 </html>
